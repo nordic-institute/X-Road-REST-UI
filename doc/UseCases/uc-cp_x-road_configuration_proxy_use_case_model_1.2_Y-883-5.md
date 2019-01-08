@@ -23,6 +23,8 @@ Date       | Version | Description                                              
 14.12.2015 |  1.2    |   UC CP\_06 fixed                                                                                               | Riin Saarmäe
 29.08.2017 |  1.3    |   Changed documentation type from docx to md file |   Lasse Matikainen
 07.03.2018 |  1.4    |   Moved terms to term doc, added term doc reference and link | Tatu Repo
+08.01.2018 |  1.5    |   Test modifications | Janne Mattila
+
 
 ## Table of Contents
 
