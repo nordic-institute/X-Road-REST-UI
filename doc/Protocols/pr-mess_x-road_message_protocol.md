@@ -25,7 +25,7 @@ Doc. ID: PR-MESS
  14.10.2015 | 4.0.7   | Note added about supported attachment encodings. Updated examples                               | Siim Annuk, Ilja Kromonov
  17.10.2015 | 4.0.8   | Clarified must/MUST language                                                                    | Margus Freudenthal
  28.10.2015 | 4.0.9   | Better example messages added                                                                   | Siim Annuk
- 28.10.2015 | 4.0.10  | Complete X-Road identifiers schema added                                                        | Siim Annuk
+ 28.10.2015 | 4.0.10  | Complete X-Road identifiers schema added  test some more inline edits                                                      | Siim Annuk
  20.11.2015 | 4.0.11  | Minor enhancements, example messages fixed                                                      | Siim Annuk
  02.12.2015 | 4.0.12  | Minor fixes added                                                                               | Siim Annuk
  08.12.2015 | 4.0.13  | Typo fixed                                                                                      | Siim Annuk
