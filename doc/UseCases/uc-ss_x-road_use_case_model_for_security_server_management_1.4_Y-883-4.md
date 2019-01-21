@@ -226,9 +226,9 @@ manage the security server configuration.
 
 **Main Success Scenario**:
 
-1.  SS administrator selects to log in to the GUI.
+1.  SS administrator selects to log in to the GUI. As the user lands onto the page, the Log-in button is inactive.
 
-2.  SS administrator inserts the user name and password.
+2.  SS administrator inserts the user name and password. At this point, the Log-in button becomes active and available.
 
 3.  System verifies that the system is not currently undergoing the
     system restore process.
@@ -248,7 +248,7 @@ manage the security server configuration.
         - 3a.3a. SS administrator selects to terminate the use case.
 
 - 4a. The user with the inserted user name does not exist or the password is incorrect.
-    - 4a.1. System displays the error message “Authentication failed”.
+    - 4a.1. System displays the error message “Authentication failed. Please try again”. The text fields are emptied.
     - 4a.2. System logs the event “Log in user failed” to the audit log.
     - 4a.3. SS administrator selects to reinsert the user name and/or the password. Use case continues from step 3.
         - 4a.3a. SS administrator selects to terminate the use case.
