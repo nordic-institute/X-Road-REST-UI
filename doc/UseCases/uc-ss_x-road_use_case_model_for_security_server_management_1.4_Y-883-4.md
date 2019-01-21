@@ -226,9 +226,9 @@ manage the security server configuration.
 
 **Main Success Scenario**:
 
-1.  SS administrator selects to log in to the GUI. As the user lands onto the page, the Log-in button is inactive.
+1.  SS administrator selects to log in to the GUI.
 
-2.  SS administrator inserts the user name and password. At this point, the Log-in button becomes active and available.
+2.  SS administrator inserts the user name and password.
 
 3.  System verifies that the system is not currently undergoing the
     system restore process.
