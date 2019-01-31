@@ -57,7 +57,7 @@ processResources {
     }
 }
 
-ext['hibernate.version'] = '4.3.11.Final'
+ext['hibernate.version'] = '5.2.18.Final'
 ext['postgresql.version'] = '42.2.1'
 ext['hikaricp.version'] = '2.3.3'
 ext['quartz.version'] = '2.1.6'

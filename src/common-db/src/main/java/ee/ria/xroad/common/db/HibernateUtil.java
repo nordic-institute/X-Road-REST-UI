@@ -191,8 +191,9 @@ public final class HibernateUtil {
      * @return batch size
      */
     public static int getConfiguredBatchSize(Session session, int defaultBatchSize) {
-        Properties props = ((SessionFactoryImpl) session.getSessionFactory()).getProperties();
-        int configuredBatchSize = ConfigurationHelper.getInt(Environment.STATEMENT_BATCH_SIZE, props, defaultBatchSize);
+        Map sessionFactoryProperties = ((SessionFactoryImpl) session.getSessionFactory()).getProperties();
+        int configuredBatchSize = ConfigurationHelper.getInt(Environment.STATEMENT_BATCH_SIZE,
+                sessionFactoryProperties, defaultBatchSize);
 
         log.trace("Configured JDBC batch size is {}", configuredBatchSize);
 

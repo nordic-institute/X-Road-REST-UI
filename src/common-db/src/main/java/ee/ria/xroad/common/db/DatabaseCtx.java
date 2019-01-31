@@ -34,6 +34,7 @@ import org.hibernate.Interceptor;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import static ee.ria.xroad.common.ErrorCodes.X_DATABASE_ERROR;
 import static ee.ria.xroad.common.db.HibernateUtil.getSessionFactory;
@@ -123,8 +124,9 @@ public class DatabaseCtx {
     public void commitTransaction() {
         log.trace("commitTransaction({})", sessionFactoryName);
 
-        Transaction tx = getSession().getTransaction();
-        if (tx.isActive() && !tx.wasCommitted()) {
+        Session session = getSession();
+        Transaction tx = session.getTransaction();
+        if (tx.isActive() && !transactionWasCommitted(session)) {
             tx.commit();
         }
     }
@@ -135,10 +137,19 @@ public class DatabaseCtx {
     public void rollbackTransaction() {
         log.trace("rollbackTransaction({})", sessionFactoryName);
 
-        Transaction tx = getSession().getTransaction();
-        if (tx.isActive() && !tx.wasRolledBack()) {
+        Session session = getSession();
+        Transaction tx = session.getTransaction();
+        if (tx.isActive() && !transactionWasRolledBack(session)) {
             tx.rollback();
         }
+    }
+
+    private boolean transactionWasCommitted(Session session) {
+        return session.getTransaction().getStatus() == TransactionStatus.COMMITTED;
+    }
+
+    private boolean transactionWasRolledBack(Session session) {
+        return session.getTransaction().getStatus() == TransactionStatus.ROLLED_BACK;
     }
 
     /**
