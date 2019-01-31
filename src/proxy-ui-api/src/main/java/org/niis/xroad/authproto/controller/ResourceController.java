@@ -99,6 +99,18 @@ public class ResourceController {
     }
 
     /**
+     * adsds
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/create/{memberCode}/{fail}")
+    public void insert(@PathVariable("memberCode") String memberCode,
+                                @PathVariable("fail") boolean fail) {
+        logger.info("insert {} {}", memberCode, fail);
+        clientRepository.createIdentifier(memberCode, fail);
+    }
+
+    /**
      * Return one client, id encoded with ":" (like FI:GOV:1234:SUBSYSTEM1)
      * @return
      */

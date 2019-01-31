@@ -122,6 +122,23 @@ public class ClientRepository {
                 });
     }
 
+    /**
+     * dsa
+     * @param memberCode
+     * @param fail
+     */
+    public void createIdentifier(String memberCode, boolean fail) {
+        ClientId id = ClientId.create("FI", "GOV", memberCode, "SS1");
+        DatabaseContextHelper.serverConfTransaction(
+                session -> {
+                    session.save(id);
+                    if (fail) throw new RuntimeException("failing on purpose");
+                    ClientType type = null;
+                    return type;
+                });
+
+    }
+
     //CHECKSTYLE.OFF: TodoComment
     /**
      * TODO: should repositories talk in openapi terms?
