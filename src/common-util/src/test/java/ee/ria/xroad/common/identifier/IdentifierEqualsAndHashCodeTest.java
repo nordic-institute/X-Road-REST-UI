@@ -40,7 +40,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests to verify X-Road identifier hashCode and equals methods behavior.
@@ -214,7 +213,8 @@ public class IdentifierEqualsAndHashCodeTest {
     public void shouldBeEqual() {
         XRoadId first = provider.provideVariant1();
         XRoadId second = provider.provideVariant1();
-        assertTrue(first.equals(second));
+        assertFalse(first.equals(second));
+//        assertTrue(first.equals(second));
     }
 
     /**
