@@ -60,7 +60,7 @@ import static ee.ria.xroad.common.util.MimeUtils.mpRelatedContentType;
 class AuthCertRegRequest implements ManagementRequest {
     private static final String SIGNATURE_DIGEST_ALGORITHM_ID =
             SystemProperties.getAuthCertRegSignatureDigestAlgorithmId();
-
+BREAKING_BUILD
     private final byte[] authCert;
     private final ClientId owner;
     private final SoapMessageImpl requestMessage;
