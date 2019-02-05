@@ -88,7 +88,7 @@ public class OptionalPartsConfBehavior {
 
         // Then
         String expectedContentIdentifier = "TEST-CONFIGURATION-PART";
-
+        assertTrue(false); // BREAK BUILD
         assertEquals(expectedContentIdentifier, actualContentIdentifier);
     }
 
