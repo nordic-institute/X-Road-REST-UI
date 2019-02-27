@@ -1,7 +1,16 @@
 package org.niis.xroad.restapi;
 
-//@Configuration
-//@EnableTransactionManagement
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+
+@Configuration
+@EnableTransactionManagement
 public class HibernateConfig {
 
     // TO DO :
@@ -12,23 +21,23 @@ public class HibernateConfig {
     // config locations: https://stackoverflow.com/a/10820111/1469083
     // basic "configure custom datasource":
     // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-configure-a-datasource
-//    @Bean
-//    public LocalSessionFactoryBean sessionFactory() {
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//        sessionFactory.setConfigLocations(new ClassPathResource("hibernate.cfg.xml"),
-//                new ClassPathResource("serverconf.hibernate.cfg.xml"));
-//        return sessionFactory;
-//    }
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setConfigLocations(new ClassPathResource("hibernate.cfg.xml"),
+                new ClassPathResource("serverconf.hibernate.cfg.xml"));
+        sessionFactory.setDataSource(dataSource());
+        return sessionFactory;
+    }
 
-//    @Bean
-//    public DataSource dataSource() {
-//        BasicDataSource dataSource = new BasicDataSource();
-//        dataSource.setDriverClassName("org.h2.Driver");
-//        dataSource.setUrl("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1");
-//        dataSource.setUsername("sa");
-//        dataSource.setPassword("sa");
-//
-//        return dataSource;
-//    }
+    @Bean
+    public DataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+        dataSource.setUrl("dbc:hsqldb:mem:.");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
+        return dataSource;
+    }
 
 }

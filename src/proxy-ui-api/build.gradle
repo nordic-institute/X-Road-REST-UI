@@ -57,10 +57,10 @@ processResources {
     }
 }
 
-ext['hibernate.version'] = '4.3.11.Final'
-ext['postgresql.version'] = '42.2.1'
-ext['hikaricp.version'] = '2.3.3'
-ext['quartz.version'] = '2.1.6'
+//ext['hibernate.version'] = '4.3.11.Final'
+//ext['postgresql.version'] = '42.2.1'
+//ext['hikaricp.version'] = '2.3.3'
+//ext['quartz.version'] = '2.1.6'
 
 node {
     download = false
@@ -135,6 +135,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.apache.commons:commons-dbcp2:2.5.0')
     implementation('org.kohsuke:libpam4j:1.11')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
