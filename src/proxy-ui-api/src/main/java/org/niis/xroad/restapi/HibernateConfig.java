@@ -1,6 +1,5 @@
 package org.niis.xroad.restapi;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -21,23 +20,35 @@ public class HibernateConfig {
     // config locations: https://stackoverflow.com/a/10820111/1469083
     // basic "configure custom datasource":
     // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-configure-a-datasource
+
+
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
+    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setConfigLocations(new ClassPathResource("hibernate.cfg.xml"),
                 new ClassPathResource("serverconf.hibernate.cfg.xml"));
-        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setDataSource(dataSource);
         return sessionFactory;
     }
+//
+//    @Bean
+//    public DataSource dataSource() {
+//        HikariDataSource dataSource = new HikariDataSource();
+//        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+//        dataSource.setJdbcUrl("dbc:hsqldb:mem:.");
+//        dataSource.setUsername("sa");
+//        dataSource.setPassword("");
+//        return dataSource;
+//    }
 
-    @Bean
-    public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
-        dataSource.setUrl("dbc:hsqldb:mem:.");
-        dataSource.setUsername("sa");
-        dataSource.setPassword("");
-        return dataSource;
-    }
+//    @Bean
+//    public DataSource dataSource() {
+//        BasicDataSource dataSource = new BasicDataSource();
+//        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+//        dataSource.setUrl("dbc:hsqldb:mem:.");
+//        dataSource.setUsername("sa");
+//        dataSource.setPassword("");
+//        return dataSource;
+//    }
 
 }

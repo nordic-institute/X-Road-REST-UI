@@ -31,7 +31,9 @@ import ee.ria.xroad.common.identifier.ClientId;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
-import org.niis.xroad.restapi.DatabaseContextHelper;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,16 +47,20 @@ import java.util.List;
 @Transactional
 public class ClientRepository {
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
     /**
      * return one client
      * @param id
      */
     public ClientType getClient(ClientId id) {
         ClientDAOImpl clientDAO = new ClientDAOImpl();
-        return DatabaseContextHelper.serverConfTransaction(
-                session -> {
-                    return clientDAO.getClient(session, id);
-                });
+        return clientDAO.getClient(getCurrentSession(), id);
     }
 
     /**
@@ -63,12 +69,35 @@ public class ClientRepository {
      */
     public List<ClientType> getAllClients() {
         ServerConfDAOImpl serverConf = new ServerConfDAOImpl();
-        return DatabaseContextHelper.serverConfTransaction(
-                session -> {
-                    List<ClientType> clientTypes = serverConf.getConf().getClient();
-                    Hibernate.initialize(clientTypes);
-                    return clientTypes;
-                });
+        List<ClientType> clientTypes = serverConf.getConf().getClient();
+        Hibernate.initialize(clientTypes);
+        return clientTypes;
     }
+
+//    /**
+//     * return one client
+//     * @param id
+//     */
+//    public ClientType getClient(ClientId id) {
+//        ClientDAOImpl clientDAO = new ClientDAOImpl();
+//        return DatabaseContextHelper.serverConfTransaction(
+//                session -> {
+//                    return clientDAO.getClient(session, id);
+//                });
+//    }
+
+//    /**
+//     * return all clients
+//     * @return
+//     */
+//    public List<ClientType> getAllClients() {
+//        ServerConfDAOImpl serverConf = new ServerConfDAOImpl();
+//        return DatabaseContextHelper.serverConfTransaction(
+//                session -> {
+//                    List<ClientType> clientTypes = serverConf.getConf().getClient();
+//                    Hibernate.initialize(clientTypes);
+//                    return clientTypes;
+//                });
+//    }
 }
 
