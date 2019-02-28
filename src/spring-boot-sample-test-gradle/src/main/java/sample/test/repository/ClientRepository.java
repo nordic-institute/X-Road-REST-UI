@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.repository;
+package sample.test.repository;
 
 import ee.ria.xroad.common.conf.serverconf.dao.ClientDAOImpl;
 import ee.ria.xroad.common.conf.serverconf.dao.ServerConfDAOImpl;
@@ -34,6 +34,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -48,13 +49,6 @@ import java.util.List;
 @Transactional
 public class ClientRepository {
 
-//    @Autowired
-//    private SessionFactory sessionFactory;
-
-//    private Session getCurrentSession() {
-//        return sessionFactory.getCurrentSession();
-//    }
-
     @Autowired
     private EntityManager entityManager;
 
@@ -62,12 +56,11 @@ public class ClientRepository {
         return entityManager.unwrap(Session.class);
     }
 
-
-
     /**
      * return one client
      * @param id
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ClientType getClient(ClientId id) {
         ClientDAOImpl clientDAO = new ClientDAOImpl();
         return clientDAO.getClient(getCurrentSession(), id);
@@ -77,9 +70,10 @@ public class ClientRepository {
      * return all clients
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<ClientType> getAllClients() {
         ServerConfDAOImpl serverConf = new ServerConfDAOImpl();
-        List<ClientType> clientTypes = serverConf.getConf().getClient();
+        List<ClientType> clientTypes = serverConf.getConf(getCurrentSession()).getClient();
         Hibernate.initialize(clientTypes);
         return clientTypes;
     }

@@ -1,0 +1,65 @@
+plugins {
+//    id 'org.springframework.boot' version '2.0.8.RELEASE'
+    id 'org.springframework.boot' version '2.1.3.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compile {
+        exclude group: 'org.hibernate', module: 'hibernate-hikaricp'
+        exclude group: 'org.postgresql', module: 'postgresql'
+        exclude group: 'org.hsqldb', module: 'hsqldb'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+// oldest hibernate does not work
+//ext['hibernate.version'] = '4.3.11.Final'
+//ext['hikaricp.version'] = '2.3.3'
+//Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'entityManagerFactory' available
+//at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:775)
+
+// hibernate version from XRDDEV-341 -> does not work
+//ext['hibernate.version'] = '5.1.7.Final'
+//ext['hikaricp.version'] = '2.5.1'
+//Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'entityManagerFactory' available
+//at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:775)
+
+// even newer hibernate, XRDDEV-323-add-IT picks this for some reason -> works
+ext['hibernate.version'] = '5.3.7.Final'
+ext['hikaricp.version'] = '3.2.0'
+
+//ext['hibernate.version'] = '4.3.11.Final'
+//ext['postgresql.version'] = '42.2.1'
+//ext['hikaricp.version'] = '2.3.3' 4.3.11.Final but com.zaxxer:HikariCP-java6:2.3.3
+//ext['quartz.version'] = '2.1.6'
+
+dependencies {
+    implementation project(':serverconf')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.seleniumhq.selenium:selenium-api')
+    // TODO: would rather use hsqldb (why? maybe since old code uses that)
+    // but there's some case sensitivity problems (see confluence)
+    // TODO: why do we have to have serverconf.server_code instead of serverconf.server_code?
+    // but table names had messed up UPPERCASEs
+    // TODO: also would like to take *.hbm.xml from classpath and not copypaste those
+//    implementation('org.hsqldb:hsqldb:2.4.0')
+    implementation('com.h2database:h2')
+//    implementation('mysql:mysql-connector-java')
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.seleniumhq.selenium:htmlunit-driver')
+    testImplementation('net.sourceforge.htmlunit:htmlunit')
+
+    // jaxb-api?
+}

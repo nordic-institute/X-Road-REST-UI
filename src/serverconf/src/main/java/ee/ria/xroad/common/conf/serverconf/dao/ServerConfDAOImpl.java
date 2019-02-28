@@ -28,10 +28,10 @@ import ee.ria.xroad.common.CodedException;
 import ee.ria.xroad.common.conf.serverconf.model.ServerConfType;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 
 import static ee.ria.xroad.common.ErrorCodes.X_MALFORMED_SERVERCONF;
 import static ee.ria.xroad.common.conf.serverconf.ServerConfDatabaseCtx.doInTransaction;
-import static ee.ria.xroad.common.conf.serverconf.ServerConfDatabaseCtx.get;
 
 /**
  * Server conf data access object implementation.
@@ -55,14 +55,14 @@ public class ServerConfDAOImpl {
      * @throws Exception if an error occurs
      */
     public boolean confExists() throws Exception {
-        return getFirst(ServerConfType.class) != null;
+        return getFirst(null, ServerConfType.class) != null;
     }
 
     /**
      * @return the server conf
      */
-    public ServerConfType getConf() {
-        ServerConfType confType = getFirst(ServerConfType.class);
+    public ServerConfType getConf(Session session) {
+        ServerConfType confType = getFirst(session, ServerConfType.class);
         if (confType == null) {
             throw new CodedException(X_MALFORMED_SERVERCONF,
                     "Server conf is not initialized!");
@@ -72,8 +72,8 @@ public class ServerConfDAOImpl {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T getFirst(final Class<?> clazz) {
-        Criteria c = get().getSession().createCriteria(clazz);
+    private <T> T getFirst(Session session, final Class<?> clazz) {
+        Criteria c = session.createCriteria(clazz);
         c.setFirstResult(0);
         c.setMaxResults(1);
         T t = (T) c.uniqueResult();
