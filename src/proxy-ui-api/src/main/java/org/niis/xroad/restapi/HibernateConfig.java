@@ -1,15 +1,7 @@
 package org.niis.xroad.restapi;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.sql.DataSource;
-
-@Configuration
-@EnableTransactionManagement
+//@Configuration
+//@EnableTransactionManagement
 public class HibernateConfig {
 
     // TO DO :
@@ -22,14 +14,14 @@ public class HibernateConfig {
     // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-configure-a-datasource
 
 
-    @Bean
-    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setConfigLocations(new ClassPathResource("hibernate.cfg.xml"),
-                new ClassPathResource("serverconf.hibernate.cfg.xml"));
-        sessionFactory.setDataSource(dataSource);
-        return sessionFactory;
-    }
+//    @Bean
+//    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
+//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//        sessionFactory.setConfigLocations(new ClassPathResource("hibernate.cfg.xml"),
+//                new ClassPathResource("serverconf.hibernate.cfg.xml"));
+//        sessionFactory.setDataSource(dataSource);
+//        return sessionFactory;
+//    }
 //
 //    @Bean
 //    public DataSource dataSource() {

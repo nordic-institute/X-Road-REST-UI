@@ -48,21 +48,12 @@ import java.util.List;
 @Transactional
 public class ClientRepository {
 
-//    @Autowired
-//    private SessionFactory sessionFactory;
-
-//    private Session getCurrentSession() {
-//        return sessionFactory.getCurrentSession();
-//    }
-
     @Autowired
     private EntityManager entityManager;
 
     private Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
-
-
 
     /**
      * return one client
@@ -79,7 +70,7 @@ public class ClientRepository {
      */
     public List<ClientType> getAllClients() {
         ServerConfDAOImpl serverConf = new ServerConfDAOImpl();
-        List<ClientType> clientTypes = serverConf.getConf().getClient();
+        List<ClientType> clientTypes = serverConf.getConf(getCurrentSession()).getClient();
         Hibernate.initialize(clientTypes);
         return clientTypes;
     }
