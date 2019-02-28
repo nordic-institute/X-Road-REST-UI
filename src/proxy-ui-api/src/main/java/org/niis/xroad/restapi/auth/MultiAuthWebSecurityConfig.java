@@ -237,7 +237,7 @@ public class MultiAuthWebSecurityConfig {
             filter.setExceptionIfHeaderMissing(false); // exception at this point
             // would cause http 500, we want http 401
             http
-                .antMatcher("/api/**")
+                .antMatcher("/Bapi/**")
                 .addFilter(filter)
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.NEVER)
