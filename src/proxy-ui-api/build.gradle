@@ -18,7 +18,7 @@ buildscript {
 configurations {
     compile {
         exclude group: 'org.hibernate', module: 'hibernate-hikaricp'
-        exclude group: 'org.postgresql', module: 'postgresql'
+//        exclude group: 'org.postgresql', module: 'postgresql'
         exclude group: 'org.hsqldb', module: 'hsqldb'
     }
     developmentOnly
@@ -149,13 +149,14 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-    implementation('com.h2database:h2')
     implementation('org.kohsuke:libpam4j:1.11')
+    implementation('org.postgresql:postgresql:42.2.5')
+//    implementation('mysql:mysql-connector-java')
+//    implementation('org.postgresql:postgresql:42.2.5')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
-//    testImplementation 'org.powermock:powermock-module-junit4:1.6.5'
-//    testImplementation 'org.powermock:powermock-api-mockito:1.6.5'
-//    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation('com.h2database:h2')
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     // openapi-generator related
     implementation('io.springfox:springfox-swagger2:2.8.0')
