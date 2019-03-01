@@ -46,67 +46,20 @@ public class DatabasePropertiesEnvironmentPostProcessor implements EnvironmentPo
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
-        System.out.println("processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
-        System.out.println("************** processing environment 1");
         try {
             List<PropertySource<?>> sources = new PropertiesPropertySourceLoader().load(
                     "xroad-db-properties",
                     new FileSystemResource(SystemProperties.getDatabasePropertiesFile()));
-            System.out.println("processing environment 2");
             if (sources.size() > 1) {
                 throw new IllegalStateException("expected max 1 db properties file source, "
                         + sources.size());
             }
-            System.out.println("processing environment 3");
             String password = (String) sources.get(0).getProperty("serverconf.hibernate.connection.password");
-            System.out.println("password" + password);
             Map<String, Object> dbPropertiesMap = new HashMap<>();
             dbPropertiesMap.put("spring.datasource.password", password);
             environment.getPropertySources().addLast(new MapPropertySource("dbpassword", dbPropertiesMap));
-            System.out.println("processing environment 4");
-            System.out.println("processing environment 5");
-            System.out.println("processing environment 6");
 
         } catch (Exception e) {
-            System.out.println("processing environment exception");
             e.printStackTrace();
         }
     }
