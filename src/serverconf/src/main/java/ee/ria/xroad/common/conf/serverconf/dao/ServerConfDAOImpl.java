@@ -31,32 +31,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import static ee.ria.xroad.common.ErrorCodes.X_MALFORMED_SERVERCONF;
-import static ee.ria.xroad.common.conf.serverconf.ServerConfDatabaseCtx.doInTransaction;
 
 /**
  * Server conf data access object implementation.
  */
 public class ServerConfDAOImpl {
-
-    /**
-     * Saves the server conf to the database.
-     * @param conf the server conf
-     * @throws Exception if an error occurs
-     */
-    public void save(final ServerConfType conf) throws Exception {
-        doInTransaction(session -> {
-            session.saveOrUpdate(conf);
-            return null;
-        });
-    }
-
-    /**
-     * @return true, if configuration exists in the database
-     * @throws Exception if an error occurs
-     */
-    public boolean confExists() throws Exception {
-        return getFirst(null, ServerConfType.class) != null;
-    }
 
     /**
      * @return the server conf

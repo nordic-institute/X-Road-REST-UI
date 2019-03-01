@@ -26,32 +26,60 @@ package org.niis.xroad.restapi.repository;
 
 import ee.ria.xroad.common.conf.serverconf.model.ClientType;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
- * dsfds
+ * test ClientRepository
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
+@Slf4j
+@Transactional
 public class ClientRepositoryIntegrationTest {
 
     @Autowired
     private ClientRepository clientRepository;
 
     @Test
-    public void test() {
+    public void getAllClients() {
         List<ClientType> clients = clientRepository.getAllClients();
         assertEquals(2, clients.size());
+    }
+
+    @Test
+    public void testRollback1() {
+        String code = clientRepository.getAndUpdateServerCode();
+        assertEquals("TEST-INMEM-SS", code);
+        log.info("got code {}", code);
+
+        String updated = clientRepository.getAndUpdateServerCode();
+        assertNotEquals("TEST-INMEM-SS", updated);
+        log.info("got updated code {}", updated);
+    }
+
+    @Test
+    public void testRollback2() {
+        // transactions should be rolled back between tests
+        String code = clientRepository.getAndUpdateServerCode();
+        assertEquals("TEST-INMEM-SS", code);
+        log.info("got (2) code {}", code);
+
+        String updated = clientRepository.getAndUpdateServerCode();
+        assertNotEquals("TEST-INMEM-SS", updated);
+        log.info("got (2) updated code {}", updated);
     }
 }
 

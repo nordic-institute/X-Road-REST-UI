@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
 import java.util.ArrayList;
@@ -90,6 +91,26 @@ public class ClientsApiController implements org.niis.xroad.restapi.openapi.Clie
     public ResponseEntity<List<org.niis.xroad.restapi.openapi.model.Service>> getClientServices(String id) {
         if (true) throw new NullPointerException("NullPointerException");
         return null;
+    }
+
+    /**
+     * test transactions
+     * @return
+     */
+    @PermitAll
+    public String getAndUpdateServerCode() {
+        return clientRepository.getAndUpdateServerCode();
+    }
+
+    /**
+     * test transactions
+     * @return
+     */
+    @PermitAll
+    public String getAndUpdateServerCodeRollback() {
+        String code = clientRepository.getAndUpdateServerCode();
+        if (true) throw new NullPointerException("code broke, transaction should rollback");
+        return code;
     }
 
     @Override

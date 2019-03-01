@@ -333,7 +333,7 @@ public class ServerConfImpl implements ServerConfProvider {
                 .findFirst().orElse(null);
     }
 
-    protected static <T> T tx(TransactionCallback<T> t) {
+    protected <T> T tx(TransactionCallback<T> t) {
         try {
             return doInTransaction(t);
         } catch (Exception e) {
