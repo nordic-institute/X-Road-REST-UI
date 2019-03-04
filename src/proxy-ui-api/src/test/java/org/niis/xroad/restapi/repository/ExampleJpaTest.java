@@ -79,14 +79,14 @@ public class ExampleJpaTest {
     @Test
     public void testThatConstraintsWork() {
         // null conf_id is allowed
-        jdbcTemplate.update("INSERT INTO CLIENT (id, conf_id, identifier)" +
-                " values (1000, null, null)");
+        jdbcTemplate.update("INSERT INTO CLIENT (id, conf_id, identifier)"
+                + " values (1000, null, null)");
         try {
             // foreign key constrain should break with conf_id = 1000 (does not exist)
-            jdbcTemplate.update("INSERT INTO CLIENT (id, conf_id, identifier)" +
-                    " values (2000, 1000, null)");
+            jdbcTemplate.update("INSERT INTO CLIENT (id, conf_id, identifier)"
+                    + " values (2000, 1000, null)");
 
-        } catch (DataIntegrityViolationException expected) {}
+        } catch (DataIntegrityViolationException expected) { }
     }
 
 }
