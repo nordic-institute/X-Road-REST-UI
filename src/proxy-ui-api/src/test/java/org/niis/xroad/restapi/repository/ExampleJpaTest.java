@@ -33,6 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +57,10 @@ public class ExampleJpaTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+
     @Test
     public void testTestEntityManager() {
         ServerConfType conf2 = new ServerConfType();
@@ -69,6 +75,20 @@ public class ExampleJpaTest {
         ServerConfType confLoad2 = testEntityManager.find(ServerConfType.class, confPersisted.getId());
         assertEquals("from-test", confLoad2.getServerCode());
     }
+
+    @Test
+    public void testThatConstraintsWork() {
+        // null conf_id is allowed
+        jdbcTemplate.update("INSERT INTO CLIENT (id, conf_id, identifier)" +
+                " values (1000, null, null)");
+        try {
+            // foreign key constrain should break with conf_id = 1000 (does not exist)
+            jdbcTemplate.update("INSERT INTO CLIENT (id, conf_id, identifier)" +
+                    " values (2000, 1000, null)");
+
+        } catch (DataIntegrityViolationException expected) {}
+    }
+
 }
 
 
