@@ -19,7 +19,7 @@ configurations {
     compile {
         exclude group: 'org.hibernate', module: 'hibernate-hikaricp'
 //        exclude group: 'org.postgresql', module: 'postgresql'
-        exclude group: 'org.hsqldb', module: 'hsqldb'
+//        exclude group: 'org.hsqldb', module: 'hsqldb'
     }
     developmentOnly
     runtimeClasspath {
@@ -64,11 +64,6 @@ processResources {
 
 ext['hibernate.version'] = '5.3.7.Final'
 ext['hikaricp.version'] = '3.2.0'
-
-//ext['hibernate.version'] = '4.3.11.Final'
-//ext['postgresql.version'] = '42.2.1'
-//ext['hikaricp.version'] = '2.3.3'
-//ext['quartz.version'] = '2.1.6'
 
 node {
     download = false
@@ -155,7 +150,8 @@ dependencies {
 //    implementation('org.postgresql:postgresql:42.2.5')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
-    testImplementation('com.h2database:h2')
+//    testImplementation('com.h2database:h2')
+    testImplementation('org.hsqldb:hsqldb')
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     // openapi-generator related

@@ -4,12 +4,12 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ee.ria.xroad.common.identifier">
 
-    <class name="XRoadId" table="identifier">
+    <class name="XRoadId" table="IDENTIFIER">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
 
-        <discriminator column="discriminator" type="string"/>
+        <discriminator column="DISCRIMINATOR" type="string"/>
 
         <property name="type" access="field">
              <type name="org.hibernate.type.EnumType">

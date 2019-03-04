@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ee.ria.xroad.common.conf.serverconf.model">
 
-    <class name="ServerConfType" table="serverconf">
+    <class name="ServerConfType" table="SERVERCONF">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -63,7 +63,7 @@
         </bag>
     </class>
 
-    <class name="ee.ria.xroad.common.conf.serverconf.model.ServiceDescriptionType" table="servicedescription">
+    <class name="ee.ria.xroad.common.conf.serverconf.model.ServiceDescriptionType" table="SERVICEDESCRIPTION">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -113,7 +113,7 @@
         </bag>
     </class>
 
-    <class name="LocalGroupType" table="localgroup">
+    <class name="LocalGroupType" table="LOCALGROUP">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -129,7 +129,7 @@
         <property name="updated" access="field" not-null="true"/>
     </class>
 
-    <class name="GroupMemberType" table="groupmember">
+    <class name="GroupMemberType" table="GROUPMEMBER">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -140,7 +140,7 @@
         <property name="added" access="field" not-null="true"/>
     </class>
 
-    <class name="CertificateType" table="certificate">
+    <class name="CertificateType" table="CERTIFICATE">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -149,7 +149,7 @@
             type="org.hibernate.type.MaterializedBlobType"/>
     </class>
 
-    <class name="AccessRightType" table="accessright">
+    <class name="AccessRightType" table="ACCESSRIGHT">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -163,7 +163,7 @@
         <property name="rightsGiven" access="field" not-null="true"/>
     </class>
 
-    <class name="TspType" table="tsp">
+    <class name="TspType" table="TSP">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
@@ -172,7 +172,7 @@
         <property name="url" access="field" not-null="true"/>
     </class>
 
-    <class name="UiUserType" table="uiuser">
+    <class name="UiUserType" table="UIUSER">
         <id name="id" type="long" access="field">
             <generator class="native"/>
         </id>
