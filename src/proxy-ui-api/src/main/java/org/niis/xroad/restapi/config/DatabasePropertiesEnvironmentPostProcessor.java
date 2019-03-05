@@ -26,11 +26,14 @@ package org.niis.xroad.restapi.config;
 
 import ee.ria.xroad.common.SystemProperties;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.boot.env.PropertiesPropertySourceLoader;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.Profiles;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.FileSystemResource;
 
@@ -39,28 +42,52 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Load properties from db.properties file
+ * Load datasource properties from db.properties file
  */
+@Slf4j
+@Profile("!test")
 public class DatabasePropertiesEnvironmentPostProcessor implements EnvironmentPostProcessor {
+
+    private static final Map<String, String> DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES =
+            new HashMap<>();
+    static {
+        DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES
+                .put("serverconf.hibernate.connection.username", "spring.datasource.username");
+        DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES
+                .put("serverconf.hibernate.connection.password", "spring.datasource.password");
+        DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES
+                .put("serverconf.hibernate.connection.url", "spring.datasource.url");
+    }
+
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
-        try {
-            List<PropertySource<?>> sources = new PropertiesPropertySourceLoader().load(
-                    "xroad-db-properties",
-                    new FileSystemResource(SystemProperties.getDatabasePropertiesFile()));
-            if (sources.size() > 1) {
-                throw new IllegalStateException("expected max 1 db properties file source, "
-                        + sources.size());
-            }
-            String password = (String) sources.get(0).getProperty("serverconf.hibernate.connection.password");
-            Map<String, Object> dbPropertiesMap = new HashMap<>();
-            dbPropertiesMap.put("spring.datasource.password", password);
-            environment.getPropertySources().addLast(new MapPropertySource("dbpassword", dbPropertiesMap));
+        // we read db.properties only if not testing
+        if (environment.acceptsProfiles(Profiles.of("!test"))) {
+            try {
+                List<PropertySource<?>> sources = new PropertiesPropertySourceLoader().load(
+                        "xroad-db-properties",
+                        new FileSystemResource(SystemProperties.getDatabasePropertiesFile()));
+                if (sources.size() > 1) {
+                    throw new IllegalStateException("expected max 1 db properties file source, "
+                            + sources.size());
+                }
+                PropertySource<?> source = sources.get(0);
+                Map<String, Object> springDatasourcePropertiesMap = new HashMap<>();
+                for (String dbPropertyName: DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES.keySet()) {
+                    String springPropertyName = DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES.get(dbPropertyName);
+                    Object propertyValue = source.getProperty(dbPropertyName);
+                    log.info("mapping db property {} to spring property {}, value={}",
+                            dbPropertyName, springPropertyName, propertyValue);
+                    springDatasourcePropertiesMap.put(springPropertyName, propertyValue);
+                }
+                environment.getPropertySources().addLast(new MapPropertySource(
+                        "fromDbPropertiesFile", springDatasourcePropertiesMap));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
