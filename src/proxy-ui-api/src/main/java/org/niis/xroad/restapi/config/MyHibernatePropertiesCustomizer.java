@@ -65,6 +65,16 @@ public class MyHibernatePropertiesCustomizer implements HibernatePropertiesCusto
                         dbProperties.getProperty(propertyName));
             }
         }
+
+        // go through system properties, and apply relevant hibernate properties from there
+        // (as in old implementation)
+        Properties systemProperties = System.getProperties();
+        for (String systemProperty: systemProperties.stringPropertyNames()) {
+            if (isServerConfProperty(systemProperty) && canBeCustomized(systemProperty)) {
+                hibernateProperties.put(removeServerConfPartFromName(systemProperty),
+                    systemProperties.getProperty(systemProperty));
+            }
+        }
     }
 
     private boolean canBeCustomized(String propertyName) {

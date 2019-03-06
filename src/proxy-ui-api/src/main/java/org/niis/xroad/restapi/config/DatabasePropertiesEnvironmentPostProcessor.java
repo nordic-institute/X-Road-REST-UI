@@ -40,6 +40,7 @@ import org.springframework.core.io.FileSystemResource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Load datasource properties from db.properties file
@@ -77,11 +78,17 @@ public class DatabasePropertiesEnvironmentPostProcessor implements EnvironmentPo
                 }
                 PropertySource<?> source = sources.get(0);
                 Map<String, Object> springDatasourcePropertiesMap = new HashMap<>();
+                Properties systemProperties = System.getProperties();
                 for (String dbPropertyName: DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES.keySet()) {
                     String springPropertyName = DB_PROPERTY_NAMES_TO_SPRING_PROPERTIES.get(dbPropertyName);
                     Object propertyValue = source.getProperty(dbPropertyName);
-                    log.info("mapping db property {} to spring property {}, value={}",
-                            dbPropertyName, springPropertyName, propertyValue);
+                    log.debug("mapping db property {} to spring property {}",
+                            dbPropertyName, springPropertyName);
+                    if (systemProperties.contains(dbPropertyName)) {
+                        log.debug("overriding db property {} with value from system property",
+                                dbPropertyName);
+                        propertyValue = systemProperties.getProperty(dbPropertyName);
+                    }
                     springDatasourcePropertiesMap.put(springPropertyName, propertyValue);
                 }
                 environment.getPropertySources().addLast(new MapPropertySource(
