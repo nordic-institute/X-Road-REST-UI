@@ -32,23 +32,22 @@ import org.springframework.context.event.ContextClosedEvent;
 
 /**
  * Listener which can be used to bootstrap Akka.
- * Follows example of ProxyUIServices in old proxy-ui.
+ * See ProxyUIServices in old proxy-ui.
+ * System properties bootstrapping is done with SystemPropertiesInitializer
  *
  * Not a spring bean, and does not use @EventListener annotation,
  * since it listens to events that occur before or after
  * ApplicationContext is available
  */
-//@Component
-//@Profile("!test")
 @Slf4j
 public class StartStopListener implements ApplicationListener {
 
     private void stop() {
-        print("stop");
+        log.debug("stop");
     }
 
     private void start() {
-        print("start");
+        log.debug("start");
     }
 
     @Override
@@ -58,15 +57,5 @@ public class StartStopListener implements ApplicationListener {
         } else if (event instanceof ApplicationStartingEvent) {
             start();
         }
-    }
-
-    public static final int XERO = 0;
-    public static final int TVENTY = 20;
-
-    private void print(String msg) {
-        for (int i = XERO; i < TVENTY; i++) {
-            System.out.println("**************************** " + i);
-        }
-        System.out.println(msg);
     }
 }

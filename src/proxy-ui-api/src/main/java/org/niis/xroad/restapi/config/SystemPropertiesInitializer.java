@@ -34,54 +34,23 @@ import static ee.ria.xroad.common.SystemProperties.CONF_FILE_SIGNER;
 
 /**
  * Helper wrapper which makes sure system properties are initialized
- * and are not initialized multiple times
  */
 public final class SystemPropertiesInitializer {
     private SystemPropertiesInitializer() {
     }
-    private static final AtomicBoolean XROAD_PROPERTIES_INITIALIZED;
-    static {
-        Printer.print("creating XROAD_PROPERTIES_INITIALIZED");
-        XROAD_PROPERTIES_INITIALIZED = new AtomicBoolean(false);
-        Printer.print("created XROAD_PROPERTIES_INITIALIZED, value=" + XROAD_PROPERTIES_INITIALIZED.get());
-    }
+    private static final AtomicBoolean XROAD_PROPERTIES_INITIALIZED = new AtomicBoolean(false);
 
     /**
-     * initialize
+     * initialize, if not yet initialized
      */
     public static synchronized void initialize() {
-        if (XROAD_PROPERTIES_INITIALIZED.get()) {
-            throw new IllegalStateException("Should only be initialized once!");
-        }
-        print("initialize");
-        SystemPropertiesLoader.create().withCommonAndLocal()
-                .with(CONF_FILE_PROXY)
-                .with(CONF_FILE_PROXY_UI)
-                .with(CONF_FILE_SIGNER)
-                .load();
-        XROAD_PROPERTIES_INITIALIZED.set(true);
-        Printer.print("initialized, value=" + XROAD_PROPERTIES_INITIALIZED.get());
-    }
-
-    /**
-     * Throw exception if not initialized yet
-     */
-    public static synchronized void verifyInitialized() {
-        Printer.print("verifying, value=" + XROAD_PROPERTIES_INITIALIZED.get());
-        print("verifyInitialized");
         if (!XROAD_PROPERTIES_INITIALIZED.get()) {
-            throw new IllegalStateException(("Should be initialized, but is not"));
+            SystemPropertiesLoader.create().withCommonAndLocal()
+                    .with(CONF_FILE_PROXY)
+                    .with(CONF_FILE_PROXY_UI)
+                    .with(CONF_FILE_SIGNER)
+                    .load();
+            XROAD_PROPERTIES_INITIALIZED.set(true);
         }
     }
-
-    public static final int XERO = 0;
-    public static final int TVENTY = 20;
-
-    private static void print(String msg) {
-        for (int i = XERO; i < TVENTY; i++) {
-            System.out.println("**************************** " + i);
-        }
-        System.out.println(msg);
-    }
-
 }

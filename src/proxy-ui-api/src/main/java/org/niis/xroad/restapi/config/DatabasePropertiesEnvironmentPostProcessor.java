@@ -63,10 +63,9 @@ public class DatabasePropertiesEnvironmentPostProcessor implements EnvironmentPo
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
-        Printer.print("postProcessEnvironment");
-
         // we read db.properties only if not testing
         if (environment.acceptsProfiles(Profiles.of("!test"))) {
+            // called twice since IntelliJ tests load the class twice
             SystemPropertiesInitializer.initialize();
             try {
                 List<PropertySource<?>> sources = new PropertiesPropertySourceLoader().load(
