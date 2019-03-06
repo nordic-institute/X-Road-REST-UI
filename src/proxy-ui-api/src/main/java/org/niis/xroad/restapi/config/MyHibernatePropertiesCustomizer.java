@@ -46,6 +46,8 @@ public class MyHibernatePropertiesCustomizer implements HibernatePropertiesCusto
 
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
+        Printer.print("customize");
+        SystemPropertiesInitializer.verifyInitialized();
         Properties dbProperties = new Properties();
         try {
             dbProperties.load(new FileInputStream(SystemProperties.getDatabasePropertiesFile()));

@@ -63,8 +63,11 @@ public class DatabasePropertiesEnvironmentPostProcessor implements EnvironmentPo
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
+        Printer.print("postProcessEnvironment");
+
         // we read db.properties only if not testing
         if (environment.acceptsProfiles(Profiles.of("!test"))) {
+            SystemPropertiesInitializer.initialize();
             try {
                 List<PropertySource<?>> sources = new PropertiesPropertySourceLoader().load(
                         "xroad-db-properties",
