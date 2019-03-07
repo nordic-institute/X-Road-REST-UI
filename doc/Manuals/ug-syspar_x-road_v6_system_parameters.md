@@ -1,6 +1,6 @@
 # X-Road: System Parameters User Guide
 
-Version: 2.39  
+Version: 2.41  
 Doc. ID: UG-SYSPAR
 
 | Date       | Version  | Description                                                                  | Author             |
@@ -49,6 +49,8 @@ Doc. ID: UG-SYSPAR
 | 08.11.2018 | 2.37     | Improved definition of *minimum-global-configuration-version* on the central server and configuration proxy | Ilkka Seppälä |
 | 19.12.2018 | 2.38     | Fixed the default value of trusted-anchors-allowed | Ilkka Seppälä |
 | 21.12.2018 | 2.39     | Add connector initial idle time parameters | Jarkko Hyöty |
+| 23.01.2019 | 2.40     | Added new Central Server parameter *auto-approve-auth-cert-reg-requests* | Petteri Kivimäki |
+| 03.02.2019 | 2.41     | Added new Central Server parameter *auto-approve-client-reg-requests* | Petteri Kivimäki |
 
 ## Table of Contents
 
@@ -353,6 +355,8 @@ For instructions on how to change the parameter values, see section [Changing th
 | internal-directory      | internalconf                            | Name of the signed internal configuration directory that is distributed to the configuration clients (security servers and/or configuration proxies) of this X-Road instance. |
 | trusted-anchors-allowed | true                                    | True if federation is allowed for this X-Road instance. |
 | minimum-global-configuration-version | 2                          | The minimum supported global configuration version on the central server. This parameter is used if the central server needs to generate multiple versions of global configuration. Note that the support for global configuration V1 has been dropped in X-Road 6.20.0 and since that version the minimum value for this parameter is 2. |
+| auto-approve-auth-cert-reg-requests | false                       | True if automatic approval of auth cert registration requests is enabled for this X-Road instance. Automatic approval is applied to existing members only. |
+| auto-approve-client-reg-requests | false                          | True if automatic approval of client registration requests is enabled for this X-Road instance. Automatic approval is applied to existing members only. In addition, automatic approval is applied only if the client registration request has been signed by the member owning the subsystem to be registered as a security server client. |
 
 #### 4.1.3 Signer parameters: `[signer]`
 
