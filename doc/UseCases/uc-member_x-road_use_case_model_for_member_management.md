@@ -2913,6 +2913,80 @@ Figure 1. Use case diagram for member management
 -   The security server client state machine model is described in the document “Security Server User Guide” \[[UG-SS](#Ref_UG-SS)\].
 
 
+#### 2.4.45 UC MEMBER\_47: Add a Subsystem to the Security Server
+
+**System**: Security server
+
+**Level**: User task
+
+**Component**: Security server
+
+**Actor**: SS administrator
+
+**Brief description**: SS administrator adds a Subsystem to an existing member.
+
+**Precondition**: The desired Subsystem is not available in the Security Server
+
+**Postcondition**: -
+
+**Trigger**: -
+
+**Main success scenario**:
+
+SS administrator selects to add a security server client ("Add Subsystem" button).
+
+1.  SS administrator inserts the Subsystem code.
+
+- System parses the user input: [2.5.1](#251-uc-member_54-parse-user-input);
+
+- System verifies that a client with the inserted identifier does not already exist in the system configuration.
+
+- System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
+
+2. SS Administrator adds the specified Subsystem
+
+3.  System saves the client to the system configuration and sets the status of the client to *saved*.
+
+4.  System logs the event “Add client” to the audit log.
+
+**Extensions**:
+
+1a. The parsing of the user input terminated with an error.
+
+  - 1a.1. System displays the termination message of the parsing process.
+
+  - 1a.2. System logs the event “Add client failed” to the audit log.
+
+  - 1a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 1.
+
+    - 1a.3a. SS administrator selects to terminate the use case.
+
+2a. A client with the inserted identifier already exists in the system configuration.
+
+  - 4a.1. System displays the error message: “Client already exists”.
+
+  - 4a.2. System logs the event “Add client failed” to the audit log.
+
+  - 4a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 1.
+
+    - 4a.3a. SS administrator selects to terminate the use case.
+
+3a. An X-Road member with the inserted identifier does not exist.
+
+  - 5a.1. System prompts the message “The person/organisation 'X' is not registered as X-Road member” (where “X” is the entered identifier) and asks for confirmation for continuing.
+
+  - 5a.2. SS administrator selects not to continue and reinserts the client identifier. Use case continues from step 1.
+
+    - 5a.2a. SS administrator selects not to continue and terminates the use case.
+
+**Related information**:
+
+-   The audit log is located at `/var/log/xroad/audit.log`. The data set of audit log records is described in the document “X-Road: Audit Log Events” \[[SPEC-AL](#Ref_SPEC-AL)\].
+
+-   The security server client state machine model is described in the document “Security Server User Guide” \[[UG-SS](#Ref_UG-SS)\].
+
+
+
 #### 2.4.5 UC MEMBER\_48: Register a Security Server Client
 
 **System**: Security server
