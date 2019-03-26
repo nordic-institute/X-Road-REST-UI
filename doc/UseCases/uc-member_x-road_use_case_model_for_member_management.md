@@ -2852,7 +2852,7 @@ Figure 1. Use case diagram for member management
 
 **Brief description**: SS administrator adds a client to the security server.
 
-**Precondition**: -
+**Precondition**: The desired Client is not available in the Security Server
 
 **Postcondition**: -
 
@@ -2860,51 +2860,55 @@ Figure 1. Use case diagram for member management
 
 **Main success scenario**:
 
-1.  SS administrator selects to add a security server client.
+SS administrator selects to add a security server client ("Add client" button).
 
-2.  SS administrator inserts the X-Road identifier of the client.
+1.  SS administrator inserts the X-Road identifier of the client (manually or from the Global list).
 
-3.  System parses the user input: [2.5.1](#251-uc-member_54-parse-user-input);
+- System parses the user input: [2.5.1](#251-uc-member_54-parse-user-input);
 
-4.  System verifies that a client with the inserted identifier does not already exist in the system configuration.
+- System verifies that a client with the inserted identifier does not already exist in the system configuration.
 
-5.  System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
+- System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
 
-6.  System saves the client to the system configuration and sets the status of the client to *saved*.
+2. SS administrator generates a new Sign key and its certificate
 
-7.  System logs the event “Add client” to the audit log.
+- System triggers a request for a new key and and a new certificate
+
+3. SS Administrator adds the specified Client
+
+4.  System saves the client to the system configuration and sets the status of the client to *saved*.
+
+5.  System logs the event “Add client” to the audit log.
 
 **Extensions**:
 
-3a. The parsing of the user input terminated with an error.
+1a. The parsing of the user input terminated with an error.
 
-  - 3a.1. System displays the termination message of the parsing process.
+  - 1a.1. System displays the termination message of the parsing process.
 
-  - 3a.2. System logs the event “Add client failed” to the audit log.
+  - 1a.2. System logs the event “Add client failed” to the audit log.
 
-  - 3a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 3.
+  - 1a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 1.
 
-    - 3a.3a. SS administrator selects to terminate the use case.
+    - 1a.3a. SS administrator selects to terminate the use case.
 
-4a. A client with the inserted identifier already exists in the system configuration.
+2a. A client with the inserted identifier already exists in the system configuration.
 
   - 4a.1. System displays the error message: “Client already exists”.
 
   - 4a.2. System logs the event “Add client failed” to the audit log.
 
-  - 4a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 3.
+  - 4a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 1.
 
     - 4a.3a. SS administrator selects to terminate the use case.
 
-5a. An X-Road member with the inserted identifier does not exist.
+3a. An X-Road member with the inserted identifier does not exist.
 
   - 5a.1. System prompts the message “The person/organisation 'X' is not registered as X-Road member” (where “X” is the entered identifier) and asks for confirmation for continuing.
 
-  - 5a.2. SS administrator selects not to continue and reinserts the client identifier. Use case continues from step 3.
+  - 5a.2. SS administrator selects not to continue and reinserts the client identifier. Use case continues from step 1.
 
-    - 5a.2a. SS administrator selects to continue. Use case continues from step 6.
-
-    - 5a.2b. SS administrator selects not to continue and terminates the use case.
+    - 5a.2a. SS administrator selects not to continue and terminates the use case.
 
 **Related information**:
 
@@ -2943,7 +2947,7 @@ Figure 1. Use case diagram for member management
 
 **Main Success Scenario**:
 
-1.  SS administrator selects to initiate the registration of a security server client.
+1.  SS administrator selects to initiate the registration of a security server client (via "Register" button).
 
 2.  System verifies that the selected subsystem exists in the global configuration.
 
