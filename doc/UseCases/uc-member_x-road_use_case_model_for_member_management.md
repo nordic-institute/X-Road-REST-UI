@@ -2852,7 +2852,7 @@ Figure 1. Use case diagram for member management
 
 **Brief description**: SS administrator adds a client to the security server.
 
-**Precondition**: The desired Client is not available in the Security Server
+**Precondition**: The desired Client does not exist in the Security Server
 
 **Postcondition**: -
 
@@ -2860,7 +2860,7 @@ Figure 1. Use case diagram for member management
 
 **Main success scenario**:
 
-SS administrator selects to add a security server client ("Add client" button).
+SS administrator selects to add a security server client.
 
 1.  SS administrator inserts the X-Road identifier of the client (manually or from the Global list).
 
@@ -2947,7 +2947,7 @@ SS administrator selects to add a security server client ("Add client" button).
 
 **Main Success Scenario**:
 
-1.  SS administrator selects to initiate the registration of a security server client (via "Register" button).
+1.  SS administrator selects to initiate the registration of a security server client.
 
 2.  System verifies that the selected subsystem exists in the global configuration.
 
