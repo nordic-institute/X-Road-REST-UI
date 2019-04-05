@@ -2862,7 +2862,9 @@ Figure 1. Use case diagram for member management
 
 SS administrator selects to add a security server client.
 
-1.  SS administrator inserts the X-Road identifier of the client (manually or from the Global list).
+1. If there are two or more tokens on the Security Server, the SS administrator must select the one on which he will add the client
+
+2.  SS administrator inserts the X-Road identifier of the client (manually or from the Global list).
 
 - System parses the user input: [2.5.1](#251-uc-member_54-parse-user-input);
 
@@ -2876,13 +2878,19 @@ SS administrator selects to add a security server client.
 
 3. SS Administrator adds the specified Client
 
-4.  System saves the client to the system configuration and sets the status of the client to *saved*.
+4. System ask confirmation "Do you want to send a client registration request for the added client?"
 
-5.  System logs the event “Add client” to the audit log.
+- If SS administrator selects "Cancel", the operation is aborted
+
+- If SS administrator selects "Confirm", the operation continues to step 5
+
+5.  System saves the client to the system configuration and sets the status of the client to *saved*.
+
+6.  System logs the event “Add client” to the audit log.
 
 **Extensions**:
 
-1a. The parsing of the user input terminated with an error.
+2a. The parsing of the user input terminated with an error.
 
   - 1a.1. System displays the termination message of the parsing process.
 
