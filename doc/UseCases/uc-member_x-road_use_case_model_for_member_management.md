@@ -2956,6 +2956,12 @@ Figure 1. Use case diagram for member management
 
 **Extensions**:
 
+- 2a. SS administrator selected to add new subsystem to existing client. _Member details are prefilled and are not editable_
+
+  - 2a.1. SS administrator inputs the subsystem code OR
+
+  - 2a.2. SS administrator selects the subsystem code by searching form existing subsystems
+
 3a. The parsing of the user input terminated with an error.
 
   - 3a.1. System displays the termination message of the parsing process.
