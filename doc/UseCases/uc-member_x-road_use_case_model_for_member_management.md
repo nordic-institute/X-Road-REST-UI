@@ -2852,7 +2852,7 @@ Figure 1. Use case diagram for member management
 
 **Brief description**: SS administrator adds a client to the security server.
 
-**Precondition**: The desired Client does not exist in the Security Server
+**Precondition**: The desired client does not exist in the Security Server
 
 **Postcondition**: -
 
@@ -2872,7 +2872,7 @@ SS administrator selects to add a security server client.
 
 - System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
 
-2. SS administrator generates a new Sign key and its certificate
+2. SS administrator generates a new Sign key (https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#329-uc-ss_28-generate-a-key) and its certificate (https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#330-uc-ss_29-generate-a-certificate-signing-request-for-a-key)
 
 - System triggers a request for a new key and and a new certificate
 
@@ -2890,7 +2890,7 @@ SS administrator selects to add a security server client.
 
 **Extensions**:
 
-2a. The parsing of the user input terminated with an error.
+1a. The parsing of the user input terminated with an error.
 
   - 1a.1. System displays the termination message of the parsing process.
 
@@ -2902,21 +2902,21 @@ SS administrator selects to add a security server client.
 
 2a. A client with the inserted identifier already exists in the system configuration.
 
-  - 4a.1. System displays the error message: “Client already exists”.
+  - 2a.1. System displays the error message: “Client already exists”.
 
-  - 4a.2. System logs the event “Add client failed” to the audit log.
+  - 2a.2. System logs the event “Add client failed” to the audit log.
 
-  - 4a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 1.
+  - 2a.3. SS administrator selects to reinsert the client identifier. Use case continues from step 1.
 
-    - 4a.3a. SS administrator selects to terminate the use case.
+    - 2a.3a. SS administrator selects to terminate the use case.
 
 3a. An X-Road member with the inserted identifier does not exist.
 
-  - 5a.1. System prompts the message “The person/organisation 'X' is not registered as X-Road member” (where “X” is the entered identifier) and asks for confirmation for continuing.
+  - 3a.1. System prompts the message “The person/organisation 'X' is not registered as X-Road member” (where “X” is the entered identifier) and asks for confirmation for continuing.
 
-  - 5a.2. SS administrator selects not to continue and reinserts the client identifier. Use case continues from step 1.
+  - 3a.2. SS administrator selects not to continue and reinserts the client identifier. Use case continues from step 1.
 
-    - 5a.2a. SS administrator selects not to continue and terminates the use case.
+    - 3a.2a. SS administrator selects not to continue and terminates the use case.
 
 **Related information**:
 
