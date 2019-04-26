@@ -2872,7 +2872,7 @@ SS administrator selects to add a security server client.
 
 - System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
 
-2. SS administrator generates a new Sign key (https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#329-uc-ss_28-generate-a-key) and its certificate (https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#330-uc-ss_29-generate-a-certificate-signing-request-for-a-key)
+2. SS administrator inpiuts the key name and certificates details 
 
 - System triggers a request for a new key and and a new certificate
 
@@ -2885,6 +2885,8 @@ SS administrator selects to add a security server client.
 - If SS administrator selects "Confirm", the operation continues to step 5
 
 5.  System saves the client to the system configuration and sets the status of the client to *saved*.
+
+(https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#329-uc-ss_28-generate-a-key) and its certificate (https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#330-uc-ss_29-generate-a-certificate-signing-request-for-a-key)
 
 6.  System logs the event “Add client” to the audit log.
 
