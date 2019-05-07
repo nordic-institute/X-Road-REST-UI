@@ -959,8 +959,6 @@ paths:
           schema:
             type: string
             format: binary
-            minLength: 1
-            maxLength: 1000000
       security:
         - ApiKeyAuth: []
       responses:
@@ -985,8 +983,6 @@ paths:
           application/*:
             schema:
               type: string
-              minLength: 1
-              maxLength: 1000000
               format: binary
         description: certificate to add
   /clients/{id}/tlscertificates/{hash}:
