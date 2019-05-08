@@ -26,23 +26,23 @@ package org.niis.xroad.restapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Arrays;
-import java.util.HashSet;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * main spring boot application.
  */
+@ServletComponentScan
 @SpringBootApplication
+@PropertySource("classpath:/common-application.properties")
+@EnableCaching
 @SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 public class RestApiApplication {
     /**
      * start application
      */
     public static void main(String[] args) {
-        // bootRun seems to duplicate parameters in some situations
-        // with our gradle configuration
-        HashSet<String> filtered = new HashSet(Arrays.asList(args));
-        SpringApplication.run(RestApiApplication.class, filtered.toArray(new String[]{}));
+        SpringApplication.run(RestApiApplication.class, args);
     }
 }

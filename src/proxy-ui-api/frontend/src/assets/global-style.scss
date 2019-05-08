@@ -2,13 +2,30 @@
 .rounded-button {
   padding-left: 24px;
   padding-right: 24px;
+  border-radius: 4px;
+}
+
+.xr-small-button {
+  height: 24px;
+  border-radius: 4px;
+  margin-right: 4px;
 }
 
 .app-custom {
   background-color: white;
 }
 
+.xr-tab-max-width {
+  max-width: 850px;
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 // Vuetify overrides
 .v-tabs__slider{
   height: 4px;
 }
+
+
+

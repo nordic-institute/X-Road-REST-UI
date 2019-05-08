@@ -1,7 +1,7 @@
 <template>
   <v-app class="app-custom">
     <v-content>
-      <v-toolbar dark app color="primary" class="elevation-2">
+      <v-toolbar dark app color="#202020" class="elevation-2">
         <v-img
           :src="require('../assets/xroad_logo_64.png')"
           height="64"
@@ -21,7 +21,8 @@
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    name="login"
+                    id="username"
+                    name="username"
                     label="Username"
                     type="text"
                     v-model="username"
@@ -44,6 +45,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
+                  id="submit-button"
                   color="primary"
                   class="rounded-button"
                   @click="submit"
@@ -62,6 +64,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { RouteName } from '@/global';
 
 export default Vue.extend({
   name: 'login',
@@ -105,7 +108,8 @@ export default Vue.extend({
         .dispatch('login', loginData)
         .then(
           (response) => {
-            this.$router.replace('/');
+            // Auth ok. Start phase 2 (fetch user data).
+            this.fetchUserData();
           },
           (error) => {
             // Display invalid username/password error in inputs
@@ -124,7 +128,26 @@ export default Vue.extend({
               this.errors.first('username');
               this.errors.first('password');
             }
-            console.log(error);
+            console.error(error);
+            this.$bus.$emit('show-error', error.message);
+          },
+        )
+        .finally(() => {
+          // Clear loading state
+          this.loading = false;
+        });
+    },
+    async fetchUserData() {
+      this.loading = true;
+      this.$store
+        .dispatch('fetchUserData')
+        .then(
+          (response) => {
+            this.$router.replace({ name: RouteName.Clients });
+          },
+          (error) => {
+            // Display error
+            console.error(error);
             this.$bus.$emit('show-error', error.message);
           },
         )

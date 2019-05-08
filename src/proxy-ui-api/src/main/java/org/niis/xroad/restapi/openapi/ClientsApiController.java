@@ -28,15 +28,20 @@ import ee.ria.xroad.common.conf.serverconf.model.ClientType;
 import ee.ria.xroad.common.identifier.ClientId;
 
 import lombok.extern.slf4j.Slf4j;
+import org.niis.xroad.restapi.converter.CertificateConverter;
 import org.niis.xroad.restapi.converter.ClientConverter;
+import org.niis.xroad.restapi.converter.ConnectionTypeMapping;
+import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.openapi.model.Certificate;
 import org.niis.xroad.restapi.openapi.model.Client;
-import org.niis.xroad.restapi.repository.ClientRepository;
+import org.niis.xroad.restapi.openapi.model.ConnectionType;
+import org.niis.xroad.restapi.service.ClientService;
+import org.niis.xroad.restapi.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -45,6 +50,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * clients api
  */
@@ -52,16 +59,21 @@ import java.util.Optional;
 @RequestMapping("/api")
 @Slf4j
 @PreAuthorize("denyAll")
-@Transactional
 public class ClientsApiController implements org.niis.xroad.restapi.openapi.ClientsApi {
 
     private final NativeWebRequest request;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private ClientConverter clientConverter;
+
+    @Autowired
+    private CertificateConverter certificateConverter;
 
     @Autowired
     public ClientsApiController(NativeWebRequest request) {
@@ -81,7 +93,7 @@ public class ClientsApiController implements org.niis.xroad.restapi.openapi.Clie
     @Override
     @PreAuthorize("hasAuthority('VIEW_CLIENTS')")
     public ResponseEntity<List<Client>> getClients() {
-        List<ClientType> clientTypes = clientRepository.getAllClients();
+        List<ClientType> clientTypes = clientService.getAllClients();
         List<Client> clients = new ArrayList<>();
         for (ClientType clientType : clientTypes) {
             clients.add(clientConverter.convert(clientType));
@@ -90,18 +102,56 @@ public class ClientsApiController implements org.niis.xroad.restapi.openapi.Clie
     }
 
     @Override
-    @PreAuthorize("hasAuthority('NO_ONE_HAS_THIS_PERMISSION_YET')")
+    @PreAuthorize("hasAuthority('VIEW_CLIENT_DETAILS')")
     public ResponseEntity<Client> getClient(String id) {
-//CHECKSTYLE.OFF: TodoComment - need this todo and still want builds to succeed
-        // getClient is not yet implemented at this point,
-        // but keeping the work-in-progress version here anyway
-        ClientId clientId = clientConverter.convertId(id);
-        ClientType clientType = clientRepository.getClient(clientId);
+        ClientType clientType = getClientType(id);
         Client client = clientConverter.convert(clientType);
-        // TODO: 404 not working
         return new ResponseEntity<>(client, HttpStatus.OK);
-//CHECKSTYLE.ON: TodoComment
+    }
 
+    /**
+     * Read one client from DB, throw NotFoundException or
+     * BadRequestException is needed
+     */
+    private ClientType getClientType(String encodedId) {
+        ClientId clientId = clientConverter.convertId(encodedId);
+        ClientType clientType = clientService.getClient(clientId);
+        if (clientType == null) {
+            throw new NotFoundException("client with id " + encodedId + " not found");
+        }
+        return clientType;
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('VIEW_CLIENT_DETAILS')")
+    public ResponseEntity<List<Certificate>> getClientCertificates(String encodedId) {
+        ClientType clientType = getClientType(encodedId);
+        try {
+            List<Certificate> certificates = tokenService.getAllTokens(clientType)
+                    .stream()
+                    .map(certificateConverter::convert)
+                    .collect(toList());
+            return new ResponseEntity<>(certificates, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * Update a client's connection type
+     * @param encodedId
+     * @param connectiontype
+     * @return
+     */
+    @PreAuthorize("hasAuthority('EDIT_CLIENT_INTERNAL_CONNECTION_TYPE')")
+    @Override
+    public ResponseEntity<Client> updateClient(String encodedId, ConnectionType connectiontype) {
+        ClientId clientId = clientConverter.convertId(encodedId);
+        String connectionTypeString = ConnectionTypeMapping.map(connectiontype).get();
+        ClientType changed = clientService.updateConnectionType(clientId, connectionTypeString);
+        Client result = clientConverter.convert(changed);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @Override
