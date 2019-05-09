@@ -2950,7 +2950,7 @@ SS administrator selects to add a security server client.
 
 - System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
 
-2. If there are two or more security tokens on the Security Server, the SS selects the one on which the client is added
+2. If there are two or more security tokens on the Security Server, the SS administrator selects selects the one on which the client is added
 
 3. SS administrator selects to generate a key
 
