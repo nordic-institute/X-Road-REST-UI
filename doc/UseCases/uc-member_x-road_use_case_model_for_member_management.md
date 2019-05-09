@@ -2950,13 +2950,11 @@ SS administrator selects to add a security server client.
 
 - System verifies that an X-Road member with the inserted identifier exists by looking the member up from the global configuration.
 
-2. If there are two or more security tokens on the Security Server, the SS elects the one on which the client is added
+2. If there are two or more security tokens on the Security Server, the SS selects the one on which the client is added
 
 3. SS administrator selects to generate a key
 
-- SS administrator inserts the label value (not required, may be left blank).
-
-- System triggers a request for a new key
+- SS administrator inserts the label value (not required, may be left blank)
 
 4. SS administrator selects to generate a certificate signing request for a key
 
@@ -2972,9 +2970,7 @@ SS administrator selects to add a security server client.
 
 - User inserts the values of the subject distinguished name that were not prefilled by the system
 
-- System parses the user input: 3.42.
-
-- System generates the certificate signing request and prompts the request file for downloading.
+- System parses the user input: [2.5.1](#251-uc-member_54-parse-user-input)
 
 - System verifies, that information of the token holding the key the CSR was generated for has not been previously saved to the system configuration and saves the token information.
 
@@ -2986,7 +2982,7 @@ SS administrator selects to add a security server client.
 
 - continue the operation: the operation continues to step 6
 
-6. System generates the certificate signing request and prompts the request file for downloading
+6. System creates a new key, generates the certificate signing request and prompts the request file for downloading.
 
 - SS administrator saves the CSR file to the local file system
 
@@ -3044,10 +3040,9 @@ SS administrator selects to add a security server client.
 
 -   The security server client state machine model is described in the document “Security Server User Guide” \[[UG-SS](#Ref_UG-SS)\].
 
--   Details on generating a key [Generate a Key](https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#329-uc-ss_28-generate-a-key)
+-   Details on generating a key: see UC SS\_28 \[[UC-SS](#Ref_UC-SS)\].
 
--   Detail on generating a CSR [Generate a Certificate Signing Request for a Key](https://github.com/nordic-institute/X-Road-REST-UI/blob/XRDDEV-346/doc/UseCases/uc-ss_x-road_use_case_model_for_security_server_management_1.4_Y-883-4.md#330-uc-ss_29-generate-a-certificate-signing-request-for-a-key)
-
+-   Details on generating a CSR: see UC SS\_29 \[[UC-SS](#Ref_UC-SS)\].
 
 
 #### 2.4.5 UC MEMBER\_48: Register a Security Server Client
