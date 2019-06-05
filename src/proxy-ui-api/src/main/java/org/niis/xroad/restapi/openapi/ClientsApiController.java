@@ -35,6 +35,7 @@ import org.niis.xroad.restapi.converter.CertificateDetailsConverter;
 import org.niis.xroad.restapi.converter.ClientConverter;
 import org.niis.xroad.restapi.converter.ConnectionTypeMapping;
 import org.niis.xroad.restapi.converter.GroupConverter;
+import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.ErrorCode;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
@@ -46,6 +47,7 @@ import org.niis.xroad.restapi.openapi.model.Group;
 import org.niis.xroad.restapi.openapi.model.InlineObject;
 import org.niis.xroad.restapi.openapi.model.InlineObject1;
 import org.niis.xroad.restapi.openapi.model.InlineObject2;
+import org.niis.xroad.restapi.openapi.model.ServiceDescription;
 import org.niis.xroad.restapi.service.ClientService;
 import org.niis.xroad.restapi.service.GroupService;
 import org.niis.xroad.restapi.service.TokenService;
@@ -83,6 +85,7 @@ public class ClientsApiController implements ClientsApi {
     private final NativeWebRequest request;
     private final TokenService tokenService;
     private final CertificateDetailsConverter certificateDetailsConverter;
+    private final ServiceDescriptionConverter serviceDescriptionConverter;
 
     /**
      * ClientsApiController constructor
@@ -92,12 +95,14 @@ public class ClientsApiController implements ClientsApi {
      * @param clientConverter
      * @param groupConverter
      * @param groupsService
+     * @param serviceDescriptionConverter
      */
 
     @Autowired
     public ClientsApiController(NativeWebRequest request, ClientService clientService, TokenService tokenService,
             ClientConverter clientConverter, GroupConverter groupConverter, GroupService groupsService,
-            CertificateDetailsConverter certificateDetailsConverter) {
+            CertificateDetailsConverter certificateDetailsConverter,
+            ServiceDescriptionConverter serviceDescriptionConverter) {
         this.request = request;
         this.clientService = clientService;
         this.tokenService = tokenService;
@@ -105,6 +110,7 @@ public class ClientsApiController implements ClientsApi {
         this.groupConverter = groupConverter;
         this.groupsService = groupsService;
         this.certificateDetailsConverter = certificateDetailsConverter;
+        this.serviceDescriptionConverter = serviceDescriptionConverter;
     }
 
     /**
@@ -151,8 +157,12 @@ public class ClientsApiController implements ClientsApi {
     }
 
     /**
-     * Read one client from DB, throw NotFoundException or
-     * BadRequestException is needed
+     * Read one client from DB
+     * @param encodedId id that is encoded with the <INSTANCE>:<MEMBER_CLASS>:....
+     * encoding
+     * @throws NotFoundException if client does not exist
+     * @throws BadRequestException if encodedId was not proper encoded client ID
+     * @return
      */
     private ClientType getClientType(String encodedId) {
         ClientId clientId = clientConverter.convertId(encodedId);
@@ -318,6 +328,15 @@ public class ClientsApiController implements ClientsApi {
         ClientType clientType = getClientType(id);
         List<LocalGroupType> localGroupTypes = clientType.getLocalGroup();
         return new ResponseEntity<>(groupConverter.convert(localGroupTypes), HttpStatus.OK);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('VIEW_CLIENT_SERVICES')")
+    public ResponseEntity<List<ServiceDescription>> getClientServiceDescriptions(String encodedId) {
+        ClientType clientType = getClientType(encodedId);
+        List<ServiceDescription> serviceDescriptions = serviceDescriptionConverter.convert(
+                clientType.getServiceDescription());
+        return new ResponseEntity<>(serviceDescriptions, HttpStatus.OK);
     }
 
     /**
