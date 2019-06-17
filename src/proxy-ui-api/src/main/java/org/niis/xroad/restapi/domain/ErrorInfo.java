@@ -24,6 +24,7 @@
  */
 package org.niis.xroad.restapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.*;
@@ -34,6 +35,7 @@ import java.util.*;
 @Data
 public class ErrorInfo {
     private int status;
+    @JsonProperty("error_code")
     private String errorCode;
     private Map<String, List<String>> warnings;
 
