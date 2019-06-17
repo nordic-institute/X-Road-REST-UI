@@ -24,18 +24,26 @@
  */
 package org.niis.xroad.restapi.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
+
+import java.util.List;
 
 /**
- * detailed error code
+ * detailed error code.
+ * May carry metadata related to the error (list of strings)
  */
 @Getter
 @AllArgsConstructor
 public class ErrorCode {
     private final String value;
+    private final List<String> metadata;
 
     public static ErrorCode of(String value) {
-        return new ErrorCode(value);
+        return new ErrorCode(value, null);
     }
+
+    public static ErrorCode of(String value, List<String> metadata) {
+        return new ErrorCode(value, metadata);
+    }
+
 }

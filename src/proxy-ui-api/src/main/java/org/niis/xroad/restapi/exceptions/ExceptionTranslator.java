@@ -57,6 +57,10 @@ public class ExceptionTranslator {
             ErrorCodedException errorCodedException = (ErrorCodedException) e;
             errorDto.setErrorCode(errorCodedException.getErrorCode());
         }
+        if (e instanceof  WarningsAwareException) {
+            WarningsAwareException warningsAwareException = (WarningsAwareException) e;
+            errorDto.setWarnings(warningsAwareException.getWarnings());
+        }
         return new ResponseEntity<ErrorInfo>(errorDto, status);
     }
 }

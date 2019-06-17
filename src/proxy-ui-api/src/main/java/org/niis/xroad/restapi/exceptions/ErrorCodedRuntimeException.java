@@ -24,12 +24,15 @@
  */
 package org.niis.xroad.restapi.exceptions;
 
+import java.util.*;
+
 /**
- * RuntimeException that (possibly) carries error code
+ * RuntimeException that (possibly) carries error code.
  */
-public class ErrorCodedRuntimeException extends RuntimeException implements ErrorCodedException {
+public class ErrorCodedRuntimeException extends RuntimeException implements ErrorCodedException, WarningsAwareException {
 
     private String errorCode;
+    private Map<String, List<String>> warnings = new HashMap<>();
 
     @Override
     public String getErrorCode() {
@@ -70,4 +73,32 @@ public class ErrorCodedRuntimeException extends RuntimeException implements Erro
         this.errorCode = errorCode.getValue();
     }
 
+    /**
+     * Not threadsafe
+     */
+    @Override
+    public Map<String, List<String>> getWarnings() {
+        return warnings;
+    }
+
+    /**
+     * Not threadsafe
+     */
+    public boolean hasWarnings() {
+        return (warnings != null && warnings.size() > 0);
+    }
+
+    /**
+     * Not threadsafe
+     * @param type
+     * @param warning
+     */
+    public void addWarning(String type, String warning) {
+        List<String> warningsForType = warnings.get(type);
+        if (warningsForType == null) {
+            warningsForType = new ArrayList<>();
+            warnings.put(type, warningsForType);
+        }
+        warningsForType.add(warning);
+    }
 }

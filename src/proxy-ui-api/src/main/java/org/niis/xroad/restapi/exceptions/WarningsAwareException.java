@@ -22,34 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.domain;
-
-import lombok.Data;
+package org.niis.xroad.restapi.exceptions;
 
 import java.util.*;
 
 /**
- * data for rest api error responses
+ * Exception which contains information about warnings
  */
-@Data
-public class ErrorInfo {
-    private int status;
-    private String errorCode;
-    private Map<String, List<String>> warnings;
+public interface WarningsAwareException {
 
-    public ErrorInfo(int status) {
-        this.status = status;
-    }
-
-    public ErrorInfo(int status, String errorCode) {
-        this.status = status;
-        this.errorCode = errorCode;
-    }
-
-    public ErrorInfo(int status, String errorCode, Map<String, List<String>> warnings) {
-        this.status = status;
-        this.errorCode = errorCode;
-        this.warnings = warnings;
-    }
+    /**
+     * Returns a Map containing all warnings.
+     *
+     * @return Map, key = warning type code, value = Collection<String> containing metadata related to this warning code
+     */
+    Map<String, List<String>> getWarnings();
 
 }
