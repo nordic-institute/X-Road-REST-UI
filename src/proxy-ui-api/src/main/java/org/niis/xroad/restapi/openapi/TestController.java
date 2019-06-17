@@ -24,6 +24,7 @@ public class TestController implements ServiceDescriptionsApi {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ErrorInfo errorDto = new ErrorInfo(status.value());
         errorDto.setErrorCode("dsadasdsa");
+        counter++;
         if (counter % 2 == 0) {
             NotFoundException e = new NotFoundException("example with warnings", ErrorCode.of("foo_error_code"));
             e.addWarning("adding_service", "fooService.v1");
