@@ -26,7 +26,6 @@
 -       enable_disable_wsdl: [XROAD_SERVICE_ADMINISTRATOR]
 -       edit_wsdl: [XROAD_SERVICE_ADMINISTRATOR]
 -       refresh_wsdl: [XROAD_SERVICE_ADMINISTRATOR]
--       delete_wsdl_missing_services: [XROAD_SERVICE_ADMINISTRATOR]
 -       delete_wsdl: [XROAD_SERVICE_ADMINISTRATOR]
 -       edit_service_params: [XROAD_SERVICE_ADMINISTRATOR]
 -       view_service_acl: [XROAD_SERVICE_ADMINISTRATOR, XROAD_SECURITYSERVER_OBSERVER]
