@@ -25,18 +25,20 @@ public class AnnotationDrivenRunAsManager extends RunAsManagerImpl {
             return super.buildRunAs(authentication, object, attributes);
         }
 
-        String roleName = ((ReflectiveMethodInvocation)object).getMethod().getAnnotation(RunAsRole.class).value();
+        String[] roleNames = ((ReflectiveMethodInvocation)object).getMethod().getAnnotation(RunAsRole.class).values();
 
-        if (roleName == null || roleName.isEmpty()) {
+        if (roleNames == null || roleNames.length == 0) {
             return null;
         }
 
-        GrantedAuthority runAsAuthority = new SimpleGrantedAuthority(roleName);
         List<GrantedAuthority> newAuthorities = new ArrayList<GrantedAuthority>();
-        // Add existing authorities
-        newAuthorities.addAll(authentication.getAuthorities());
-        // Add the new run-as authority
-        newAuthorities.add(runAsAuthority);
+        for (String roleName: roleNames) {
+            GrantedAuthority runAsAuthority = new SimpleGrantedAuthority(roleName);
+            // Add existing authorities
+            newAuthorities.addAll(authentication.getAuthorities());
+            // Add the new run-as authority
+            newAuthorities.add(runAsAuthority);
+        }
 
         return new RunAsUserToken(getKey(), authentication.getPrincipal(), authentication.getCredentials(),
                 newAuthorities, authentication.getClass());

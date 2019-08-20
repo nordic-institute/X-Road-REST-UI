@@ -290,7 +290,7 @@ public class ClientsApiController implements ClientsApi {
 
     @Override
     @PreAuthorize("hasAuthority('ADD_WSDL')")
-    @RunAsRole("ROLE_SERVICE_ADD_WSDL")
+    @RunAsRole(values = {"ROLE_SERVICE_ADD_WSDL", "ROLE_SERVICE_GET_CLIENT"})
     public ResponseEntity<ServiceDescription> addClientServiceDescription(String id,
             ServiceDescriptionAdd serviceDescription) {
         ServiceDescriptionType addedServiceDescriptionType = null;

@@ -99,7 +99,7 @@ public class ClientService {
      * return one client
      * @param id
      */
-    @PreAuthorize("hasAuthority('SERVICE_GET_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_SERVICE_GET_CLIENT')")
     public ClientType getClient(ClientId id) {
         return clientRepository.getClient(id);
     }

@@ -15,5 +15,5 @@ public @interface RunAsRole {
      * das
      * @return
      */
-    String value();
+    String[] values();
 }
