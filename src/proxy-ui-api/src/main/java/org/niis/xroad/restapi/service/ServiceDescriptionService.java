@@ -188,7 +188,7 @@ public class ServiceDescriptionService {
      * @throws InvalidParametersException if URL is malformed
      * @throws ConflictException          URL already exists
      */
-    @PreAuthorize("hasAuthority('ADD_WSDL')")
+    @PreAuthorize("hasRole('ROLE_SERVICE_ADD_WSDL')")
     public ServiceDescriptionType addWsdlServiceDescription(ClientId clientId,
                                           String url,
                                           boolean ignoreWarnings) {

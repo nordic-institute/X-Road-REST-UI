@@ -27,7 +27,6 @@ package org.niis.xroad.restapi.auth.securityconfigurer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -59,7 +58,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * sets up shared configuration such as web security debugging
  */
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(proxyTargetClass = true, prePostEnabled = true)
 @Slf4j
 @Order(MultiAuthWebSecurityConfig.GLOBAL_CONFIGURATION_SECURITY_ORDER)
 public class MultiAuthWebSecurityConfig extends WebSecurityConfigurerAdapter {

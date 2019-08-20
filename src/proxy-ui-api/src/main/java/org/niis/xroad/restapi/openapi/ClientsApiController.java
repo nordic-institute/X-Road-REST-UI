@@ -32,6 +32,7 @@ import ee.ria.xroad.common.identifier.ClientId;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.niis.xroad.restapi.auth.RunAsRole;
 import org.niis.xroad.restapi.converter.CertificateDetailsConverter;
 import org.niis.xroad.restapi.converter.ClientConverter;
 import org.niis.xroad.restapi.converter.ConnectionTypeMapping;
@@ -289,6 +290,7 @@ public class ClientsApiController implements ClientsApi {
 
     @Override
     @PreAuthorize("hasAuthority('ADD_WSDL')")
+    @RunAsRole("ROLE_SERVICE_ADD_WSDL")
     public ResponseEntity<ServiceDescription> addClientServiceDescription(String id,
             ServiceDescriptionAdd serviceDescription) {
         ServiceDescriptionType addedServiceDescriptionType = null;
