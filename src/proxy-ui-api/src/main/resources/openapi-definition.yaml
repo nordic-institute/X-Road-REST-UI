@@ -57,26 +57,49 @@ paths:
       responses:
         '201':
           description: item created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Backup'
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '202':
           description: item accepted
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '400':
           description: request was invalid
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '401':
           description: authentication credentials are missing
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '403':
           description: request has been refused
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '404':
           description: resource requested does not exists
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '406':
           description: request specified an invalid format
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '409':
           description: an existing item already exists
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '500':
           description: internal server error
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
   /backups/upload:
     post: # ok
       tags:
@@ -95,12 +118,18 @@ paths:
       responses:
         '201':
           description: item created
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Backup'
         '202':
           description: item accepted
+          headers:
+            X-Road-UI-Correlation-ID:
+              $ref: '#/components/headers/X-Road-UI-Correlation-ID'
         '400':
           description: request was invalid
         '401':
@@ -3038,6 +3067,11 @@ paths:
         '500':
           description: internal server error
 components:
+  headers:
+    X-Road-UI-Correlation-ID:
+      description: correlation ID which can be used to match server side log entries to an API call
+      schema:
+        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
