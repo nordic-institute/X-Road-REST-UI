@@ -6,7 +6,7 @@
 
 **X-ROAD 6**
 
-Version: 2.29
+Version: 2.30
 Doc. ID: UG-SS
 
 ---
@@ -62,7 +62,7 @@ Doc. ID: UG-SS
  16.04.2019 | 2.27    | Minor updates regarding REST services in chapter [6] | Petteri Kivimäki
  30.06.2019 | 2.28    | Update the default connection type from HTTP to HTTPS in chapter [9] | Petteri Kivimäki
  01.07.2019 | 2.29    | Changing the Security Server Owner chapter added (Chapter [3.4](#34-changing-the-security-server-owner)) | Petteri Kivimäki
- 29.09.2019 | 2.30    | Added chapter on REST API correlation id [19](#193-correlation-id-http-header) | Janne Mattila
+ 29.09.2019 | 2.30    | Added chapter [19.3](#193-correlation-id-http-header) on REST API correlation id | Janne Mattila
 
 ## Table of Contents
 
