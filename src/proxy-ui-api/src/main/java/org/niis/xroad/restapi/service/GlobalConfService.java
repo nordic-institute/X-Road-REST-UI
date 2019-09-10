@@ -27,6 +27,7 @@ package org.niis.xroad.restapi.service;
 import ee.ria.xroad.common.conf.globalconf.GlobalConf;
 import ee.ria.xroad.common.conf.globalconf.MemberInfo;
 import ee.ria.xroad.common.identifier.ClientId;
+import ee.ria.xroad.common.identifier.SecurityServerId;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -98,5 +99,14 @@ public class GlobalConfService {
     @PreAuthorize("hasAuthority('VIEW_MEMBER_CLASSES')")
     public List<String> getInstanceIdentifiers() {
         return GlobalConf.getInstanceIdentifiers();
+    }
+
+    /**
+     * @param securityServerId
+     * @return whether the security server exists in current instance's global configuration
+     */
+    @PreAuthorize("hasAuthority('INIT_CONFIG')")
+    public boolean securityServerExists(SecurityServerId securityServerId) {
+        return GlobalConf.existsSecurityServer(securityServerId);
     }
 }
