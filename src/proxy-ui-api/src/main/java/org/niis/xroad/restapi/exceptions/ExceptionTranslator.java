@@ -24,6 +24,8 @@
  */
 package org.niis.xroad.restapi.exceptions;
 
+import ee.ria.xroad.common.CodedException;
+
 import org.niis.xroad.restapi.openapi.model.CodeWithMetadata;
 import org.niis.xroad.restapi.openapi.model.ErrorInfo;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -40,6 +42,8 @@ import java.util.List;
  */
 @Component
 public class ExceptionTranslator {
+
+    public static final String CORE_CODED_EXCEPTION_PREFIX = "core.";
 
     /**
      * Create ResponseEntity<ErrorInfo> from an Exception.
@@ -71,6 +75,12 @@ public class ExceptionTranslator {
 
                 }
             }
+        } else if (e instanceof CodedException) {
+            // map fault code and string from core CodedException
+            CodedException c = (CodedException) e;
+            Deviation deviation = new Deviation(CORE_CODED_EXCEPTION_PREFIX + c.getFaultCode(),
+                    c.getFaultString());
+            errorDto.setError(convert(deviation));
         }
         return new ResponseEntity<ErrorInfo>(errorDto, status);
     }
