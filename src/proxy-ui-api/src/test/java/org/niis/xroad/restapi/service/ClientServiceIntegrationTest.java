@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.niis.xroad.restapi.exceptions.ConflictException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.util.TestUtils;
@@ -215,8 +215,8 @@ public class ClientServiceIntegrationTest {
 
         try {
             clientService.deleteTlsCertificate(id, "wrong hash");
-            fail("should have thrown NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should have thrown ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
         clientType = clientService.getClient(id);
         assertEquals(1, clientType.getIsCert().size());

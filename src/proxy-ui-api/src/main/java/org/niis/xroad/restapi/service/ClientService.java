@@ -33,7 +33,7 @@ import ee.ria.xroad.common.util.CryptoUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.exceptions.ConflictException;
 import org.niis.xroad.restapi.exceptions.Error;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +118,7 @@ public class ClientService {
      * @param id
      * @param connectionType
      * @return
-     * @throws org.niis.xroad.restapi.exceptions.NotFoundException if
+     * @throws ResourceNotFoundException if
      *                                                             client was not found
      * @throws IllegalArgumentException                            if connectionType was not supported value
      */
@@ -134,12 +134,12 @@ public class ClientService {
 
     /**
      * Get a ClientType
-     * @throws NotFoundException if not found
+     * @throws ResourceNotFoundException if not found
      */
     private ClientType getClientType(ClientId id) {
         ClientType clientType = clientRepository.getClient(id);
         if (clientType == null) {
-            throw new NotFoundException(("client with id " + id + " not found"),
+            throw new ResourceNotFoundException(("client with id " + id + " not found"),
                     new Error(CLIENT_NOT_FOUND_ERROR_CODE));
         }
         return clientType;
@@ -208,7 +208,7 @@ public class ClientService {
      * @param id
      * @param certificateHash
      * @return
-     * @throws NotFoundException if client of certificate was not found
+     * @throws ResourceNotFoundException if client of certificate was not found
      */
     @PreAuthorize("hasAuthority('DELETE_CLIENT_INTERNAL_CERT')")
     public ClientType deleteTlsCertificate(ClientId id, String certificateHash) {
@@ -217,7 +217,7 @@ public class ClientService {
                 .filter(certificate -> calculateCertHexHash(certificate.getData()).equalsIgnoreCase(certificateHash))
                 .findAny()
                 .orElseThrow(() ->
-                        new NotFoundException("certificate with hash " + certificateHash + " not found",
+                        new ResourceNotFoundException("certificate with hash " + certificateHash + " not found",
                                 new Error(CERTIFICATE_NOT_FOUND_ERROR_CODE)));
 
         clientType.getIsCert().remove(certificateType);

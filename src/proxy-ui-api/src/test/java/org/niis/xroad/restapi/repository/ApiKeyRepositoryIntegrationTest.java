@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 import org.niis.xroad.restapi.domain.PersistentApiKeyType;
 import org.niis.xroad.restapi.domain.Role;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,12 +73,12 @@ public class ApiKeyRepositoryIntegrationTest {
         try {
             apiKey = apiKeyRepository.get(plainKey);
             fail("should throw exception");
-        } catch (NotFoundException expected) {
+        } catch (ResourceNotFoundException expected) {
         }
         try {
             apiKeyRepository.remove(plainKey);
             fail("should throw exception");
-        } catch (NotFoundException expected) {
+        } catch (ResourceNotFoundException expected) {
         }
     }
 

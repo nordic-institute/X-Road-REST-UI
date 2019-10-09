@@ -23,12 +23,12 @@
  *  THE SOFTWARE.
  */
 
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.wsdl;
 
 /**
  * Thrown if WSDL file is not found - internal wrapper runtime exception for FileNotFoundException
  */
-public class WsdlNotFoundException extends RuntimeException {
+public class WsdlNotFoundException extends Exception {
     public WsdlNotFoundException() {
     }
 

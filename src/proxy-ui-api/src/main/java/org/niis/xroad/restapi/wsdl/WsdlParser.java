@@ -29,8 +29,6 @@ import ee.ria.xroad.common.CodedException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.niis.xroad.restapi.exceptions.WsdlNotFoundException;
-import org.niis.xroad.restapi.exceptions.WsdlParseException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -102,13 +100,12 @@ public final class WsdlParser {
      * Extracts the list of services that are described in the given WSDL.
      * @param wsdlUrl the URL from which the WSDL is available
      * @return collection of ServiceInfo objects
-     * @throws Exception in case of any errors
      */
-    public static Collection<ServiceInfo> parseWSDL(String wsdlUrl) throws WsdlParseException, WsdlNotFoundException {
+    public static Collection<ServiceInfo> parseWSDL(String wsdlUrl) throws WsdlNotFoundException, WsdlParseException {
         try {
             return internalParseWSDL(wsdlUrl);
-        } catch (WsdlNotFoundException e) {
-            throw e;
+        } catch (PrivateWsdlNotFoundException e) {
+            throw new WsdlNotFoundException(e);
         } catch (Exception e) {
             throw new WsdlParseException(clarifyWsdlParsingException(e));
         }
@@ -265,6 +262,15 @@ public final class WsdlParser {
         }
     }
 
+    /**
+     * keep this one private and dont let it leak
+     */
+    private static final class PrivateWsdlNotFoundException extends RuntimeException {
+        PrivateWsdlNotFoundException(Throwable t) {
+            super(t);
+        }
+    }
+
     private static final class TrustAllSslCertsWsdlLocator implements WSDLLocator {
 
         private static final int ERROR_RESPONSE_CODE = 500;
@@ -292,7 +298,7 @@ public final class WsdlParser {
 
                 return new InputSource(new ByteArrayInputStream(response));
             } catch (FileNotFoundException e) {
-                throw new WsdlNotFoundException(e);
+                throw new PrivateWsdlNotFoundException(e);
             } catch (Exception e) {
                 throw new CodedException(X_INTERNAL_ERROR, e);
             }

@@ -34,7 +34,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
-import org.niis.xroad.restapi.exceptions.DeviationAwareRuntimeException;
 import org.niis.xroad.restapi.util.DeviationTestUtils;
 import org.niis.xroad.restapi.wsdl.WsdlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,8 +109,7 @@ public class ServiceDescriptionServiceIntegrationTest {
             serviceDescriptionService.refreshServiceDescription(serviceDescriptionType.getId(),
                     false);
             fail("should throw exception warning about service addition");
-        } catch (DeviationAwareRuntimeException expected) {
-            DeviationTestUtils.assertErrorWithoutMetadata(ServiceDescriptionService.ERROR_WARNINGS_DETECTED, expected);
+        } catch (UnhandledWarningsException expected) {
             assertEquals(1, expected.getWarnings().size());
             DeviationTestUtils.assertWarning(ServiceDescriptionService.WARNING_ADDING_SERVICES, expected,
                     BIG_ATTACHMENT_V1_SERVICECODE, SMALL_ATTACHMENT_V1_SERVICECODE);
@@ -147,8 +145,7 @@ public class ServiceDescriptionServiceIntegrationTest {
             serviceDescriptionService.refreshServiceDescription(serviceDescriptionType.getId(),
                     false);
             fail("should throw exception warning about service addition");
-        } catch (DeviationAwareRuntimeException expected) {
-            DeviationTestUtils.assertErrorWithoutMetadata(ServiceDescriptionService.ERROR_WARNINGS_DETECTED, expected);
+        } catch (UnhandledWarningsException expected) {
             assertEquals(1, expected.getWarnings().size());
             DeviationTestUtils.assertWarning(ServiceDescriptionService.WARNING_DELETING_SERVICES, expected,
                     BIG_ATTACHMENT_V1_SERVICECODE, SMALL_ATTACHMENT_V1_SERVICECODE);
@@ -195,9 +192,8 @@ public class ServiceDescriptionServiceIntegrationTest {
             serviceDescriptionService.refreshServiceDescription(serviceDescriptionType.getId(),
                     false);
             fail("should get warnings");
-        } catch (DeviationAwareRuntimeException expected) {
+        } catch (UnhandledWarningsException expected) {
             // we should get 3 warnings
-            DeviationTestUtils.assertErrorWithoutMetadata(ServiceDescriptionService.ERROR_WARNINGS_DETECTED, expected);
             assertEquals(3, expected.getWarnings().size());
             DeviationTestUtils.assertWarning(ServiceDescriptionService.WARNING_ADDING_SERVICES, expected,
                     SMALL_ATTACHMENT_V1_SERVICECODE);
@@ -233,9 +229,8 @@ public class ServiceDescriptionServiceIntegrationTest {
             serviceDescriptionService.addWsdlServiceDescription(CLIENT_ID_SS1,
                     url, false);
             fail("should get warnings");
-        } catch (DeviationAwareRuntimeException expected) {
+        } catch (UnhandledWarningsException expected) {
             // we should get 1 warning
-            DeviationTestUtils.assertErrorWithoutMetadata(ServiceDescriptionService.ERROR_WARNINGS_DETECTED, expected);
             assertEquals(1, expected.getWarnings().size());
             DeviationTestUtils.assertWarning(ServiceDescriptionService.WARNING_WSDL_VALIDATION_WARNINGS, expected,
                     "mock warning", "mock warning 2");
@@ -280,9 +275,8 @@ public class ServiceDescriptionServiceIntegrationTest {
             serviceDescriptionService.updateWsdlUrl(serviceDescriptionType.getId(),
                     newUrl, false);
             fail("should get warnings");
-        } catch (DeviationAwareRuntimeException expected) {
+        } catch (UnhandledWarningsException expected) {
             // we should get 3 warnings
-            DeviationTestUtils.assertErrorWithoutMetadata(ServiceDescriptionService.ERROR_WARNINGS_DETECTED, expected);
             assertEquals(3, expected.getWarnings().size());
             DeviationTestUtils.assertWarning(ServiceDescriptionService.WARNING_ADDING_SERVICES, expected,
                     SMALL_ATTACHMENT_V1_SERVICECODE);

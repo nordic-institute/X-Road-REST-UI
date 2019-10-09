@@ -37,7 +37,7 @@ import org.junit.runner.RunWith;
 import org.mockito.stubbing.Answer;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.ConflictException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.openapi.model.CertificateDetails;
 import org.niis.xroad.restapi.openapi.model.Client;
@@ -81,11 +81,12 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
-import static org.niis.xroad.restapi.service.ServiceDescriptionService.ERROR_INVALID_WSDL;
-import static org.niis.xroad.restapi.service.ServiceDescriptionService.ERROR_SERVICE_EXISTS;
-import static org.niis.xroad.restapi.service.ServiceDescriptionService.ERROR_WARNINGS_DETECTED;
-import static org.niis.xroad.restapi.service.ServiceDescriptionService.ERROR_WSDL_EXISTS;
+import static org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController.ERROR_INVALID_WSDL;
+import static org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController.ERROR_WSDL_EXISTS;
+import static org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController.ERROR_WSDL_VALIDATION_FAILED;
+import static org.niis.xroad.restapi.service.ServiceAlreadyExistsException.ERROR_SERVICE_EXISTS;
 import static org.niis.xroad.restapi.service.ServiceDescriptionService.WARNING_WSDL_VALIDATION_WARNINGS;
+import static org.niis.xroad.restapi.service.UnhandledWarningsException.ERROR_WARNINGS_DETECTED;
 import static org.niis.xroad.restapi.util.CertificateTestUtils.getResource;
 import static org.niis.xroad.restapi.util.DeviationTestUtils.assertErrorWithMetadata;
 import static org.niis.xroad.restapi.util.DeviationTestUtils.assertErrorWithoutMetadata;
@@ -198,8 +199,8 @@ public class ClientsApiControllerIntegrationTest {
         assertEquals("SS1", client.getSubsystemCode());
         try {
             clientsApiController.getClient("FI:GOV:M1:SS3");
-            fail("should throw NotFoundException to 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException to 404");
+        } catch (ResourceNotFoundException expected) {
         }
     }
 
@@ -251,8 +252,8 @@ public class ClientsApiControllerIntegrationTest {
                 new ArrayList<>(onlyCertificate.getKeyUsages()));
         try {
             certificates = clientsApiController.getClientCertificates("FI:GOV:M2");
-            fail("should throw NotFoundException for 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException for 404");
+        } catch (ResourceNotFoundException expected) {
         }
     }
 
@@ -347,8 +348,8 @@ public class ClientsApiControllerIntegrationTest {
         try {
             clientsApiController.deleteClientTlsCertificate(CLIENT_ID_SS1,
                     CertificateTestUtils.getWidgitsCertificateHash());
-            fail("should have thrown NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should have thrown ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
         assertEquals(0, clientsApiController.getClientTlsCertificates(CLIENT_ID_SS1).getBody().size());
     }
@@ -379,8 +380,8 @@ public class ClientsApiControllerIntegrationTest {
         try {
             clientsApiController.getClientTlsCertificate(CLIENT_ID_SS1,
                     "63a104b2bac1466");
-            fail("should have thrown NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should have thrown ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
     }
 
@@ -499,8 +500,8 @@ public class ClientsApiControllerIntegrationTest {
         // client not found
         try {
             descriptions = clientsApiController.getClientServiceDescriptions("FI:GOV:M1:NONEXISTENT");
-            fail("should throw NotFoundException to 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException to 404");
+        } catch (ResourceNotFoundException expected) {
         }
 
         // bad client id
@@ -651,7 +652,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithMetadata(WsdlValidator.ERROR_WSDL_VALIDATION_FAILED,
+            assertErrorWithMetadata(ERROR_WSDL_VALIDATION_FAILED,
                     WsdlValidatorTest.MOCK_VALIDATOR_ERROR, expected);
         }
 
@@ -661,7 +662,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithMetadata(WsdlValidator.ERROR_WSDL_VALIDATION_FAILED,
+            assertErrorWithMetadata(ERROR_WSDL_VALIDATION_FAILED,
                     WsdlValidatorTest.MOCK_VALIDATOR_ERROR, expected);
         }
 
@@ -678,7 +679,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithMetadata(WsdlValidator.ERROR_WSDL_VALIDATION_FAILED,
+            assertErrorWithMetadata(ERROR_WSDL_VALIDATION_FAILED,
                     WsdlValidatorTest.MOCK_VALIDATOR_ERROR, expected);
         }
     }

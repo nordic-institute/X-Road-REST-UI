@@ -22,44 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.niis.xroad.restapi.exceptions.DeviationAwareException;
+import org.niis.xroad.restapi.exceptions.Error;
 
-/**
- * Thrown if item was not found.
- * Results in http 404 NOT_FOUND
- */
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class NotFoundException extends DeviationAwareRuntimeException {
+import java.util.List;
 
-    public NotFoundException() {
+public class ServiceAlreadyExistsException extends DeviationAwareException {
+
+    public static final String ERROR_SERVICE_EXISTS = "clients.service_exists";
+
+    public ServiceAlreadyExistsException(List<String> metadata) {
+        super(new Error(ERROR_SERVICE_EXISTS, metadata));
     }
-
-
-    public NotFoundException(String msg) {
-        super(msg);
-    }
-
-    public NotFoundException(Error error) {
-        super(error);
-    }
-
-    public NotFoundException(String msg, Error error) {
-        super(msg, error);
-    }
-
-    public NotFoundException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
-    public NotFoundException(Throwable t) {
-        super(t);
-    }
-
-    public NotFoundException(Throwable t, Error error) {
-        super(t, error);
-    }
-
 }
