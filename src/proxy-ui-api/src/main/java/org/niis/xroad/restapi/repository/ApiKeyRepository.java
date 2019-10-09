@@ -29,7 +29,7 @@ import org.niis.xroad.restapi.dao.PersistentApiKeyDAOImpl;
 import org.niis.xroad.restapi.domain.PersistentApiKeyType;
 import org.niis.xroad.restapi.domain.Role;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.util.PersistenceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -114,10 +114,10 @@ public class ApiKeyRepository {
      * get matching key
      * @param key
      * @return
-     * @throws NotFoundException if api key was not found
+     * @throws ResourceNotFoundException if api key was not found
      */
     @Cacheable(GET_KEY_CACHE)
-    public PersistentApiKeyType get(String key) throws NotFoundException {
+    public PersistentApiKeyType get(String key) throws ResourceNotFoundException {
         String encodedKey = passwordEncoder.encode(key);
         List<PersistentApiKeyType> keys = new PersistentApiKeyDAOImpl().findAll(persistenceUtils.getCurrentSession());
         for (PersistentApiKeyType apiKeyType : keys) {
@@ -125,16 +125,16 @@ public class ApiKeyRepository {
                 return apiKeyType;
             }
         }
-        throw new NotFoundException("api key not found");
+        throw new ResourceNotFoundException("api key not found");
     }
 
     /**
      * remove / revoke one key
      * @param key
-     * @throws NotFoundException if api key was not found
+     * @throws ResourceNotFoundException if api key was not found
      */
     @CacheEvict(allEntries = true, cacheNames = { LIST_ALL_KEYS_CACHE, GET_KEY_CACHE })
-    public void remove(String key) throws NotFoundException {
+    public void remove(String key) throws ResourceNotFoundException {
         PersistentApiKeyType apiKeyType = get(key);
         new PersistentApiKeyDAOImpl().delete(persistenceUtils.getCurrentSession(), apiKeyType);
     }
@@ -142,14 +142,14 @@ public class ApiKeyRepository {
     /**
      * remove / revoke one key by id
      * @param id
-     * @throws NotFoundException if api key was not found
+     * @throws ResourceNotFoundException if api key was not found
      */
     @CacheEvict(allEntries = true, cacheNames = { LIST_ALL_KEYS_CACHE, GET_KEY_CACHE })
-    public void removeById(long id) throws NotFoundException {
+    public void removeById(long id) throws ResourceNotFoundException {
         PersistentApiKeyDAOImpl dao = new PersistentApiKeyDAOImpl();
         PersistentApiKeyType apiKeyType = dao.findById(persistenceUtils.getCurrentSession(), id);
         if (apiKeyType == null) {
-            throw new NotFoundException("api key with id " + id + " not found");
+            throw new ResourceNotFoundException("api key with id " + id + " not found");
         }
         dao.delete(persistenceUtils.getCurrentSession(), apiKeyType);
     }

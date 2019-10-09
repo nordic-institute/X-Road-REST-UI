@@ -22,40 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.niis.xroad.restapi.exceptions.DeviationAwareException;
+import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.Warning;
 
 import java.util.Collection;
 
 /**
- * Thrown if there was a conflict, for example tried to add an item which already exists.
- * Results in http 409 CONFLICT
+ * If warnings were detected and they were not ignored
  */
-@ResponseStatus(value = HttpStatus.CONFLICT)
-public class ConflictException extends DeviationAwareRuntimeException {
-    public ConflictException() {
-    }
+public class UnhandledWarningsException extends DeviationAwareException {
 
-    public ConflictException(DeviationAware deviations) {
-        super(deviations.getError(), deviations.getWarnings());
-    }
+    public static final String ERROR_WARNINGS_DETECTED = "clients.warnings_detected";
 
-    public ConflictException(String msg) {
-        super(msg);
+    public UnhandledWarningsException(Collection<Warning> warnings) {
+        super(new Error(ERROR_WARNINGS_DETECTED), warnings);
     }
-
-    public ConflictException(Error error, Collection<Warning> warnings) {
-        super(error, warnings);
-    }
-
-    public ConflictException(String msg, Error error) {
-        super(msg, error);
-    }
-
-    public ConflictException(Error error) {
-        super(error);
-    }
-
 }

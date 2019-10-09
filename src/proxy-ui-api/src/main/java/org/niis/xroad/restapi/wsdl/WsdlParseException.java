@@ -22,16 +22,14 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.wsdl;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.niis.xroad.restapi.service.ServiceException;
 
 /**
  * Thrown if WSDL parsing fails
  */
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class WsdlParseException extends DeviationAwareRuntimeException {
+public class WsdlParseException extends ServiceException {
     public WsdlParseException() {
     }
 
@@ -43,16 +41,8 @@ public class WsdlParseException extends DeviationAwareRuntimeException {
         super(msg, t);
     }
 
-    public WsdlParseException(String msg, Throwable t, Error error) {
-        super(msg, t, error);
-    }
-
     public WsdlParseException(Throwable t) {
         super(t);
-    }
-
-    public WsdlParseException(Throwable t, Error error) {
-        super(t, error);
     }
 
 }

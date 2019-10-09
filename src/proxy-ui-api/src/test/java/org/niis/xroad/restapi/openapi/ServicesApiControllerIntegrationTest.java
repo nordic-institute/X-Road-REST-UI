@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.stubbing.Answer;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.openapi.model.Service;
 import org.niis.xroad.restapi.openapi.model.ServiceClient;
@@ -197,8 +197,8 @@ public class ServicesApiControllerIntegrationTest {
     public void getServiceClientNotFound() {
         try {
             servicesApiController.getService(SS0_GET_RANDOM).getBody();
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
             assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getError().getCode());
         }
     }
@@ -208,8 +208,8 @@ public class ServicesApiControllerIntegrationTest {
     public void getServiceNotFound() {
         try {
             servicesApiController.getService(SS1_PREDICT_WINNING_LOTTERY_NUMBERS).getBody();
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
             assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getError().getCode());
         }
     }
@@ -248,15 +248,15 @@ public class ServicesApiControllerIntegrationTest {
 
         try {
             servicesApiController.getServiceAccessRights(SS0_GET_RANDOM);
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
             assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getError().getCode());
         }
 
         try {
             servicesApiController.getServiceAccessRights(SS1_PREDICT_WINNING_LOTTERY_NUMBERS);
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
             assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getError().getCode());
         }
     }

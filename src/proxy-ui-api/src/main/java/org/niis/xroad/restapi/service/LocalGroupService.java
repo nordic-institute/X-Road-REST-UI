@@ -31,7 +31,7 @@ import ee.ria.xroad.common.identifier.ClientId;
 
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.exceptions.ConflictException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.repository.LocalGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +90,7 @@ public class LocalGroupService {
     public LocalGroupType updateDescription(Long groupId, String description) {
         LocalGroupType localGroupType = getLocalGroup(groupId);
         if (localGroupType == null) {
-            throw new NotFoundException("LocalGroup with id " + groupId + " not found");
+            throw new ResourceNotFoundException("LocalGroup with id " + groupId + " not found");
         }
         localGroupType.setDescription(description);
         localGroupType.setUpdated(new Date());
@@ -107,7 +107,7 @@ public class LocalGroupService {
     public LocalGroupType addLocalGroup(ClientId id, LocalGroupType localGroupTypeToAdd) {
         ClientType clientType = clientRepository.getClient(id);
         if (clientType == null) {
-            throw new NotFoundException("client with id " + id + " not found");
+            throw new ResourceNotFoundException("client with id " + id + " not found");
         }
         Optional<LocalGroupType> existingLocalGroupType = clientType.getLocalGroup().stream()
                 .filter(localGroupType -> localGroupType.getGroupCode().equals(
@@ -130,13 +130,13 @@ public class LocalGroupService {
     public void addLocalGroupMembers(Long groupId, List<ClientId> memberIds) {
         LocalGroupType localGroupType = getLocalGroup(groupId);
         if (localGroupType == null) {
-            throw new NotFoundException("LocalGroup with id " + groupId + " not found");
+            throw new ResourceNotFoundException("LocalGroup with id " + groupId + " not found");
         }
         List<GroupMemberType> membersToBeAdded = new ArrayList<>(memberIds.size());
         memberIds.forEach(memberId -> {
             Optional<ClientType> foundMember = clientService.findByClientId(memberId);
             if (!foundMember.isPresent()) {
-                throw new NotFoundException("client with id " + memberId.toShortString() + " not found");
+                throw new ResourceNotFoundException("client with id " + memberId.toShortString() + " not found");
             }
             ClientId clientIdToBeAdded = foundMember.get().getIdentifier();
             boolean isAdded = localGroupType.getGroupMember().stream().anyMatch(groupMemberType ->
@@ -163,7 +163,7 @@ public class LocalGroupService {
     public void deleteLocalGroup(Long groupId) {
         LocalGroupType existingLocalGroupType = getLocalGroup(groupId);
         if (existingLocalGroupType == null) {
-            throw new NotFoundException("LocalGroup with id " + groupId + " not found");
+            throw new ResourceNotFoundException("LocalGroup with id " + groupId + " not found");
         }
         localGroupRepository.delete(existingLocalGroupType);
     }
@@ -181,7 +181,7 @@ public class LocalGroupService {
                                 .equals(member.getGroupMemberId().toShortString().trim())))
                 .collect(Collectors.toList());
         if (membersToBeRemoved.isEmpty()) {
-            throw new NotFoundException("the requested group member was not found in local group");
+            throw new ResourceNotFoundException("the requested group member was not found in local group");
         }
         localGroupType.getGroupMember().removeAll(membersToBeRemoved);
         localGroupRepository.saveOrUpdate(localGroupType);

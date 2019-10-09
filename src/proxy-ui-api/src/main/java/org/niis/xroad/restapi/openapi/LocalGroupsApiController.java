@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.converter.ClientConverter;
 import org.niis.xroad.restapi.converter.LocalGroupConverter;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.LocalGroup;
 import org.niis.xroad.restapi.openapi.model.Members;
 import org.niis.xroad.restapi.service.LocalGroupService;
@@ -118,14 +118,14 @@ public class LocalGroupsApiController implements LocalGroupsApi {
     }
 
     /**
-     * Read one group from DB, throw NotFoundException or
+     * Read one group from DB, throw ResourceNotFoundException or
      * BadRequestException is needed
      */
     private LocalGroupType getLocalGroupType(String groupIdString) {
         Long groupId = FormatUtils.parseLongIdOrThrowNotFound(groupIdString);
         LocalGroupType localGroupType = localGroupService.getLocalGroup(groupId);
         if (localGroupType == null) {
-            throw new NotFoundException("LocalGroup with not found");
+            throw new ResourceNotFoundException("LocalGroup with not found");
         }
         return localGroupType;
     }

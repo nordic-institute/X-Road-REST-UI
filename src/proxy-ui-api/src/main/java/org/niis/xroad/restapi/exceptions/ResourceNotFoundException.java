@@ -27,35 +27,39 @@ package org.niis.xroad.restapi.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.Collection;
-
 /**
- * Thrown if there was a conflict, for example tried to add an item which already exists.
- * Results in http 409 CONFLICT
+ * Thrown if item was not found.
+ * Results in http 404 NOT_FOUND
  */
-@ResponseStatus(value = HttpStatus.CONFLICT)
-public class ConflictException extends DeviationAwareRuntimeException {
-    public ConflictException() {
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends DeviationAwareRuntimeException {
+
+    public ResourceNotFoundException() {
     }
 
-    public ConflictException(DeviationAware deviations) {
-        super(deviations.getError(), deviations.getWarnings());
-    }
 
-    public ConflictException(String msg) {
+    public ResourceNotFoundException(String msg) {
         super(msg);
     }
 
-    public ConflictException(Error error, Collection<Warning> warnings) {
-        super(error, warnings);
+    public ResourceNotFoundException(Error error) {
+        super(error);
     }
 
-    public ConflictException(String msg, Error error) {
+    public ResourceNotFoundException(String msg, Error error) {
         super(msg, error);
     }
 
-    public ConflictException(Error error) {
-        super(error);
+    public ResourceNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
+
+    public ResourceNotFoundException(Throwable t) {
+        super(t);
+    }
+
+    public ResourceNotFoundException(Throwable t, Error error) {
+        super(t, error);
     }
 
 }

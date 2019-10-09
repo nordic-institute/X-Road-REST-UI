@@ -38,9 +38,11 @@ import org.niis.xroad.restapi.converter.ConnectionTypeMapping;
 import org.niis.xroad.restapi.converter.LocalGroupConverter;
 import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
+import org.niis.xroad.restapi.exceptions.ConflictException;
 import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.InternalServerErrorException;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.CertificateDetails;
 import org.niis.xroad.restapi.openapi.model.Client;
 import org.niis.xroad.restapi.openapi.model.ConnectionType;
@@ -49,10 +51,20 @@ import org.niis.xroad.restapi.openapi.model.LocalGroup;
 import org.niis.xroad.restapi.openapi.model.ServiceDescription;
 import org.niis.xroad.restapi.openapi.model.ServiceDescriptionAdd;
 import org.niis.xroad.restapi.openapi.model.ServiceType;
+import org.niis.xroad.restapi.service.ClientNotFoundException;
 import org.niis.xroad.restapi.service.ClientService;
+import org.niis.xroad.restapi.service.InvalidUrlException;
 import org.niis.xroad.restapi.service.LocalGroupService;
+import org.niis.xroad.restapi.service.ServiceAlreadyExistsException;
 import org.niis.xroad.restapi.service.ServiceDescriptionService;
 import org.niis.xroad.restapi.service.TokenService;
+import org.niis.xroad.restapi.service.UnhandledWarningsException;
+import org.niis.xroad.restapi.service.WsdlUrlAlreadyExistsException;
+import org.niis.xroad.restapi.wsdl.WsdlNotFoundException;
+import org.niis.xroad.restapi.wsdl.WsdlParseException;
+import org.niis.xroad.restapi.wsdl.WsdlUrlMissingException;
+import org.niis.xroad.restapi.wsdl.WsdlValidationFailedException;
+import org.niis.xroad.restapi.wsdl.WsdlValidatorNotExecutableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -60,7 +72,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -83,7 +94,6 @@ public class ClientsApiController implements ClientsApi {
     private final ClientService clientService;
     private final LocalGroupConverter localGroupConverter;
     private final LocalGroupService localGroupService;
-    private final NativeWebRequest request;
     private final TokenService tokenService;
     private final CertificateDetailsConverter certificateDetailsConverter;
     private final ServiceDescriptionConverter serviceDescriptionConverter;
@@ -91,7 +101,6 @@ public class ClientsApiController implements ClientsApi {
 
     /**
      * ClientsApiController constructor
-     * @param request
      * @param clientService
      * @param tokenService
      * @param clientConverter
@@ -102,12 +111,11 @@ public class ClientsApiController implements ClientsApi {
      */
 
     @Autowired
-    public ClientsApiController(NativeWebRequest request, ClientService clientService, TokenService tokenService,
+    public ClientsApiController(ClientService clientService, TokenService tokenService,
             ClientConverter clientConverter, LocalGroupConverter localGroupConverter,
             LocalGroupService localGroupService, CertificateDetailsConverter certificateDetailsConverter,
             ServiceDescriptionConverter serviceDescriptionConverter,
             ServiceDescriptionService serviceDescriptionService) {
-        this.request = request;
         this.clientService = clientService;
         this.tokenService = tokenService;
         this.clientConverter = clientConverter;
@@ -153,14 +161,14 @@ public class ClientsApiController implements ClientsApi {
      * @param encodedId id that is encoded with the <INSTANCE>:<MEMBER_CLASS>:....
      * encoding
      * @return
-     * @throws NotFoundException   if client does not exist
+     * @throws ResourceNotFoundException   if client does not exist
      * @throws BadRequestException if encodedId was not proper encoded client ID
      */
     private ClientType getClientType(String encodedId) {
         ClientId clientId = clientConverter.convertId(encodedId);
         ClientType clientType = clientService.getClient(clientId);
         if (clientType == null) {
-            throw new NotFoundException("client with id " + encodedId + " not found");
+            throw new ResourceNotFoundException("client with id " + encodedId + " not found");
         }
         return clientType;
     }
@@ -238,7 +246,7 @@ public class ClientsApiController implements ClientsApi {
         ClientId clientId = clientConverter.convertId(encodedId);
         Optional<CertificateType> certificateType = clientService.getTlsCertificate(clientId, certHash);
         if (!certificateType.isPresent()) {
-            throw new NotFoundException("certificate with hash " + certHash
+            throw new ResourceNotFoundException("certificate with hash " + certHash
                     + ", client id " + encodedId + " not found");
         }
         return new ResponseEntity<>(certificateDetailsConverter.convert(certificateType.get()), HttpStatus.OK);
@@ -253,11 +261,6 @@ public class ClientsApiController implements ClientsApi {
                 .map(certificateDetailsConverter::convert)
                 .collect(toList());
         return new ResponseEntity<>(certificates, HttpStatus.OK);
-    }
-
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.ofNullable(request);
     }
 
     @Override
@@ -293,9 +296,34 @@ public class ClientsApiController implements ClientsApi {
             ServiceDescriptionAdd serviceDescription) {
         ServiceDescriptionType addedServiceDescriptionType = null;
         if (serviceDescription.getType() == ServiceType.WSDL) {
-            addedServiceDescriptionType = serviceDescriptionService.addWsdlServiceDescription(
-                    clientConverter.convertId(id),
-                    serviceDescription.getUrl(), serviceDescription.getIgnoreWarnings());
+            try {
+                addedServiceDescriptionType = serviceDescriptionService.addWsdlServiceDescription(
+                        clientConverter.convertId(id),
+                        serviceDescription.getUrl(), serviceDescription.getIgnoreWarnings());
+            } catch (WsdlParseException e) {
+                throw new BadRequestException(new Error(ServiceDescriptionsApiController.ERROR_INVALID_WSDL));
+            } catch (WsdlNotFoundException e) {
+                throw new InternalServerErrorException();
+            } catch (ClientNotFoundException e) {
+                throw new ResourceNotFoundException(new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
+            } catch (WsdlValidationFailedException e) {
+                throw new BadRequestException(new Error(ServiceDescriptionsApiController.ERROR_WSDL_VALIDATION_FAILED,
+                        e.getOutput()));
+            } catch (WsdlValidatorNotExecutableException e) {
+                throw new BadRequestException(
+                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE));
+            } catch (WsdlUrlMissingException e) {
+                throw new BadRequestException(new Error(ServiceDescriptionsApiController.ERROR_WSDL_URL_MISSING));
+            } catch (UnhandledWarningsException e) {
+                throw new BadRequestException(e);
+            } catch (ServiceAlreadyExistsException e) {
+                throw new ConflictException(e);
+            } catch (InvalidUrlException e) {
+                throw new BadRequestException();
+            } catch (WsdlUrlAlreadyExistsException e) {
+                throw new ConflictException(new Error(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
+            }
+
         } else if (serviceDescription.getType() == ServiceType.REST) {
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         }

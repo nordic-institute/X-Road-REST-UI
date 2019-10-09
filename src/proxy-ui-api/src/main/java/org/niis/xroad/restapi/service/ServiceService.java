@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.dto.AccessRightHolderDto;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.Error;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.repository.LocalGroupRepository;
 import org.niis.xroad.restapi.repository.ServiceDescriptionRepository;
@@ -93,7 +93,7 @@ public class ServiceService {
     public ServiceType getService(ClientId clientId, String fullServiceCode) {
         ClientType client = clientRepository.getClient(clientId);
         if (client == null) {
-            throw new NotFoundException("Client " + clientId.toShortString() + " not found",
+            throw new ResourceNotFoundException("Client " + clientId.toShortString() + " not found",
                     new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
         }
         return getServiceFromClient(client, fullServiceCode);
@@ -112,7 +112,7 @@ public class ServiceService {
                 .flatMap(List::stream)
                 .filter(serviceType -> FormatUtils.getServiceFullName(serviceType).equals(fullServiceCode))
                 .findFirst();
-        return foundService.orElseThrow(() -> new NotFoundException("Service " + fullServiceCode + " not found",
+        return foundService.orElseThrow(() -> new ResourceNotFoundException("Service " + fullServiceCode + " not found",
                 new Error(ERROR_SERVICE_NOT_FOUND)));
     }
 
@@ -140,7 +140,7 @@ public class ServiceService {
         ServiceType serviceType = getService(clientId, fullServiceCode);
 
         if (serviceType == null) {
-            throw new NotFoundException("Service " + fullServiceCode + " not found");
+            throw new ResourceNotFoundException("Service " + fullServiceCode + " not found");
         }
 
         ServiceDescriptionType serviceDescriptionType = serviceType.getServiceDescription();
@@ -194,7 +194,7 @@ public class ServiceService {
     public List<AccessRightHolderDto> getAccessRightHoldersByService(ClientId clientId, String fullServiceCode) {
         ClientType clientType = clientRepository.getClient(clientId);
         if (clientType == null) {
-            throw new NotFoundException("Client " + clientId.toShortString() + " not found",
+            throw new ResourceNotFoundException("Client " + clientId.toShortString() + " not found",
                     new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
         }
 
@@ -227,7 +227,7 @@ public class ServiceService {
     public void deleteServiceAccessRights(ClientId clientId, String fullServiceCode, Set<XRoadId> subjectIds) {
         ClientType clientType = clientRepository.getClient(clientId);
         if (clientType == null) {
-            throw new NotFoundException("Client " + clientId.toShortString() + " not found",
+            throw new ResourceNotFoundException("Client " + clientId.toShortString() + " not found",
                     new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
         }
 
@@ -268,7 +268,7 @@ public class ServiceService {
                 .map(groupId -> {
                     LocalGroupType localGroup = localGroupRepository.getLocalGroup(groupId); // no need to batch
                     if (localGroup == null) {
-                        throw new NotFoundException("LocalGroup with id " + groupId + " not found");
+                        throw new ResourceNotFoundException("LocalGroup with id " + groupId + " not found");
                     }
                     return LocalGroupId.create(localGroup.getGroupCode());
                 })

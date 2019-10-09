@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.stubbing.Answer;
-import org.niis.xroad.restapi.exceptions.NotFoundException;
+import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.openapi.model.Client;
 import org.niis.xroad.restapi.openapi.model.IgnoreWarnings;
@@ -127,13 +127,13 @@ public class ServiceDescriptionsApiControllerIntegrationTest {
         // serviceDescriptions that do not exist
         try {
             serviceDescriptionsApiController.enableServiceDescription("10000");
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
         try {
             serviceDescriptionsApiController.enableServiceDescription("non-numeric-id");
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
 
     }
@@ -169,13 +169,13 @@ public class ServiceDescriptionsApiControllerIntegrationTest {
         // serviceDescriptions that do not exist
         try {
             serviceDescriptionsApiController.enableServiceDescription("10000");
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
         try {
             serviceDescriptionsApiController.enableServiceDescription("non-numeric-id");
-            fail("should throw NotFoundException");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException");
+        } catch (ResourceNotFoundException expected) {
         }
 
     }
@@ -290,14 +290,14 @@ public class ServiceDescriptionsApiControllerIntegrationTest {
 
         try {
             serviceDescriptionsApiController.getServiceDescription("123451");
-            fail("should throw NotFoundException to 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException to 404");
+        } catch (ResourceNotFoundException expected) {
         }
 
         try {
             serviceDescriptionsApiController.getServiceDescription("ugh");
-            fail("should throw NotFoundException to 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException to 404");
+        } catch (ResourceNotFoundException expected) {
         }
     }
 
@@ -321,14 +321,14 @@ public class ServiceDescriptionsApiControllerIntegrationTest {
 
         try {
             serviceDescriptionsApiController.getServiceDescriptionServices("123451");
-            fail("should throw NotFoundException to 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException to 404");
+        } catch (ResourceNotFoundException expected) {
         }
 
         try {
             serviceDescriptionsApiController.getServiceDescriptionServices("ugh");
-            fail("should throw NotFoundException to 404");
-        } catch (NotFoundException expected) {
+            fail("should throw ResourceNotFoundException to 404");
+        } catch (ResourceNotFoundException expected) {
         }
     }
 

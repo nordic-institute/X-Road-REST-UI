@@ -35,6 +35,11 @@ import java.util.Collection;
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class BadRequestException extends DeviationAwareRuntimeException {
+
+    public BadRequestException(DeviationAware deviations) {
+        super(deviations.getError(), deviations.getWarnings());
+    }
+
     public BadRequestException() {
     }
 

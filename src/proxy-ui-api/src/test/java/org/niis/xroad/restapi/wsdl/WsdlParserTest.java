@@ -25,8 +25,6 @@
 package org.niis.xroad.restapi.wsdl;
 
 import org.junit.Test;
-import org.niis.xroad.restapi.exceptions.WsdlNotFoundException;
-import org.niis.xroad.restapi.exceptions.WsdlParseException;
 
 import java.util.Collection;
 
