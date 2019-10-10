@@ -42,6 +42,10 @@ public class InternalServerErrorException extends DeviationAwareRuntimeException
         super(msg);
     }
 
+    public InternalServerErrorException(String msg, Throwable t) {
+        super(msg, t);
+    }
+
     public InternalServerErrorException(String msg, Error error) {
         super(msg, error);
     }

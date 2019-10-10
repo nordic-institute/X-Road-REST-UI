@@ -40,7 +40,6 @@ import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.ConflictException;
 import org.niis.xroad.restapi.exceptions.Error;
-import org.niis.xroad.restapi.exceptions.InternalServerErrorException;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.CertificateDetails;
@@ -60,11 +59,8 @@ import org.niis.xroad.restapi.service.ServiceDescriptionService;
 import org.niis.xroad.restapi.service.TokenService;
 import org.niis.xroad.restapi.service.UnhandledWarningsException;
 import org.niis.xroad.restapi.service.WsdlUrlAlreadyExistsException;
+import org.niis.xroad.restapi.wsdl.InvalidWsdlException;
 import org.niis.xroad.restapi.wsdl.WsdlNotFoundException;
-import org.niis.xroad.restapi.wsdl.WsdlParseException;
-import org.niis.xroad.restapi.wsdl.WsdlUrlMissingException;
-import org.niis.xroad.restapi.wsdl.WsdlValidationFailedException;
-import org.niis.xroad.restapi.wsdl.WsdlValidatorNotExecutableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -300,28 +296,27 @@ public class ClientsApiController implements ClientsApi {
                 addedServiceDescriptionType = serviceDescriptionService.addWsdlServiceDescription(
                         clientConverter.convertId(id),
                         serviceDescription.getUrl(), serviceDescription.getIgnoreWarnings());
-            } catch (WsdlParseException e) {
-                throw new BadRequestException(new Error(ServiceDescriptionsApiController.ERROR_INVALID_WSDL));
             } catch (WsdlNotFoundException e) {
-                throw new InternalServerErrorException();
-            } catch (ClientNotFoundException e) {
-                throw new ResourceNotFoundException(new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
-            } catch (WsdlValidationFailedException e) {
-                throw new BadRequestException(new Error(ServiceDescriptionsApiController.ERROR_WSDL_VALIDATION_FAILED,
-                        e.getOutput()));
-            } catch (WsdlValidatorNotExecutableException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE));
-            } catch (WsdlUrlMissingException e) {
-                throw new BadRequestException(new Error(ServiceDescriptionsApiController.ERROR_WSDL_URL_MISSING));
+                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
+            } catch (ClientNotFoundException e) {
+                throw new ResourceNotFoundException(
+                        new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
             } catch (UnhandledWarningsException e) {
+                // errorcode + warnings copied
                 throw new BadRequestException(e);
             } catch (ServiceAlreadyExistsException e) {
+                // errorcode + warnings copied
                 throw new ConflictException(e);
             } catch (InvalidUrlException e) {
-                throw new BadRequestException();
+                throw new BadRequestException(
+                        new Error(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
             } catch (WsdlUrlAlreadyExistsException e) {
-                throw new ConflictException(new Error(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
+                throw new ConflictException(
+                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
+            } catch (InvalidWsdlException e) {
+                throw new BadRequestException(
+                        new Error(ServiceDescriptionsApiController.ERROR_INVALID_WSDL, e.getMetadata()));
             }
 
         } else if (serviceDescription.getType() == ServiceType.REST) {

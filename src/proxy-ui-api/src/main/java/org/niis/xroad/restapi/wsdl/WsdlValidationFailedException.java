@@ -29,12 +29,8 @@ import java.util.List;
 /**
  * Thrown if WSDL validation fails
  */
-public class WsdlValidationFailedException extends WsdlValidationException {
-    private final List<String> output;
-    public WsdlValidationFailedException(List<String> output) {
-        this.output = output;
-    }
-    public List<String> getOutput() {
-        return output;
+public class WsdlValidationFailedException extends InvalidWsdlException {
+    public WsdlValidationFailedException(List<String> metadata) {
+        super(metadata);
     }
 }
