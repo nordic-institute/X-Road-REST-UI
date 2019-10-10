@@ -32,7 +32,7 @@ import ee.ria.xroad.common.util.CryptoUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.exceptions.ConflictException;
-import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.repository.ClientRepository;
@@ -140,7 +140,7 @@ public class ClientService {
         ClientType clientType = clientRepository.getClient(id);
         if (clientType == null) {
             throw new ResourceNotFoundException(("client with id " + id + " not found"),
-                    new Error(CLIENT_NOT_FOUND_ERROR_CODE));
+                    new FatalError(CLIENT_NOT_FOUND_ERROR_CODE));
         }
         return clientType;
     }
@@ -218,7 +218,7 @@ public class ClientService {
                 .findAny()
                 .orElseThrow(() ->
                         new ResourceNotFoundException("certificate with hash " + certificateHash + " not found",
-                                new Error(CERTIFICATE_NOT_FOUND_ERROR_CODE)));
+                                new FatalError(CERTIFICATE_NOT_FOUND_ERROR_CODE)));
 
         clientType.getIsCert().remove(certificateType);
         clientRepository.saveOrUpdate(clientType);

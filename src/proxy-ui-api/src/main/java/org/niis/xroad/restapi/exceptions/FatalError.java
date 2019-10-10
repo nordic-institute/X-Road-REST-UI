@@ -29,16 +29,16 @@ import java.util.List;
 /**
  * An error that can't be ignored
  */
-public class Error extends Deviation {
-    public Error(String code, List<String> metadata) {
+public class FatalError extends Deviation {
+    public FatalError(String code, List<String> metadata) {
         super(code, metadata);
     }
 
-    public Error(String code, String metadataItem) {
+    public FatalError(String code, String metadataItem) {
         super(code, metadataItem);
     }
 
-    public Error(String code) {
+    public FatalError(String code) {
         super(code);
     }
 }

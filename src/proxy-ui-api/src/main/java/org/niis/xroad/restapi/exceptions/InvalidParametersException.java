@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Thrown if parameters were invalid.
  * Results in http 400 BAD_REQUEST
+ * to do: replace with BadRequestException and ServiceExceptions
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class InvalidParametersException extends RuntimeException {

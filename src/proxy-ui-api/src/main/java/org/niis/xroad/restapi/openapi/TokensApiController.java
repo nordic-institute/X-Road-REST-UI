@@ -29,7 +29,7 @@ import ee.ria.xroad.signer.protocol.dto.TokenInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.converter.TokenConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
-import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.Token;
 import org.niis.xroad.restapi.openapi.model.TokenPassword;
@@ -97,7 +97,7 @@ public class TokensApiController implements TokensApi {
         } catch (TokenService.TokenNotFoundException e) {
             throw new ResourceNotFoundException(e);
         } catch (TokenService.PinIncorrectException e) {
-            throw new BadRequestException(e, new Error(ERROR_PIN_INCORRECT));
+            throw new BadRequestException(e, new FatalError(ERROR_PIN_INCORRECT));
         }
         Token token = getTokenFromService(id);
         return new ResponseEntity<>(token, HttpStatus.OK);

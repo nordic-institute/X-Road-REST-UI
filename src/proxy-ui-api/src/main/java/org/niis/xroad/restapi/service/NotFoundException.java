@@ -24,14 +24,18 @@
  */
 package org.niis.xroad.restapi.service;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+
 public class NotFoundException extends ServiceException {
-    public NotFoundException(Throwable t) {
-        super(t);
+    public NotFoundException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
     }
-    public NotFoundException() {
-        super();
+
+    public NotFoundException(FatalError fatalError) {
+        super(fatalError);
     }
-    public NotFoundException(String s) {
-        super(s);
+
+    public NotFoundException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
     }
 }

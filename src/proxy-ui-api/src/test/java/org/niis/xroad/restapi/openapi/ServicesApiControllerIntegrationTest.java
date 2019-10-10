@@ -199,7 +199,7 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getService(SS0_GET_RANDOM).getBody();
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getError().getCode());
+            assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getFatalError().getCode());
         }
     }
 
@@ -210,7 +210,7 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getService(SS1_PREDICT_WINNING_LOTTERY_NUMBERS).getBody();
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getError().getCode());
+            assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 
@@ -250,14 +250,14 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getServiceAccessRights(SS0_GET_RANDOM);
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getError().getCode());
+            assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getFatalError().getCode());
         }
 
         try {
             servicesApiController.getServiceAccessRights(SS1_PREDICT_WINNING_LOTTERY_NUMBERS);
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getError().getCode());
+            assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 
@@ -353,7 +353,7 @@ public class ServicesApiControllerIntegrationTest {
         try {
             servicesApiController.deleteServiceAccessRight(SS1_GET_RANDOM, subjects).getBody();
         } catch (BadRequestException expected) {
-            assertEquals(ServiceService.ERROR_ACCESSRIGHT_NOT_FOUND, expected.getError().getCode());
+            assertEquals(ServiceService.ERROR_ACCESSRIGHT_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 
@@ -371,7 +371,7 @@ public class ServicesApiControllerIntegrationTest {
         try {
             servicesApiController.deleteServiceAccessRight(SS1_GET_RANDOM, subjects).getBody();
         } catch (BadRequestException expected) {
-            assertEquals(ServiceService.ERROR_ACCESSRIGHT_NOT_FOUND, expected.getError().getCode());
+            assertEquals(ServiceService.ERROR_ACCESSRIGHT_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 

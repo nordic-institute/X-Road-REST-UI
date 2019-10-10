@@ -35,7 +35,7 @@ public interface DeviationAware {
      * Return the error details, if any
      * @return
      */
-    Error getError();
+    FatalError getFatalError();
 
     /**
      * Return warnings, if any

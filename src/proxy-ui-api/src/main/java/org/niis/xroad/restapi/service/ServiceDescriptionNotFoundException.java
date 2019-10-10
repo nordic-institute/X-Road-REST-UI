@@ -24,14 +24,15 @@
  */
 package org.niis.xroad.restapi.service;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+
 public class ServiceDescriptionNotFoundException extends NotFoundException {
-    public ServiceDescriptionNotFoundException(Throwable t) {
-        super(t);
-    }
-    public ServiceDescriptionNotFoundException() {
-        super();
-    }
+
+    // To do: remove from service?
+    public static final String SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE =
+            ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE;
+
     public ServiceDescriptionNotFoundException(String s) {
-        super(s);
+        super(s, new FatalError(SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
     }
 }

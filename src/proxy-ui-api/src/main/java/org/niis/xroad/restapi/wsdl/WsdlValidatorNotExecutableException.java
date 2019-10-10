@@ -24,16 +24,16 @@
  */
 package org.niis.xroad.restapi.wsdl;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
+
 /**
  * Thrown if WSDL validation fails
  */
 public class WsdlValidatorNotExecutableException extends WsdlValidationException {
-    public WsdlValidatorNotExecutableException() {
-    }
-    public WsdlValidatorNotExecutableException(String s) {
-        super(s);
-    }
+    public static final String ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE =
+            ServiceDescriptionsApiController.ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE;
     public WsdlValidatorNotExecutableException(Throwable t) {
-        super(t);
+        super(t, new FatalError(ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE));
     }
 }

@@ -39,23 +39,23 @@ public class ConflictException extends DeviationAwareRuntimeException {
     }
 
     public ConflictException(DeviationAware deviations) {
-        super(deviations.getError(), deviations.getWarnings());
+        super(deviations.getFatalError(), deviations.getWarnings());
     }
 
     public ConflictException(String msg) {
         super(msg);
     }
 
-    public ConflictException(Error error, Collection<Warning> warnings) {
-        super(error, warnings);
+    public ConflictException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
     }
 
-    public ConflictException(String msg, Error error) {
-        super(msg, error);
+    public ConflictException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
     }
 
-    public ConflictException(Error error) {
-        super(error);
+    public ConflictException(FatalError fatalError) {
+        super(fatalError);
     }
 
 }

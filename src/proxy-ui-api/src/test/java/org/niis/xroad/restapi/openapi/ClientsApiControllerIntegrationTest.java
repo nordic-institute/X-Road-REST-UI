@@ -585,7 +585,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown ConflictException");
         } catch (ConflictException expected) {
-            assertEquals(ERROR_WSDL_EXISTS, expected.getError().getCode());
+            assertEquals(ERROR_WSDL_EXISTS, expected.getFatalError().getCode());
         }
         serviceDescription = new ServiceDescriptionAdd().url("file:src/test/resources/wsdl/testservice.wsdl");
         serviceDescription.setType(ServiceType.WSDL);
@@ -610,7 +610,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertEquals(ERROR_INVALID_WSDL, expected.getError().getCode());
+            assertEquals(ERROR_INVALID_WSDL, expected.getFatalError().getCode());
         }
     }
 

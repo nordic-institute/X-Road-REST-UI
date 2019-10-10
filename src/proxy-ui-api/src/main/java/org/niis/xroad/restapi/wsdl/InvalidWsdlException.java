@@ -24,6 +24,9 @@
  */
 package org.niis.xroad.restapi.wsdl;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
+
 import java.util.List;
 
 /**
@@ -31,16 +34,15 @@ import java.util.List;
  */
 public class InvalidWsdlException extends WsdlValidationException {
 
-    private final List<String> metadata;
+    // To do: remove from ServiceDescriptionsApiController?
+    public static final String ERROR_INVALID_WSDL =
+            ServiceDescriptionsApiController.ERROR_INVALID_WSDL;
 
     /**
      * @param metadata describes why wsdl was invalid
      */
     public InvalidWsdlException(List<String> metadata) {
-        this.metadata = metadata;
+        super(new FatalError(ERROR_INVALID_WSDL, metadata));
     }
 
-    public List<String> getMetadata() {
-        return metadata;
-    }
 }

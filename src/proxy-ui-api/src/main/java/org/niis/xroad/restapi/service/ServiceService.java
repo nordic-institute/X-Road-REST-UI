@@ -37,7 +37,7 @@ import ee.ria.xroad.common.identifier.XRoadObjectType;
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.dto.AccessRightHolderDto;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
-import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.repository.LocalGroupRepository;
@@ -94,7 +94,7 @@ public class ServiceService {
         ClientType client = clientRepository.getClient(clientId);
         if (client == null) {
             throw new ResourceNotFoundException("Client " + clientId.toShortString() + " not found",
-                    new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
+                    new FatalError(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
         }
         return getServiceFromClient(client, fullServiceCode);
     }
@@ -113,7 +113,7 @@ public class ServiceService {
                 .filter(serviceType -> FormatUtils.getServiceFullName(serviceType).equals(fullServiceCode))
                 .findFirst();
         return foundService.orElseThrow(() -> new ResourceNotFoundException("Service " + fullServiceCode + " not found",
-                new Error(ERROR_SERVICE_NOT_FOUND)));
+                new FatalError(ERROR_SERVICE_NOT_FOUND)));
     }
 
     /**
@@ -195,7 +195,7 @@ public class ServiceService {
         ClientType clientType = clientRepository.getClient(clientId);
         if (clientType == null) {
             throw new ResourceNotFoundException("Client " + clientId.toShortString() + " not found",
-                    new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
+                    new FatalError(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
         }
 
         ServiceType serviceType = getServiceFromClient(clientType, fullServiceCode);
@@ -228,7 +228,7 @@ public class ServiceService {
         ClientType clientType = clientRepository.getClient(clientId);
         if (clientType == null) {
             throw new ResourceNotFoundException("Client " + clientId.toShortString() + " not found",
-                    new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
+                    new FatalError(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
         }
 
         ServiceType serviceType = getServiceFromClient(clientType, fullServiceCode);
@@ -245,7 +245,7 @@ public class ServiceService {
                 .collect(Collectors.toList());
 
         if (!subjectsToBeRemoved.containsAll(subjectIds)) {
-            throw new BadRequestException(new Error(ERROR_ACCESSRIGHT_NOT_FOUND));
+            throw new BadRequestException(new FatalError(ERROR_ACCESSRIGHT_NOT_FOUND));
         }
 
         clientType.getAcl().removeAll(accessRightsToBeRemoved);

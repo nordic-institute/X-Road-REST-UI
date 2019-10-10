@@ -37,7 +37,7 @@ import java.util.Collection;
 public class BadRequestException extends DeviationAwareRuntimeException {
 
     public BadRequestException(DeviationAware deviations) {
-        super(deviations.getError(), deviations.getWarnings());
+        super(deviations.getFatalError(), deviations.getWarnings());
     }
 
     public BadRequestException() {
@@ -47,28 +47,28 @@ public class BadRequestException extends DeviationAwareRuntimeException {
         super(msg);
     }
 
-    public BadRequestException(String msg, Error error) {
-        super(msg, error);
+    public BadRequestException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
     }
 
-    public BadRequestException(String msg, Throwable t, Error error) {
-        super(msg, t, error);
+    public BadRequestException(String msg, Throwable t, FatalError fatalError) {
+        super(msg, t, fatalError);
     }
 
-    public BadRequestException(Throwable t, Error error, Collection<Warning> warnings) {
-        super(t, error, warnings);
+    public BadRequestException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(t, fatalError, warnings);
     }
 
-    public BadRequestException(Error error, Collection<Warning> warnings) {
-        super(error, warnings);
+    public BadRequestException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
     }
 
-    public BadRequestException(Error error) {
-        super(error);
+    public BadRequestException(FatalError fatalError) {
+        super(fatalError);
     }
 
-    public BadRequestException(Throwable t, Error error) {
-        super(t, error);
+    public BadRequestException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
     }
 
     /**
@@ -76,7 +76,7 @@ public class BadRequestException extends DeviationAwareRuntimeException {
      * @param e
      */
     public BadRequestException(DeviationAwareRuntimeException e) {
-        this(e, e.getError(), e.getWarnings());
+        this(e, e.getFatalError(), e.getWarnings());
     }
 
 }
