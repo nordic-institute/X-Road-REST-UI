@@ -297,6 +297,8 @@ public final class WsdlParser {
                 throw new PrivateWsdlNotFoundException(e);
             } catch (Exception e) {
                 throw new PrivateWsdlNotFoundException(e);
+            } catch (Throwable t) {
+                throw new PrivateWsdlNotFoundException(t);
             }
         }
 

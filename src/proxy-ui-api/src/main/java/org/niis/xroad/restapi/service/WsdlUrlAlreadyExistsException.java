@@ -24,14 +24,16 @@
  */
 package org.niis.xroad.restapi.service;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
+
 public class WsdlUrlAlreadyExistsException extends ServiceException {
-    public WsdlUrlAlreadyExistsException(Throwable t) {
-        super(t);
-    }
-    public WsdlUrlAlreadyExistsException() {
-        super();
-    }
+
+    // To do: remove from ServiceDescriptionsApiController?
+    public static final String ERROR_WSDL_EXISTS =
+            ServiceDescriptionsApiController.ERROR_WSDL_EXISTS;
+
     public WsdlUrlAlreadyExistsException(String s) {
-        super(s);
+        super(s, new FatalError(ERROR_WSDL_EXISTS));
     }
 }

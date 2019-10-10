@@ -32,7 +32,7 @@ import org.niis.xroad.restapi.converter.ServiceConverter;
 import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.ConflictException;
-import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.IgnoreWarnings;
 import org.niis.xroad.restapi.openapi.model.Service;
@@ -147,7 +147,7 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
                         serviceDescriptionUpdate.getIgnoreWarnings());
             } catch (WsdlNotFoundException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
             } catch (UnhandledWarningsException e) {
                 // errorcode + warnings copied
                 throw new BadRequestException(e);
@@ -156,19 +156,20 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
                 throw new ConflictException(e);
             } catch (InvalidUrlException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
             } catch (WsdlUrlAlreadyExistsException e) {
                 throw new ConflictException(
-                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
             } catch (InvalidWsdlException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_INVALID_WSDL, e.getMetadata()));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_INVALID_WSDL,
+                                e.getFatalError().getMetadata()));
             } catch (ServiceDescriptionNotFoundException e) {
                 throw new ResourceNotFoundException(
-                        new Error(ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
+                        new FatalError(ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
             } catch (WrongServiceDescriptionTypeException e) {
                 throw new BadRequestException(
-                        new Error(ERROR_WRONG_TYPE));
+                        new FatalError(ERROR_WRONG_TYPE));
             }
             serviceDescription = serviceDescriptionConverter.convert(updatedServiceDescription);
         } else if (serviceDescriptionUpdate.getType() == ServiceType.REST) {
@@ -199,7 +200,7 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
                             ignoreWarnings.getIgnoreWarnings()));
         } catch (WsdlNotFoundException e) {
             throw new BadRequestException(
-                    new Error(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
+                    new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
         } catch (UnhandledWarningsException e) {
             // errorcode + warnings copied
             throw new BadRequestException(e);
@@ -208,19 +209,20 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
             throw new ConflictException(e);
         } catch (InvalidUrlException e) {
             throw new BadRequestException(
-                    new Error(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
+                    new FatalError(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
         } catch (WsdlUrlAlreadyExistsException e) {
             throw new ConflictException(
-                    new Error(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
+                    new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
         } catch (InvalidWsdlException e) {
             throw new BadRequestException(
-                    new Error(ServiceDescriptionsApiController.ERROR_INVALID_WSDL, e.getMetadata()));
+                    new FatalError(ServiceDescriptionsApiController.ERROR_INVALID_WSDL,
+                            e.getFatalError().getMetadata()));
         } catch (ServiceDescriptionNotFoundException e) {
             throw new ResourceNotFoundException(
-                    new Error(ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
+                    new FatalError(ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
         } catch (WrongServiceDescriptionTypeException e) {
             throw new BadRequestException(
-                    new Error(ERROR_WRONG_TYPE));
+                    new FatalError(ERROR_WRONG_TYPE));
         }
         return new ResponseEntity<>(serviceDescription, HttpStatus.OK);
     }

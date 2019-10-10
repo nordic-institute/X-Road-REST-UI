@@ -37,17 +37,20 @@ public class ResourceNotFoundException extends DeviationAwareRuntimeException {
     public ResourceNotFoundException() {
     }
 
+    public ResourceNotFoundException(DeviationAware deviations) {
+        super(deviations.getFatalError(), deviations.getWarnings());
+    }
 
     public ResourceNotFoundException(String msg) {
         super(msg);
     }
 
-    public ResourceNotFoundException(Error error) {
-        super(error);
+    public ResourceNotFoundException(FatalError fatalError) {
+        super(fatalError);
     }
 
-    public ResourceNotFoundException(String msg, Error error) {
-        super(msg, error);
+    public ResourceNotFoundException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
     }
 
     public ResourceNotFoundException(String msg, Throwable t) {
@@ -58,8 +61,8 @@ public class ResourceNotFoundException extends DeviationAwareRuntimeException {
         super(t);
     }
 
-    public ResourceNotFoundException(Throwable t, Error error) {
-        super(t, error);
+    public ResourceNotFoundException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
     }
 
 }

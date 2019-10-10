@@ -72,7 +72,8 @@ public class WsdlValidatorTest {
             wsdlValidator.executeValidator("src/test/resources/wsdl/error.wsdl");
             fail("should have thrown WsdlValidationException");
         } catch (WsdlValidationFailedException expected) {
-            assertEquals(Collections.singletonList(MOCK_VALIDATOR_ERROR), expected.getMetadata());
+            assertEquals(Collections.singletonList(MOCK_VALIDATOR_ERROR),
+                    expected.getFatalError().getMetadata());
         }
     }
 

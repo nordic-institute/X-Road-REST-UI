@@ -24,16 +24,15 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.DeviationAwareException;
-import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.FatalError;
 
 import java.util.List;
 
-public class ServiceAlreadyExistsException extends DeviationAwareException {
+public class ServiceAlreadyExistsException extends ServiceException {
 
     public static final String ERROR_SERVICE_EXISTS = "clients.service_exists";
 
     public ServiceAlreadyExistsException(List<String> metadata) {
-        super(new Error(ERROR_SERVICE_EXISTS, metadata));
+        super(new FatalError(ERROR_SERVICE_EXISTS, metadata));
     }
 }

@@ -24,14 +24,16 @@
  */
 package org.niis.xroad.restapi.service;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
+
 public class WrongServiceDescriptionTypeException extends ServiceException {
-    public WrongServiceDescriptionTypeException(Throwable t) {
-        super(t);
-    }
-    public WrongServiceDescriptionTypeException() {
-        super();
-    }
+
+    // To do: remove from ServiceDescriptionsApiController?
+    public static final String ERROR_INVALID_WSDL =
+            ServiceDescriptionsApiController.ERROR_WRONG_TYPE;
+
     public WrongServiceDescriptionTypeException(String s) {
-        super(s);
+        super(s, new FatalError(ERROR_INVALID_WSDL));
     }
 }

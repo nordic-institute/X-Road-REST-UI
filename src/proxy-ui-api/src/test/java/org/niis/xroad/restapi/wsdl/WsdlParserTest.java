@@ -58,7 +58,7 @@ public class WsdlParserTest {
      * Test if an invalid URL is recognized.
      * @throws Exception in case of any errors
      */
-    @Test(expected = WsdlParseException.class)
+    @Test(expected = WsdlNotFoundException.class)
     public void readWsdlFromInvalidUrl() throws Exception {
         WsdlParser.parseWSDL("http://localhost:1234/foo.wsdl");
     }

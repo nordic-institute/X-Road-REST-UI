@@ -75,13 +75,13 @@ public final class DeviationTestUtils {
     }
 
     /**
-     * Error with null metadata
+     * FatalError with null metadata
      * @param errorCode
      * @param deviationAware
      */
     public static void assertErrorWithoutMetadata(String errorCode, DeviationAware deviationAware) {
-        assertEquals(errorCode, deviationAware.getError().getCode());
-        assertNull(deviationAware.getError().getMetadata());
+        assertEquals(errorCode, deviationAware.getFatalError().getCode());
+        assertNull(deviationAware.getFatalError().getMetadata());
     }
 
     /**
@@ -115,25 +115,25 @@ public final class DeviationTestUtils {
 
 
     /**
-     * Error with one metadata item
+     * FatalError with one metadata item
      * @param errorCode
      * @param metadata
      * @param deviationAware
      */
     public static void assertErrorWithMetadata(String errorCode, String metadata, DeviationAware deviationAware) {
-        assertEquals(errorCode, deviationAware.getError().getCode());
-        assertNotNull(deviationAware.getError().getMetadata());
+        assertEquals(errorCode, deviationAware.getFatalError().getCode());
+        assertNotNull(deviationAware.getFatalError().getMetadata());
         assertEquals(Collections.singletonList(metadata),
-                deviationAware.getError().getMetadata());
+                deviationAware.getFatalError().getMetadata());
     }
 
     /**
      * multiple error metadata items
      */
     public static void assertErrorWithMetadata(String errorCode, DeviationAware deviationAware, String...metadata) {
-        assertEquals(errorCode, deviationAware.getError().getCode());
-        assertNotNull(deviationAware.getError().getMetadata());
+        assertEquals(errorCode, deviationAware.getFatalError().getCode());
+        assertNotNull(deviationAware.getFatalError().getMetadata());
         List<String> metadatas = Arrays.asList(metadata);
-        assertEquals(metadatas, deviationAware.getError().getMetadata());
+        assertEquals(metadatas, deviationAware.getFatalError().getMetadata());
     }
 }

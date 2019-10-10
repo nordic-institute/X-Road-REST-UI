@@ -39,7 +39,7 @@ import org.niis.xroad.restapi.converter.LocalGroupConverter;
 import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.ConflictException;
-import org.niis.xroad.restapi.exceptions.Error;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.CertificateDetails;
@@ -215,14 +215,15 @@ public class ClientsApiController implements ClientsApi {
         try {
             certificateBytes = IOUtils.toByteArray(body.getInputStream());
         } catch (IOException ex) {
-            throw new BadRequestException("cannot read certificate data", ex, new Error(INVALID_UPLOAD_ERROR_CODE));
+            throw new BadRequestException("cannot read certificate data", ex,
+                    new FatalError(INVALID_UPLOAD_ERROR_CODE));
         }
         ClientId clientId = clientConverter.convertId(encodedId);
         CertificateType certificateType = null;
         try {
             certificateType = clientService.addTlsCertificate(clientId, certificateBytes);
         } catch (CertificateException c) {
-            throw new BadRequestException(c, new Error(INVALID_CERT_ERROR_CODE));
+            throw new BadRequestException(c, new FatalError(INVALID_CERT_ERROR_CODE));
         }
         CertificateDetails certificateDetails = certificateDetailsConverter.convert(certificateType);
         return createCreatedResponse("/api/certificates/{hash}", certificateDetails, certificateDetails.getHash());
@@ -298,10 +299,10 @@ public class ClientsApiController implements ClientsApi {
                         serviceDescription.getUrl(), serviceDescription.getIgnoreWarnings());
             } catch (WsdlNotFoundException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
             } catch (ClientNotFoundException e) {
                 throw new ResourceNotFoundException(
-                        new Error(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
+                        new FatalError(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
             } catch (UnhandledWarningsException e) {
                 // errorcode + warnings copied
                 throw new BadRequestException(e);
@@ -310,13 +311,14 @@ public class ClientsApiController implements ClientsApi {
                 throw new ConflictException(e);
             } catch (InvalidUrlException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
             } catch (WsdlUrlAlreadyExistsException e) {
                 throw new ConflictException(
-                        new Error(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
             } catch (InvalidWsdlException e) {
                 throw new BadRequestException(
-                        new Error(ServiceDescriptionsApiController.ERROR_INVALID_WSDL, e.getMetadata()));
+                        new FatalError(ServiceDescriptionsApiController.ERROR_INVALID_WSDL,
+                                e.getFatalError().getMetadata()));
             }
 
         } else if (serviceDescription.getType() == ServiceType.REST) {

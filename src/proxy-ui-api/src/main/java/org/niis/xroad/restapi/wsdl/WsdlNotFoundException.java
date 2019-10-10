@@ -25,22 +25,20 @@
 
 package org.niis.xroad.restapi.wsdl;
 
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
+import org.niis.xroad.restapi.service.ServiceException;
+
 /**
- * Thrown if WSDL file is not found - internal wrapper runtime exception for FileNotFoundException
+ * Thrown if WSDL file is not found
  */
-public class WsdlNotFoundException extends Exception {
-    public WsdlNotFoundException() {
-    }
+public class WsdlNotFoundException extends ServiceException {
 
-    public WsdlNotFoundException(String message) {
-        super(message);
-    }
-
-    public WsdlNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    // To do: remove from ServiceDescriptionsApiController?
+    public static final String ERROR_WSDL_DOWNLOAD_FAILED =
+            ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED;
 
     public WsdlNotFoundException(Throwable cause) {
-        super(cause);
+        super(cause, new FatalError(ERROR_WSDL_DOWNLOAD_FAILED));
     }
 }

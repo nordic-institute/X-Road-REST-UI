@@ -24,18 +24,42 @@
  */
 package org.niis.xroad.restapi.service;
 
-public class ServiceException extends Exception {
-    public ServiceException(String msg, Throwable t) {
-        super(msg, t);
+import org.niis.xroad.restapi.exceptions.DeviationAwareException;
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.Warning;
+
+import java.util.Collection;
+
+public abstract class ServiceException extends DeviationAwareException {
+
+    public ServiceException(String msg, Throwable t, FatalError fatalError) {
+        super(msg, t, fatalError);
     }
 
-    public ServiceException(Throwable t) {
-        super(t);
+    public ServiceException(String msg, Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(msg, t, fatalError, warnings);
     }
-    public ServiceException() {
-        super();
+
+    public ServiceException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
     }
-    public ServiceException(String s) {
-        super(s);
+
+    public ServiceException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
     }
+
+    public ServiceException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(t, fatalError, warnings);
+    }
+
+    public ServiceException(FatalError fatalError) {
+        super(fatalError);
+    }
+
+    public ServiceException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
+    }
+
+
+
 }

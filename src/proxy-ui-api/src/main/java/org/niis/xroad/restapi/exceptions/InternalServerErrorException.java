@@ -35,6 +35,11 @@ import java.util.Collection;
  */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 public class InternalServerErrorException extends DeviationAwareRuntimeException {
+
+    public InternalServerErrorException(DeviationAware deviations) {
+        super(deviations.getFatalError(), deviations.getWarnings());
+    }
+
     public InternalServerErrorException() {
     }
 
@@ -46,28 +51,28 @@ public class InternalServerErrorException extends DeviationAwareRuntimeException
         super(msg, t);
     }
 
-    public InternalServerErrorException(String msg, Error error) {
-        super(msg, error);
+    public InternalServerErrorException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
     }
 
-    public InternalServerErrorException(String msg, Throwable t, Error error) {
-        super(msg, t, error);
+    public InternalServerErrorException(String msg, Throwable t, FatalError fatalError) {
+        super(msg, t, fatalError);
     }
 
-    public InternalServerErrorException(Throwable t, Error error, Collection<Warning> warnings) {
-        super(t, error, warnings);
+    public InternalServerErrorException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(t, fatalError, warnings);
     }
 
-    public InternalServerErrorException(Error error, Collection<Warning> warnings) {
-        super(error, warnings);
+    public InternalServerErrorException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
     }
 
-    public InternalServerErrorException(Error error) {
-        super(error);
+    public InternalServerErrorException(FatalError fatalError) {
+        super(fatalError);
     }
 
-    public InternalServerErrorException(Throwable t, Error error) {
-        super(t, error);
+    public InternalServerErrorException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
     }
 
 
@@ -82,7 +87,7 @@ public class InternalServerErrorException extends DeviationAwareRuntimeException
      * @param e
      */
     public InternalServerErrorException(DeviationAwareRuntimeException e) {
-        this(e, e.getError(), e.getWarnings());
+        this(e, e.getFatalError(), e.getWarnings());
     }
 
 }
