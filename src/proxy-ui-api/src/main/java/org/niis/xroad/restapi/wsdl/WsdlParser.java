@@ -24,8 +24,6 @@
  */
 package org.niis.xroad.restapi.wsdl;
 
-import ee.ria.xroad.common.CodedException;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -65,8 +63,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static ee.ria.xroad.common.ErrorCodes.X_INTERNAL_ERROR;
 
 /**
  * Utils for WSDL parsing
@@ -300,7 +296,7 @@ public final class WsdlParser {
             } catch (FileNotFoundException e) {
                 throw new PrivateWsdlNotFoundException(e);
             } catch (Exception e) {
-                throw new CodedException(X_INTERNAL_ERROR, e);
+                throw new PrivateWsdlNotFoundException(e);
             }
         }
 
