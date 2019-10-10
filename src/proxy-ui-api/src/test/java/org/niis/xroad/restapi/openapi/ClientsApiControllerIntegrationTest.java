@@ -83,7 +83,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 import static org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController.ERROR_INVALID_WSDL;
 import static org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController.ERROR_WSDL_EXISTS;
-import static org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController.ERROR_WSDL_VALIDATION_FAILED;
 import static org.niis.xroad.restapi.service.ServiceAlreadyExistsException.ERROR_SERVICE_EXISTS;
 import static org.niis.xroad.restapi.service.ServiceDescriptionService.WARNING_WSDL_VALIDATION_WARNINGS;
 import static org.niis.xroad.restapi.service.UnhandledWarningsException.ERROR_WARNINGS_DETECTED;
@@ -611,7 +610,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithoutMetadata(ERROR_INVALID_WSDL, expected);
+            assertEquals(ERROR_INVALID_WSDL, expected.getError().getCode());
         }
     }
 
@@ -652,7 +651,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithMetadata(ERROR_WSDL_VALIDATION_FAILED,
+            assertErrorWithMetadata(ERROR_INVALID_WSDL,
                     WsdlValidatorTest.MOCK_VALIDATOR_ERROR, expected);
         }
 
@@ -662,7 +661,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithMetadata(ERROR_WSDL_VALIDATION_FAILED,
+            assertErrorWithMetadata(ERROR_INVALID_WSDL,
                     WsdlValidatorTest.MOCK_VALIDATOR_ERROR, expected);
         }
 
@@ -679,7 +678,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertErrorWithMetadata(ERROR_WSDL_VALIDATION_FAILED,
+            assertErrorWithMetadata(ERROR_INVALID_WSDL,
                     WsdlValidatorTest.MOCK_VALIDATOR_ERROR, expected);
         }
     }

@@ -24,25 +24,22 @@
  */
 package org.niis.xroad.restapi.wsdl;
 
-import org.niis.xroad.restapi.service.ServiceException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Thrown if WSDL parsing fails
  */
-public class WsdlParseException extends ServiceException {
-    public WsdlParseException() {
-    }
-
-    public WsdlParseException(String msg) {
-        super(msg);
-    }
-
-    public WsdlParseException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
+public class WsdlParseException extends InvalidWsdlException {
     public WsdlParseException(Throwable t) {
-        super(t);
+        super(toListOrNull(t.getMessage()));
     }
 
+    private static List<String> toListOrNull(String message) {
+        if (message == null) {
+            return null;
+        } else {
+            return Collections.singletonList(message);
+        }
+    }
 }

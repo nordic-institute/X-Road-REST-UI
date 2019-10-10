@@ -27,6 +27,7 @@ package org.niis.xroad.restapi.wsdl;
 import ee.ria.xroad.common.SystemProperties;
 
 import lombok.extern.slf4j.Slf4j;
+import org.niis.xroad.restapi.service.InvalidUrlException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -56,19 +57,20 @@ public class WsdlValidator {
      * @param wsdlUrl
      * @return List of validation warnings that could be ignored by choice
      * @throws WsdlValidatorNotExecutableException when validator is not found or
-     * there are errors when trying to execute the validator
-     * @throws WsdlUrlMissingException when wsdl url is missing
+     * there are errors (not warnings, cant be ignored) when trying to execute the validator
+     * @throws InvalidUrlException when wsdl url is missing
      * @throws WsdlValidationFailedException when validation itself fails.
      */
     public List<String> executeValidator(String wsdlUrl)
-            throws WsdlValidatorNotExecutableException, WsdlValidationFailedException, WsdlUrlMissingException {
+            throws WsdlValidatorNotExecutableException, WsdlValidationFailedException, InvalidUrlException {
         List<String> warnings = new ArrayList<>();
         // validator not set - this is ok since validator is optional
         if (StringUtils.isEmpty(getWsdlValidatorCommand())) {
             return warnings;
         }
         if (StringUtils.isEmpty(wsdlUrl)) {
-            throw new WsdlUrlMissingException();
+            // this is currently a programming error, could just be illegalargumentException
+            throw new InvalidUrlException();
         }
 
         List<String> command = new ArrayList<>();
