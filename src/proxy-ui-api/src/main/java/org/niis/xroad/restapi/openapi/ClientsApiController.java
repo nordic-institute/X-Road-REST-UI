@@ -39,6 +39,7 @@ import org.niis.xroad.restapi.converter.LocalGroupConverter;
 import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.BadRequestException;
 import org.niis.xroad.restapi.exceptions.ConflictException;
+import org.niis.xroad.restapi.exceptions.DeviationAware;
 import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.InvalidParametersException;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
@@ -297,28 +298,16 @@ public class ClientsApiController implements ClientsApi {
                 addedServiceDescriptionType = serviceDescriptionService.addWsdlServiceDescription(
                         clientConverter.convertId(id),
                         serviceDescription.getUrl(), serviceDescription.getIgnoreWarnings());
-            } catch (WsdlNotFoundException e) {
-                throw new BadRequestException(
-                        new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_DOWNLOAD_FAILED));
-            } catch (ClientNotFoundException e) {
-                throw new ResourceNotFoundException(
-                        new FatalError(ClientService.CLIENT_NOT_FOUND_ERROR_CODE));
-            } catch (UnhandledWarningsException e) {
-                // errorcode + warnings copied
+            } catch (WsdlNotFoundException | UnhandledWarningsException
+                                             | InvalidUrlException | InvalidWsdlException e) {
+                // deviation data (errorcode + warnings) copied
                 throw new BadRequestException(e);
-            } catch (ServiceAlreadyExistsException e) {
-                // errorcode + warnings copied
+            } catch (ClientNotFoundException e) {
+                // deviation data (errorcode + warnings) copied
+                throw new ResourceNotFoundException((DeviationAware) e);
+            } catch (ServiceAlreadyExistsException | WsdlUrlAlreadyExistsException e) {
+                // deviation data (errorcode + warnings) copied
                 throw new ConflictException(e);
-            } catch (InvalidUrlException e) {
-                throw new BadRequestException(
-                        new FatalError(ServiceDescriptionsApiController.ERROR_MALFORMED_URL));
-            } catch (WsdlUrlAlreadyExistsException e) {
-                throw new ConflictException(
-                        new FatalError(ServiceDescriptionsApiController.ERROR_WSDL_EXISTS));
-            } catch (InvalidWsdlException e) {
-                throw new BadRequestException(
-                        new FatalError(ServiceDescriptionsApiController.ERROR_INVALID_WSDL,
-                                e.getFatalError().getMetadata()));
             }
 
         } else if (serviceDescription.getType() == ServiceType.REST) {
