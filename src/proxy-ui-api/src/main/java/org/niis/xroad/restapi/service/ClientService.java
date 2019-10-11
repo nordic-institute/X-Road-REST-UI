@@ -31,7 +31,6 @@ import ee.ria.xroad.common.identifier.ClientId;
 import ee.ria.xroad.common.util.CryptoUtils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.niis.xroad.restapi.exceptions.ConflictException;
 import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
@@ -121,9 +120,10 @@ public class ClientService {
      * @throws ResourceNotFoundException if
      *                                                             client was not found
      * @throws IllegalArgumentException                            if connectionType was not supported value
+     * @throws ClientNotFoundException if client was not found
      */
     @PreAuthorize("hasAuthority('EDIT_CLIENT_INTERNAL_CONNECTION_TYPE')")
-    public ClientType updateConnectionType(ClientId id, String connectionType) {
+    public ClientType updateConnectionType(ClientId id, String connectionType) throws ClientNotFoundException {
         ClientType clientType = getClientType(id);
         // validate connectionType param by creating enum out of it
         IsAuthentication enumValue = IsAuthentication.valueOf(connectionType);
@@ -136,11 +136,10 @@ public class ClientService {
      * Get a ClientType
      * @throws ResourceNotFoundException if not found
      */
-    private ClientType getClientType(ClientId id) {
+    private ClientType getClientType(ClientId id) throws ClientNotFoundException {
         ClientType clientType = clientRepository.getClient(id);
         if (clientType == null) {
-            throw new ResourceNotFoundException(("client with id " + id + " not found"),
-                    new FatalError(CLIENT_NOT_FOUND_ERROR_CODE));
+            throw new ClientNotFoundException("client with id " + id + " not found");
         }
         return clientType;
     }
@@ -150,10 +149,12 @@ public class ClientService {
      * @param certBytes either PEM or DER -encoded certificate
      * @return created CertificateType with id populated
      * @throws CertificateException if certBytes was not a valid PEM or DER encoded certificate
-     * @throws ConflictException    if the certificate already exists
+     * @throws CertificateAlreadyExistsException if certificate already exists
+     * @throws ClientNotFoundException if client was not found
      */
     @PreAuthorize("hasAuthority('ADD_CLIENT_INTERNAL_CERT')")
-    public CertificateType addTlsCertificate(ClientId id, byte[] certBytes) throws CertificateException {
+    public CertificateType addTlsCertificate(ClientId id, byte[] certBytes)
+            throws CertificateException, CertificateAlreadyExistsException, ClientNotFoundException {
         X509Certificate x509Certificate;
         try {
             x509Certificate = CryptoUtils.readCertificate(certBytes);
@@ -162,22 +163,50 @@ public class ClientService {
         }
         String hash = calculateCertHexHash(x509Certificate);
         ClientType clientType = getClientType(id);
-        clientType.getIsCert().stream()
-                .filter(cert -> hash.equalsIgnoreCase(calculateCertHexHash(cert.getData())))
-                .findAny()
-                .ifPresent(a -> {
-                    throw new ConflictException("certificate already exists");
-                });
-
+        try {
+            // a clumsy way of handling checked exception from a stream
+            // in proper implementation, would not use same stream processing logic
+            clientType.getIsCert().stream()
+                    .filter(cert -> hash.equalsIgnoreCase(calculateCertHexHash(cert.getData())))
+                    .findAny()
+                    .ifPresent(a -> {
+                        throw new CertificateAlreadyExistsRuntimeException("certificate already exists");
+                    });
+        } catch (CertificateAlreadyExistsRuntimeException e) {
+            throw e.toCheckedException();
+        }
         CertificateType certificateType = new CertificateType();
         try {
             certificateType.setData(x509Certificate.getEncoded());
         } catch (CertificateEncodingException ex) {
+            // client cannot do anything about this
             throw new RuntimeException(ex);
         }
         clientType.getIsCert().add(certificateType);
         clientRepository.saveOrUpdateAndFlush(clientType);
         return certificateType;
+    }
+
+    /**
+     * Example of handling checked exceptions with streams
+     */
+    private static class CertificateAlreadyExistsRuntimeException extends RuntimeException {
+        CertificateAlreadyExistsRuntimeException(String s) {
+            super(s);
+        }
+        CertificateAlreadyExistsException toCheckedException() {
+            return new CertificateAlreadyExistsException(this.getMessage());
+        }
+    }
+
+    /**
+     * If trying to add certificate which already exists
+     */
+    public static class CertificateAlreadyExistsException extends ServiceException {
+        public static final String ERROR_CODE = "certificate_already_exists";
+        public CertificateAlreadyExistsException(String s) {
+            super(s, new FatalError(ERROR_CODE));
+        }
     }
 
     /**
@@ -208,19 +237,21 @@ public class ClientService {
      * @param id
      * @param certificateHash
      * @return
-     * @throws ResourceNotFoundException if client of certificate was not found
+     * @throws ClientNotFoundException if client was not found
+     * @throws CertificateNotFoundException if certificate was not found
      */
     @PreAuthorize("hasAuthority('DELETE_CLIENT_INTERNAL_CERT')")
-    public ClientType deleteTlsCertificate(ClientId id, String certificateHash) {
+    public ClientType deleteTlsCertificate(ClientId id, String certificateHash)
+            throws ClientNotFoundException, CertificateNotFoundException {
         ClientType clientType = getClientType(id);
-        CertificateType certificateType = clientType.getIsCert().stream()
+        Optional<CertificateType> certificateType = clientType.getIsCert().stream()
                 .filter(certificate -> calculateCertHexHash(certificate.getData()).equalsIgnoreCase(certificateHash))
-                .findAny()
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("certificate with hash " + certificateHash + " not found",
-                                new FatalError(CERTIFICATE_NOT_FOUND_ERROR_CODE)));
+                .findAny();
+        if (!certificateType.isPresent()) {
+            throw new CertificateNotFoundException();
+        }
 
-        clientType.getIsCert().remove(certificateType);
+        clientType.getIsCert().remove(certificateType.get());
         clientRepository.saveOrUpdate(clientType);
         return clientType;
     }
@@ -229,10 +260,12 @@ public class ClientService {
      * Returns a single client tls certificate that has matching hash
      * @param id
      * @param certificateHash
+     * @throws ClientNotFoundException if client was not found
      * @return
      */
     @PreAuthorize("hasAuthority('VIEW_CLIENT_INTERNAL_CERT_DETAILS')")
-    public Optional<CertificateType> getTlsCertificate(ClientId id, String certificateHash) {
+    public Optional<CertificateType> getTlsCertificate(ClientId id, String certificateHash)
+            throws ClientNotFoundException {
         ClientType clientType = getClientType(id);
         Optional<CertificateType> certificateType = clientType.getIsCert().stream()
                 .filter(certificate -> calculateCertHexHash(certificate.getData()).equalsIgnoreCase(certificateHash))

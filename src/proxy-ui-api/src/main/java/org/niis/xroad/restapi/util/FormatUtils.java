@@ -116,7 +116,7 @@ public final class FormatUtils {
         try {
             groupId = Long.valueOf(id);
         } catch (NumberFormatException nfe) {
-            throw new ResourceNotFoundException(nfe);
+            throw new ResourceNotFoundException("bad id", nfe);
         }
         return groupId;
     }

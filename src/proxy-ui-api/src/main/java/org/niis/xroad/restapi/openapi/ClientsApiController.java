@@ -51,6 +51,7 @@ import org.niis.xroad.restapi.openapi.model.LocalGroup;
 import org.niis.xroad.restapi.openapi.model.ServiceDescription;
 import org.niis.xroad.restapi.openapi.model.ServiceDescriptionAdd;
 import org.niis.xroad.restapi.openapi.model.ServiceType;
+import org.niis.xroad.restapi.service.CertificateNotFoundException;
 import org.niis.xroad.restapi.service.ClientNotFoundException;
 import org.niis.xroad.restapi.service.ClientService;
 import org.niis.xroad.restapi.service.InvalidUrlException;
@@ -200,7 +201,12 @@ public class ClientsApiController implements ClientsApi {
         ConnectionType connectionType = connectionTypeWrapper.getConnectionType();
         ClientId clientId = clientConverter.convertId(encodedId);
         String connectionTypeString = ConnectionTypeMapping.map(connectionType).get();
-        ClientType changed = clientService.updateConnectionType(clientId, connectionTypeString);
+        ClientType changed = null;
+        try {
+            changed = clientService.updateConnectionType(clientId, connectionTypeString);
+        } catch (ClientNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
         Client result = clientConverter.convert(changed);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -225,6 +231,10 @@ public class ClientsApiController implements ClientsApi {
             certificateType = clientService.addTlsCertificate(clientId, certificateBytes);
         } catch (CertificateException c) {
             throw new BadRequestException(c, new FatalError(INVALID_CERT_ERROR_CODE));
+        } catch (ClientNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        } catch (ClientService.CertificateAlreadyExistsException e) {
+            throw new ConflictException(e);
         }
         CertificateDetails certificateDetails = certificateDetailsConverter.convert(certificateType);
         return createCreatedResponse("/api/certificates/{hash}", certificateDetails, certificateDetails.getHash());
@@ -234,7 +244,11 @@ public class ClientsApiController implements ClientsApi {
     @PreAuthorize("hasAuthority('DELETE_CLIENT_INTERNAL_CERT')")
     public ResponseEntity<Void> deleteClientTlsCertificate(String encodedId, String hash) {
         ClientId clientId = clientConverter.convertId(encodedId);
-        clientService.deleteTlsCertificate(clientId, hash);
+        try {
+            clientService.deleteTlsCertificate(clientId, hash);
+        } catch (ClientNotFoundException | CertificateNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -242,7 +256,12 @@ public class ClientsApiController implements ClientsApi {
     @PreAuthorize("hasAuthority('VIEW_CLIENT_INTERNAL_CERT_DETAILS')")
     public ResponseEntity<CertificateDetails> getClientTlsCertificate(String encodedId, String certHash) {
         ClientId clientId = clientConverter.convertId(encodedId);
-        Optional<CertificateType> certificateType = clientService.getTlsCertificate(clientId, certHash);
+        Optional<CertificateType> certificateType = null;
+        try {
+            certificateType = clientService.getTlsCertificate(clientId, certHash);
+        } catch (ClientNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
         if (!certificateType.isPresent()) {
             throw new ResourceNotFoundException("certificate with hash " + certHash
                     + ", client id " + encodedId + " not found");
