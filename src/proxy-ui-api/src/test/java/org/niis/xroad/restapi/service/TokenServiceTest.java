@@ -114,13 +114,13 @@ public class TokenServiceTest {
         try {
             tokenService.activateToken(WRONG_SOFTTOKEN_PIN, password);
             fail("should have thrown exception");
-        } catch (TokenService.PinIncorrectException expected) {
+        } catch (PinIncorrectException expected) {
         }
 
         try {
             tokenService.activateToken(WRONG_HSM_PIN, password);
             fail("should have thrown exception");
-        } catch (TokenService.PinIncorrectException expected) {
+        } catch (PinIncorrectException expected) {
         }
 
         try {
@@ -134,7 +134,7 @@ public class TokenServiceTest {
         try {
             tokenService.activateToken(TOKEN_NOT_FOUND, password);
             fail("should have thrown exception");
-        } catch (TokenService.TokenNotFoundException expected) {
+        } catch (TokenNotFoundException expected) {
         }
 
         try {
@@ -155,7 +155,7 @@ public class TokenServiceTest {
         try {
             tokenService.deactivateToken(TOKEN_NOT_FOUND);
             fail("should have thrown exception");
-        } catch (TokenService.TokenNotFoundException expected) {
+        } catch (TokenNotFoundException expected) {
         }
 
         try {
