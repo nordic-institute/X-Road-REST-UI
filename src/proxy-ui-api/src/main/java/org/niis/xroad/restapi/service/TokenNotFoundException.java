@@ -25,24 +25,21 @@
 package org.niis.xroad.restapi.service;
 
 import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
 
-public class InvalidUrlException extends ServiceException {
+public class TokenNotFoundException extends NotFoundException {
 
-    // To do: remove from ServiceDescriptionsApiController?
-    public static final String ERROR_MALFORMED_URL =
-            ServiceDescriptionsApiController.ERROR_MALFORMED_URL;
+    // To do: remove from controller?
+    public static final String TOKEN_NOT_FOUND_ERROR_CODE = TokenService.TOKEN_NOT_FOUND_ERROR_CODE;
 
-    public InvalidUrlException() {
-        super(createError());
-    }
-
-    public InvalidUrlException(String s) {
+    public TokenNotFoundException(String s) {
         super(s, createError());
     }
 
-    private static FatalError createError() {
-        return new FatalError(ERROR_MALFORMED_URL);
+    public TokenNotFoundException(Throwable t) {
+        super(t, createError());
     }
 
+    private static FatalError createError() {
+        return new FatalError(TOKEN_NOT_FOUND_ERROR_CODE);
+    }
 }

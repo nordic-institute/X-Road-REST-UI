@@ -53,6 +53,8 @@ import static java.util.stream.Collectors.toList;
 @PreAuthorize("denyAll")
 public class TokenService {
 
+    public static final String TOKEN_NOT_FOUND_ERROR_CODE = "token_not_found";
+
     private final SignerProxyFacade signerProxyFacade;
 
     /**
@@ -68,11 +70,14 @@ public class TokenService {
      * get all tokens
      *
      * @return
-     * @throws Exception
      */
     @PreAuthorize("hasAuthority('VIEW_KEYS')")
-    public List<TokenInfo> getAllTokens() throws Exception {
-        return signerProxyFacade.getTokens();
+    public List<TokenInfo> getAllTokens() {
+        try {
+            return signerProxyFacade.getTokens();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -181,14 +186,4 @@ public class TokenService {
     static final String LOGIN_FAILED_FAULT_CODE = SIGNER_X + "." + X_LOGIN_FAILED;
     static final String CKR_PIN_INCORRECT_MESSAGE = "Login failed: CKR_PIN_INCORRECT";
 
-    public static class PinIncorrectException extends Exception {
-        public PinIncorrectException(Throwable t) {
-            super(t);
-        }
-    }
-    public static class TokenNotFoundException extends Exception {
-        public TokenNotFoundException(Throwable t) {
-            super(t);
-        }
-    }
 }
