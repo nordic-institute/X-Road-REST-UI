@@ -219,16 +219,6 @@ public class LocalGroupService {
     }
 
     /**
-     * If local group was not found
-     */
-    public static class LocalGroupNotFoundException extends NotFoundException {
-        public static final String ERROR_CODE = "local_group_not_found";
-        public LocalGroupNotFoundException(String s) {
-            super(s, new FatalError(ERROR_CODE));
-        }
-    }
-
-    /**
      * If local group member was not found
      */
     public static class LocalGroupMemberNotFoundException extends NotFoundException {

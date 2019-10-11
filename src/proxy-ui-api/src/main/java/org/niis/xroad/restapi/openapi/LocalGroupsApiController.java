@@ -34,6 +34,7 @@ import org.niis.xroad.restapi.exceptions.InvalidParametersException;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.LocalGroup;
 import org.niis.xroad.restapi.openapi.model.Members;
+import org.niis.xroad.restapi.service.LocalGroupNotFoundException;
 import org.niis.xroad.restapi.service.LocalGroupService;
 import org.niis.xroad.restapi.util.FormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class LocalGroupsApiController implements LocalGroupsApi {
         LocalGroupType localGroupType = null;
         try {
             localGroupType = localGroupService.updateDescription(groupId, description);
-        } catch (LocalGroupService.LocalGroupNotFoundException e) {
+        } catch (LocalGroupNotFoundException e) {
             throw new ResourceNotFoundException(e);
         }
         return new ResponseEntity<>(localGroupConverter.convert(localGroupType), HttpStatus.OK);
@@ -107,7 +108,7 @@ public class LocalGroupsApiController implements LocalGroupsApi {
             localGroupService.addLocalGroupMembers(groupId, clientConverter.convertIds(uniqueIds));
         } catch (LocalGroupService.MemberAlreadyExistsException e) {
             throw new ConflictException(e);
-        } catch (LocalGroupService.LocalGroupNotFoundException
+        } catch (LocalGroupNotFoundException
                 | LocalGroupService.LocalGroupMemberNotFoundException e) {
             throw new ResourceNotFoundException(e);
         }
@@ -120,7 +121,7 @@ public class LocalGroupsApiController implements LocalGroupsApi {
         Long groupId = FormatUtils.parseLongIdOrThrowNotFound(groupIdString);
         try {
             localGroupService.deleteLocalGroup(groupId);
-        } catch (LocalGroupService.LocalGroupNotFoundException e) {
+        } catch (LocalGroupNotFoundException e) {
             throw new ResourceNotFoundException(e);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

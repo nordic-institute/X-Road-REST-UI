@@ -27,7 +27,7 @@ package org.niis.xroad.restapi.service;
 import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.openapi.TokensApiController;
 
-public class PinIncorrectException extends NotFoundException {
+public class PinIncorrectException extends ServiceException {
 
     // To do: remove from controller?
     public static final String ERROR_PIN_INCORRECT = TokensApiController.ERROR_PIN_INCORRECT;
