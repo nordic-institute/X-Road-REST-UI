@@ -284,8 +284,15 @@ public class ClientsApiController implements ClientsApi {
     @PreAuthorize("hasAuthority('ADD_LOCAL_GROUP')")
     public ResponseEntity<LocalGroup> addClientGroup(String id, LocalGroup localGroup) {
         ClientType clientType = getClientType(id);
-        LocalGroupType localGroupType = localGroupService.addLocalGroup(clientType.getIdentifier(),
-                localGroupConverter.convert(localGroup));
+        LocalGroupType localGroupType = null;
+        try {
+            localGroupType = localGroupService.addLocalGroup(clientType.getIdentifier(),
+                    localGroupConverter.convert(localGroup));
+        } catch (LocalGroupService.DuplicateLocalGroupCodeException e) {
+            throw new ConflictException(e);
+        } catch (ClientNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
         LocalGroup createdGroup = localGroupConverter.convert(localGroupType);
         return createCreatedResponse("/api/local-groups/{id}", createdGroup, localGroupType.getId());
     }
