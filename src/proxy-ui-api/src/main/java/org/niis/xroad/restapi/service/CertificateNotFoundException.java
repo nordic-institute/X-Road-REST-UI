@@ -22,43 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.niis.xroad.restapi.exceptions.FatalError;
 
-/**
- * Thrown if item was not found.
- * Results in http 404 NOT_FOUND
- */
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends DeviationAwareRuntimeException {
+public class CertificateNotFoundException extends NotFoundException {
 
-    public ResourceNotFoundException() {
+    // To do: remove from service?
+    public static final String CERTIFICATE_NOT_FOUND_ERROR_CODE = ClientService.CERTIFICATE_NOT_FOUND_ERROR_CODE;
+
+    public CertificateNotFoundException(String s) {
+        super(s, createError());
     }
-
-    public ResourceNotFoundException(DeviationAware deviations) {
-        super(deviations.getFatalError(), deviations.getWarnings());
+    public CertificateNotFoundException() {
+        super(createError());
     }
-
-    public ResourceNotFoundException(String msg) {
-        super(msg);
+    private static FatalError createError() {
+        return new FatalError(CERTIFICATE_NOT_FOUND_ERROR_CODE);
     }
-
-    public ResourceNotFoundException(FatalError fatalError) {
-        super(fatalError);
-    }
-
-    public ResourceNotFoundException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
-    }
-
-    public ResourceNotFoundException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
-    public ResourceNotFoundException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
-    }
-
 }
