@@ -277,20 +277,13 @@ public class ServiceService {
     public void deleteServiceAccessRights(ClientId clientId, String fullServiceCode, Set<XRoadId> subjectIds,
             Set<Long> localGroupIds) throws LocalGroupNotFoundException,
             ClientNotFoundException, AccessRightNotFoundException, ServiceNotFoundException {
-        Set<Long> unmatchedIds = new HashSet<>();
-        Set<XRoadId> localGroups = localGroupIds
-                .stream()
-                .map(groupId -> {
-                    LocalGroupType localGroup = localGroupRepository.getLocalGroup(groupId); // no need to batch
-                    if (localGroup == null) {
-                        unmatchedIds.add(groupId);
-                    }
-                    return LocalGroupId.create(localGroup.getGroupCode());
-                })
-                .collect(Collectors.toSet());
-        if (!unmatchedIds.isEmpty()) {
-            // to do: test that this works
-            throw new LocalGroupNotFoundException("LocalGroup(s) with ids " + unmatchedIds + " not found");
+        Set<XRoadId> localGroups = new HashSet<>();
+        for (Long groupId: localGroupIds) {
+            LocalGroupType localGroup = localGroupRepository.getLocalGroup(groupId); // no need to batch
+            if (localGroup == null) {
+                throw new LocalGroupNotFoundException("LocalGroup with id " + groupId + " not found");
+            }
+            localGroups.add(LocalGroupId.create(localGroup.getGroupCode()));
         }
         subjectIds.addAll(localGroups);
         deleteServiceAccessRights(clientId, fullServiceCode, subjectIds);

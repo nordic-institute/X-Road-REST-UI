@@ -157,18 +157,13 @@ public class ClientService {
         }
         String hash = calculateCertHexHash(x509Certificate);
         ClientType clientType = getClientType(id);
-        try {
-            // a clumsy way of handling checked exception from a stream
-            // in proper implementation, would not use same stream processing logic
-            clientType.getIsCert().stream()
-                    .filter(cert -> hash.equalsIgnoreCase(calculateCertHexHash(cert.getData())))
-                    .findAny()
-                    .ifPresent(a -> {
-                        throw new CertificateAlreadyExistsRuntimeException("certificate already exists");
-                    });
-        } catch (CertificateAlreadyExistsRuntimeException e) {
-            throw e.toCheckedException();
+        Optional<CertificateType> duplicate = clientType.getIsCert().stream()
+                .filter(cert -> hash.equalsIgnoreCase(calculateCertHexHash(cert.getData())))
+                .findFirst();
+        if (duplicate.isPresent()) {
+            throw new CertificateAlreadyExistsException("certificate already exists");
         }
+
         CertificateType certificateType = new CertificateType();
         try {
             certificateType.setData(x509Certificate.getEncoded());
@@ -179,18 +174,6 @@ public class ClientService {
         clientType.getIsCert().add(certificateType);
         clientRepository.saveOrUpdateAndFlush(clientType);
         return certificateType;
-    }
-
-    /**
-     * Example of handling checked exceptions with streams
-     */
-    private static class CertificateAlreadyExistsRuntimeException extends RuntimeException {
-        CertificateAlreadyExistsRuntimeException(String s) {
-            super(s);
-        }
-        CertificateAlreadyExistsException toCheckedException() {
-            return new CertificateAlreadyExistsException(this.getMessage());
-        }
     }
 
     /**
