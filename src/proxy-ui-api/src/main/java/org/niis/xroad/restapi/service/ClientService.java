@@ -32,7 +32,6 @@ import ee.ria.xroad.common.util.CryptoUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +59,6 @@ import java.util.stream.Collectors;
 @Transactional
 @PreAuthorize("denyAll")
 public class ClientService {
-
-    public static final String CLIENT_NOT_FOUND_ERROR_CODE = "client_not_found";
-    public static final String CERTIFICATE_NOT_FOUND_ERROR_CODE = "certificate_not_found";
 
     private final ClientRepository clientRepository;
     private final GlobalConfFacade globalConfFacade;
@@ -117,8 +113,6 @@ public class ClientService {
      * @param id
      * @param connectionType
      * @return
-     * @throws ResourceNotFoundException if
-     *                                                             client was not found
      * @throws IllegalArgumentException                            if connectionType was not supported value
      * @throws ClientNotFoundException if client was not found
      */
@@ -134,7 +128,7 @@ public class ClientService {
 
     /**
      * Get a ClientType
-     * @throws ResourceNotFoundException if not found
+     * @throws ClientNotFoundException if not found
      */
     private ClientType getClientType(ClientId id) throws ClientNotFoundException {
         ClientType clientType = clientRepository.getClient(id);
@@ -203,7 +197,7 @@ public class ClientService {
      * If trying to add certificate which already exists
      */
     public static class CertificateAlreadyExistsException extends ServiceException {
-        public static final String ERROR_CODE = "certificate_already_exists";
+        public static final String ERROR_CODE = "clients.certificate_already_exists";
         public CertificateAlreadyExistsException(String s) {
             super(s, new FatalError(ERROR_CODE));
         }

@@ -27,6 +27,8 @@ package org.niis.xroad.restapi.wsdl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.service.ServiceException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -60,6 +62,7 @@ import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -295,8 +298,6 @@ public final class WsdlParser {
                 return new InputSource(new ByteArrayInputStream(response));
             } catch (FileNotFoundException e) {
                 throw new PrivateWsdlNotFoundException(e);
-            } catch (Exception e) {
-                throw new PrivateWsdlNotFoundException(e);
             } catch (Throwable t) {
                 throw new PrivateWsdlNotFoundException(t);
             }
@@ -350,6 +351,35 @@ public final class WsdlParser {
 
             conn.setSSLSocketFactory(ctx.getSocketFactory());
             conn.setHostnameVerifier(HostnameVerifiers.ACCEPT_ALL);
+        }
+    }
+
+    /**
+     * Thrown if WSDL parsing fails
+     */
+    public static class WsdlParseException extends InvalidWsdlException {
+        public WsdlParseException(Throwable t) {
+            super(toListOrNull(t.getMessage()));
+        }
+
+        private static List<String> toListOrNull(String message) {
+            if (message == null) {
+                return null;
+            } else {
+                return Collections.singletonList(message);
+            }
+        }
+    }
+
+    /**
+     * Thrown if WSDL file is not found
+     */
+    public static class WsdlNotFoundException extends ServiceException {
+
+        public static final String ERROR_WSDL_DOWNLOAD_FAILED = "wsdl_download_failed";
+
+        public WsdlNotFoundException(Throwable cause) {
+            super(cause, new FatalError(ERROR_WSDL_DOWNLOAD_FAILED));
         }
     }
 }

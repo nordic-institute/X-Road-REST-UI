@@ -28,7 +28,8 @@ import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.service.ServiceException;
 
 /**
- * Thrown if WSDL validation fails
+ * Thrown if something went wrong in WSDL validation.
+ * Root class for all WSDL validation exceptions.
  */
 public class WsdlValidationException extends ServiceException {
     public WsdlValidationException(FatalError fatalError) {

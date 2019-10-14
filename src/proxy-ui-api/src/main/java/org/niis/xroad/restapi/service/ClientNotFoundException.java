@@ -28,8 +28,7 @@ import org.niis.xroad.restapi.exceptions.FatalError;
 
 public class ClientNotFoundException extends NotFoundException {
 
-    // To do: remove from service?
-    public static final String CLIENT_NOT_FOUND_ERROR_CODE = ClientService.CLIENT_NOT_FOUND_ERROR_CODE;
+    public static final String CLIENT_NOT_FOUND_ERROR_CODE = "client_not_found";
 
     public ClientNotFoundException(String s) {
         super(s, new FatalError(CLIENT_NOT_FOUND_ERROR_CODE));

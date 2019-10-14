@@ -33,8 +33,6 @@ import org.niis.xroad.restapi.exceptions.DeviationAware;
 import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
 import org.niis.xroad.restapi.openapi.model.Token;
 import org.niis.xroad.restapi.openapi.model.TokenPassword;
-import org.niis.xroad.restapi.service.PinIncorrectException;
-import org.niis.xroad.restapi.service.TokenNotFoundException;
 import org.niis.xroad.restapi.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,8 +54,6 @@ public class TokensApiController implements TokensApi {
 
     private final TokenService tokenService;
     private final TokenConverter tokenConverter;
-
-    public static final String ERROR_PIN_INCORRECT = "tokens.login_failed_pin_incorrect";
 
     /**
      * TokensApiController constructor
@@ -91,9 +87,9 @@ public class TokensApiController implements TokensApi {
         char[] password = tokenPassword.getPassword().toCharArray();
         try {
             tokenService.activateToken(id, password);
-        } catch (TokenNotFoundException e) {
+        } catch (TokenService.TokenNotFoundException e) {
             throw new ResourceNotFoundException((DeviationAware) e);
-        } catch (PinIncorrectException e) {
+        } catch (TokenService.PinIncorrectException e) {
             throw new BadRequestException(e);
         }
         Token token = getTokenFromService(id);
@@ -105,7 +101,7 @@ public class TokensApiController implements TokensApi {
     public ResponseEntity<Token> logoutToken(String id) {
         try {
             tokenService.deactivateToken(id);
-        } catch (TokenNotFoundException e) {
+        } catch (TokenService.TokenNotFoundException e) {
             throw new ResourceNotFoundException((DeviationAware) e);
         }
         Token token = getTokenFromService(id);
@@ -116,7 +112,7 @@ public class TokensApiController implements TokensApi {
         TokenInfo tokenInfo = null;
         try {
             tokenInfo = tokenService.getToken(id);
-        } catch (TokenNotFoundException e) {
+        } catch (TokenService.TokenNotFoundException e) {
             throw new ResourceNotFoundException((DeviationAware) e);
         }
         return tokenConverter.convert(tokenInfo);

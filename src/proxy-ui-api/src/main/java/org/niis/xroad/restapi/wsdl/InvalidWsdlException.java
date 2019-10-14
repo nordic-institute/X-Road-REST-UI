@@ -25,7 +25,6 @@
 package org.niis.xroad.restapi.wsdl;
 
 import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
 
 import java.util.List;
 
@@ -34,9 +33,7 @@ import java.util.List;
  */
 public class InvalidWsdlException extends WsdlValidationException {
 
-    // To do: remove from ServiceDescriptionsApiController?
-    public static final String ERROR_INVALID_WSDL =
-            ServiceDescriptionsApiController.ERROR_INVALID_WSDL;
+    public static final String ERROR_INVALID_WSDL = "invalid_wsdl";
 
     /**
      * @param metadata describes why wsdl was invalid

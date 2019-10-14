@@ -25,13 +25,11 @@
 package org.niis.xroad.restapi.service;
 
 import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.openapi.ServiceDescriptionsApiController;
 
 public class InvalidUrlException extends ServiceException {
 
-    // To do: remove from ServiceDescriptionsApiController?
-    public static final String ERROR_MALFORMED_URL =
-            ServiceDescriptionsApiController.ERROR_MALFORMED_URL;
+    public static final String ERROR_MALFORMED_URL = "malformed_url";
+
 
     public InvalidUrlException() {
         super(createError());

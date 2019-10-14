@@ -41,15 +41,12 @@ import org.niis.xroad.restapi.openapi.model.ServiceDescriptionDisabledNotice;
 import org.niis.xroad.restapi.openapi.model.ServiceDescriptionUpdate;
 import org.niis.xroad.restapi.openapi.model.ServiceType;
 import org.niis.xroad.restapi.service.InvalidUrlException;
-import org.niis.xroad.restapi.service.ServiceAlreadyExistsException;
 import org.niis.xroad.restapi.service.ServiceDescriptionNotFoundException;
 import org.niis.xroad.restapi.service.ServiceDescriptionService;
 import org.niis.xroad.restapi.service.UnhandledWarningsException;
-import org.niis.xroad.restapi.service.WrongServiceDescriptionTypeException;
-import org.niis.xroad.restapi.service.WsdlUrlAlreadyExistsException;
 import org.niis.xroad.restapi.util.FormatUtils;
 import org.niis.xroad.restapi.wsdl.InvalidWsdlException;
-import org.niis.xroad.restapi.wsdl.WsdlNotFoundException;
+import org.niis.xroad.restapi.wsdl.WsdlParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -145,11 +142,12 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
                 updatedServiceDescription = serviceDescriptionService.updateWsdlUrl(
                         serviceDescriptionId, serviceDescriptionUpdate.getUrl(),
                         serviceDescriptionUpdate.getIgnoreWarnings());
-            } catch (WsdlNotFoundException | UnhandledWarningsException
+            } catch (WsdlParser.WsdlNotFoundException | UnhandledWarningsException
                              | InvalidUrlException | InvalidWsdlException
-                             | WrongServiceDescriptionTypeException e) {
+                             | ServiceDescriptionService.WrongServiceDescriptionTypeException e) {
                 throw new BadRequestException(e);
-            } catch (ServiceAlreadyExistsException | WsdlUrlAlreadyExistsException e) {
+            } catch (ServiceDescriptionService.ServiceAlreadyExistsException
+                    | ServiceDescriptionService.WsdlUrlAlreadyExistsException e) {
                 throw new ConflictException(e);
             } catch (ServiceDescriptionNotFoundException e) {
                 throw new ResourceNotFoundException((DeviationAware) e);
@@ -163,15 +161,6 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
         return new ResponseEntity<>(serviceDescription, HttpStatus.OK);
     }
 
-    public static final String ERROR_INVALID_WSDL = "clients.invalid_wsdl";
-    public static final String ERROR_WSDL_DOWNLOAD_FAILED = "clients.wsdl_download_failed";
-    public static final String ERROR_WSDL_EXISTS = "clients.wsdl_exists";
-    public static final String ERROR_MALFORMED_URL = "clients.malformed_wsdl_url";
-    public static final String ERROR_WRONG_TYPE = "clients.servicedescription_wrong_type";
-    public static final String ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE = "clients.wsdl_validator_not_executable";
-    public static final String ERROR_WSDL_VALIDATION_FAILED = "clients.wsdl_validation_failed";
-    public static final String ERROR_WSDL_URL_MISSING = "clients.wsdl_url_missing";
-
     @Override
     @PreAuthorize("hasAuthority('REFRESH_WSDL')")
     public ResponseEntity<ServiceDescription> refreshServiceDescription(String id, IgnoreWarnings ignoreWarnings) {
@@ -181,11 +170,12 @@ public class ServiceDescriptionsApiController implements ServiceDescriptionsApi 
             serviceDescription = serviceDescriptionConverter.convert(
                     serviceDescriptionService.refreshServiceDescription(serviceDescriptionId,
                             ignoreWarnings.getIgnoreWarnings()));
-        } catch (WsdlNotFoundException | UnhandledWarningsException
+        } catch (WsdlParser.WsdlNotFoundException | UnhandledWarningsException
                                      | InvalidUrlException | InvalidWsdlException
-                                     | WrongServiceDescriptionTypeException e) {
+                                     | ServiceDescriptionService.WrongServiceDescriptionTypeException e) {
             throw new BadRequestException(e);
-        } catch (ServiceAlreadyExistsException | WsdlUrlAlreadyExistsException e) {
+        } catch (ServiceDescriptionService.ServiceAlreadyExistsException
+                | ServiceDescriptionService.WsdlUrlAlreadyExistsException e) {
             throw new ConflictException(e);
         } catch (ServiceDescriptionNotFoundException e) {
             throw new ResourceNotFoundException((DeviationAware) e);

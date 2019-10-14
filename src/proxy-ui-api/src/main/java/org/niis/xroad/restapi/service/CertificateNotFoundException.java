@@ -28,8 +28,7 @@ import org.niis.xroad.restapi.exceptions.FatalError;
 
 public class CertificateNotFoundException extends NotFoundException {
 
-    // To do: remove from service?
-    public static final String CERTIFICATE_NOT_FOUND_ERROR_CODE = ClientService.CERTIFICATE_NOT_FOUND_ERROR_CODE;
+    public static final String CERTIFICATE_NOT_FOUND_ERROR_CODE = "certificate_not_found";
 
     public CertificateNotFoundException(String s) {
         super(s, createError());

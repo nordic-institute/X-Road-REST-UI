@@ -40,8 +40,6 @@ import org.niis.xroad.restapi.openapi.model.ServiceUpdate;
 import org.niis.xroad.restapi.openapi.model.Subject;
 import org.niis.xroad.restapi.openapi.model.SubjectType;
 import org.niis.xroad.restapi.openapi.model.Subjects;
-import org.niis.xroad.restapi.service.ClientService;
-import org.niis.xroad.restapi.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,6 +57,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.niis.xroad.restapi.service.ClientNotFoundException.CLIENT_NOT_FOUND_ERROR_CODE;
+import static org.niis.xroad.restapi.service.ServiceService.AccessRightNotFoundException.ERROR_ACCESSRIGHT_NOT_FOUND;
+import static org.niis.xroad.restapi.service.ServiceService.ServiceNotFoundException.ERROR_SERVICE_NOT_FOUND;
 
 /**
  * Test ServicesApiController
@@ -199,7 +200,7 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getService(SS0_GET_RANDOM).getBody();
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getFatalError().getCode());
+            assertEquals(CLIENT_NOT_FOUND_ERROR_CODE, expected.getFatalError().getCode());
         }
     }
 
@@ -210,7 +211,7 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getService(SS1_PREDICT_WINNING_LOTTERY_NUMBERS).getBody();
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getFatalError().getCode());
+            assertEquals(ERROR_SERVICE_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 
@@ -250,14 +251,14 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getServiceAccessRights(SS0_GET_RANDOM);
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ClientService.CLIENT_NOT_FOUND_ERROR_CODE, expected.getFatalError().getCode());
+            assertEquals(CLIENT_NOT_FOUND_ERROR_CODE, expected.getFatalError().getCode());
         }
 
         try {
             servicesApiController.getServiceAccessRights(SS1_PREDICT_WINNING_LOTTERY_NUMBERS);
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(ServiceService.ERROR_SERVICE_NOT_FOUND, expected.getFatalError().getCode());
+            assertEquals(ERROR_SERVICE_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 
@@ -353,7 +354,7 @@ public class ServicesApiControllerIntegrationTest {
         try {
             servicesApiController.deleteServiceAccessRight(SS1_GET_RANDOM, subjects).getBody();
         } catch (BadRequestException expected) {
-            assertEquals(ServiceService.ERROR_ACCESSRIGHT_NOT_FOUND, expected.getFatalError().getCode());
+            assertEquals(ERROR_ACCESSRIGHT_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 
@@ -371,7 +372,7 @@ public class ServicesApiControllerIntegrationTest {
         try {
             servicesApiController.deleteServiceAccessRight(SS1_GET_RANDOM, subjects).getBody();
         } catch (BadRequestException expected) {
-            assertEquals(ServiceService.ERROR_ACCESSRIGHT_NOT_FOUND, expected.getFatalError().getCode());
+            assertEquals(ERROR_ACCESSRIGHT_NOT_FOUND, expected.getFatalError().getCode());
         }
     }
 

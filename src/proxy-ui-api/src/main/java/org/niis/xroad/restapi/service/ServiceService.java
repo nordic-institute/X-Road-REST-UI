@@ -64,9 +64,6 @@ import java.util.stream.Collectors;
 @PreAuthorize("denyAll")
 public class ServiceService {
 
-    public static final String ERROR_SERVICE_NOT_FOUND = "services.service_not_found";
-    public static final String ERROR_ACCESSRIGHT_NOT_FOUND = "services.accessright_not_found";
-
     private static final String HTTPS = "https";
 
     private final ClientRepository clientRepository;
@@ -303,9 +300,9 @@ public class ServiceService {
      * If service was not found
      */
     public static class ServiceNotFoundException extends NotFoundException {
-        public static final String ERROR_CODE = ERROR_SERVICE_NOT_FOUND;
+        public static final String ERROR_SERVICE_NOT_FOUND = "services.service_not_found";
         public ServiceNotFoundException(String s) {
-            super(s, new FatalError(ERROR_CODE));
+            super(s, new FatalError(ERROR_SERVICE_NOT_FOUND));
         }
     }
 
@@ -313,9 +310,9 @@ public class ServiceService {
      * If access right was not found
      */
     public static class AccessRightNotFoundException extends NotFoundException {
-        public static final String ERROR_CODE = ERROR_ACCESSRIGHT_NOT_FOUND;
+        public static final String ERROR_ACCESSRIGHT_NOT_FOUND = "services.accessright_not_found";
         public AccessRightNotFoundException() {
-            super(new FatalError(ERROR_CODE));
+            super(new FatalError(ERROR_ACCESSRIGHT_NOT_FOUND));
         }
     }
 

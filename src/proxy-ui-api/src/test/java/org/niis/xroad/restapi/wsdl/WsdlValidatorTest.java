@@ -50,7 +50,7 @@ public class WsdlValidatorTest {
         try {
             wsdlValidator.executeValidator("src/test/resources/wsdl/error.wsdl");
             fail("should have thrown WsdlValidationException");
-        } catch (WsdlValidatorNotExecutableException expected) {
+        } catch (WsdlValidator.WsdlValidatorNotExecutableException expected) {
         }
     }
 
@@ -71,7 +71,7 @@ public class WsdlValidatorTest {
         try {
             wsdlValidator.executeValidator("src/test/resources/wsdl/error.wsdl");
             fail("should have thrown WsdlValidationException");
-        } catch (WsdlValidationFailedException expected) {
+        } catch (WsdlValidator.WsdlValidationFailedException expected) {
             assertEquals(Collections.singletonList(MOCK_VALIDATOR_ERROR),
                     expected.getFatalError().getMetadata());
         }

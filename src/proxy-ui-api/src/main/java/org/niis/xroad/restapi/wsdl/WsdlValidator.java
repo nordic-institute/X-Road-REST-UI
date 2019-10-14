@@ -27,6 +27,7 @@ package org.niis.xroad.restapi.wsdl;
 import ee.ria.xroad.common.SystemProperties;
 
 import lombok.extern.slf4j.Slf4j;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.service.InvalidUrlException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -135,5 +136,26 @@ public class WsdlValidator {
 
     public void setArgs(List<String> args) {
         this.args = args;
+    }
+
+    /**
+     * Thrown if WSDL validation fails
+     */
+    public static class WsdlValidationFailedException extends InvalidWsdlException {
+        public WsdlValidationFailedException(List<String> metadata) {
+            super(metadata);
+        }
+    }
+
+    /**
+     * Thrown if WSDL validation fails
+     */
+    public static class WsdlValidatorNotExecutableException extends WsdlValidationException {
+
+        public static final String ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE = "wsdl_validator_not_executable";
+
+        public WsdlValidatorNotExecutableException(Throwable t) {
+            super(t, new FatalError(ERROR_WSDL_VALIDATOR_NOT_EXECUTABLE));
+        }
     }
 }

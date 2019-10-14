@@ -35,7 +35,7 @@ import java.util.Collection;
  */
 public class UnhandledWarningsException extends DeviationAwareException {
 
-    public static final String ERROR_WARNINGS_DETECTED = "clients.warnings_detected";
+    public static final String ERROR_WARNINGS_DETECTED = "warnings_detected";
 
     public UnhandledWarningsException(Collection<Warning> warnings) {
         super(new FatalError(ERROR_WARNINGS_DETECTED), warnings);

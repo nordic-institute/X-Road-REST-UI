@@ -30,6 +30,7 @@ import ee.ria.xroad.signer.protocol.dto.CertificateInfo;
 import ee.ria.xroad.signer.protocol.dto.TokenInfo;
 
 import lombok.extern.slf4j.Slf4j;
+import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.facade.SignerProxyFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,8 +53,6 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 @PreAuthorize("denyAll")
 public class TokenService {
-
-    public static final String TOKEN_NOT_FOUND_ERROR_CODE = "token_not_found";
 
     private final SignerProxyFacade signerProxyFacade;
 
@@ -186,4 +185,37 @@ public class TokenService {
     static final String LOGIN_FAILED_FAULT_CODE = SIGNER_X + "." + X_LOGIN_FAILED;
     static final String CKR_PIN_INCORRECT_MESSAGE = "Login failed: CKR_PIN_INCORRECT";
 
+    /**
+     * If token was not found
+     */
+    public static class TokenNotFoundException extends NotFoundException {
+
+        public static final String TOKEN_NOT_FOUND_ERROR_CODE = "token_not_found";
+
+        public TokenNotFoundException(String s) {
+            super(s, createError());
+        }
+
+        public TokenNotFoundException(Throwable t) {
+            super(t, createError());
+        }
+
+        private static FatalError createError() {
+            return new FatalError(TOKEN_NOT_FOUND_ERROR_CODE);
+        }
+    }
+
+    public static class PinIncorrectException extends ServiceException {
+
+        public static final String ERROR_PIN_INCORRECT = "pin_incorrect";
+
+        public PinIncorrectException(Throwable t) {
+            super(t, createError());
+        }
+
+        private static FatalError createError() {
+            return new FatalError(ERROR_PIN_INCORRECT);
+        }
+
+    }
 }

@@ -56,13 +56,11 @@ import org.niis.xroad.restapi.service.ClientNotFoundException;
 import org.niis.xroad.restapi.service.ClientService;
 import org.niis.xroad.restapi.service.InvalidUrlException;
 import org.niis.xroad.restapi.service.LocalGroupService;
-import org.niis.xroad.restapi.service.ServiceAlreadyExistsException;
 import org.niis.xroad.restapi.service.ServiceDescriptionService;
 import org.niis.xroad.restapi.service.TokenService;
 import org.niis.xroad.restapi.service.UnhandledWarningsException;
-import org.niis.xroad.restapi.service.WsdlUrlAlreadyExistsException;
 import org.niis.xroad.restapi.wsdl.InvalidWsdlException;
-import org.niis.xroad.restapi.wsdl.WsdlNotFoundException;
+import org.niis.xroad.restapi.wsdl.WsdlParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -87,6 +85,9 @@ import static org.niis.xroad.restapi.openapi.ApiUtil.createCreatedResponse;
 @Slf4j
 @PreAuthorize("denyAll")
 public class ClientsApiController implements ClientsApi {
+
+    public static final String INVALID_CERT_UPLOAD_ERROR_CODE = "clients.invalid_cert_upload";
+    public static final String INVALID_CERT_ERROR_CODE = "clients.invalid_cert";
 
     private final ClientConverter clientConverter;
     private final ClientService clientService;
@@ -211,9 +212,6 @@ public class ClientsApiController implements ClientsApi {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    public static final String INVALID_UPLOAD_ERROR_CODE = "invalid_upload";
-    public static final String INVALID_CERT_ERROR_CODE = "invalid_cert";
-
     @Override
     @PreAuthorize("hasAuthority('ADD_CLIENT_INTERNAL_CERT')")
     public ResponseEntity<CertificateDetails> addClientTlsCertificate(String encodedId,
@@ -223,7 +221,7 @@ public class ClientsApiController implements ClientsApi {
             certificateBytes = IOUtils.toByteArray(body.getInputStream());
         } catch (IOException ex) {
             throw new BadRequestException("cannot read certificate data", ex,
-                    new FatalError(INVALID_UPLOAD_ERROR_CODE));
+                    new FatalError(INVALID_CERT_UPLOAD_ERROR_CODE));
         }
         ClientId clientId = clientConverter.convertId(encodedId);
         CertificateType certificateType = null;
@@ -324,14 +322,15 @@ public class ClientsApiController implements ClientsApi {
                 addedServiceDescriptionType = serviceDescriptionService.addWsdlServiceDescription(
                         clientConverter.convertId(id),
                         serviceDescription.getUrl(), serviceDescription.getIgnoreWarnings());
-            } catch (WsdlNotFoundException | UnhandledWarningsException
+            } catch (WsdlParser.WsdlNotFoundException | UnhandledWarningsException
                                              | InvalidUrlException | InvalidWsdlException e) {
                 // deviation data (errorcode + warnings) copied
                 throw new BadRequestException(e);
             } catch (ClientNotFoundException e) {
                 // deviation data (errorcode + warnings) copied
                 throw new ResourceNotFoundException((DeviationAware) e);
-            } catch (ServiceAlreadyExistsException | WsdlUrlAlreadyExistsException e) {
+            } catch (ServiceDescriptionService.ServiceAlreadyExistsException
+                    | ServiceDescriptionService.WsdlUrlAlreadyExistsException e) {
                 // deviation data (errorcode + warnings) copied
                 throw new ConflictException(e);
             }

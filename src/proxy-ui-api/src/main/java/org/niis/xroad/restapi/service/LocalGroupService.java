@@ -202,7 +202,7 @@ public class LocalGroupService {
      * Thrown when attempt to add member that already exists
      */
     public static class MemberAlreadyExistsException extends ServiceException {
-        public static final String ERROR_CODE = "local_group_member_already_exists";
+        public static final String ERROR_CODE = "local_groups.member_already_exists";
         public MemberAlreadyExistsException(String s) {
             super(s, new FatalError(ERROR_CODE));
         }
@@ -212,7 +212,7 @@ public class LocalGroupService {
      * Thrown when attempt to add member that already exists
      */
     public static class DuplicateLocalGroupCodeException extends ServiceException {
-        public static final String ERROR_CODE = "local_group_code_already_exists";
+        public static final String ERROR_CODE = "local_groups.code_already_exists";
         public DuplicateLocalGroupCodeException(String s) {
             super(s, new FatalError(ERROR_CODE));
         }
@@ -222,7 +222,7 @@ public class LocalGroupService {
      * If local group member was not found
      */
     public static class LocalGroupMemberNotFoundException extends NotFoundException {
-        public static final String ERROR_CODE = "local_group_member_not_found";
+        public static final String ERROR_CODE = "local_groups.member_not_found";
         public LocalGroupMemberNotFoundException(String s) {
             super(s, new FatalError(ERROR_CODE));
         }

@@ -22,17 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.service;
+package org.niis.xroad.restapi.domain;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
-
-import java.util.List;
-
-public class ServiceAlreadyExistsException extends ServiceException {
-
-    public static final String ERROR_SERVICE_EXISTS = "clients.service_exists";
-
-    public ServiceAlreadyExistsException(List<String> metadata) {
-        super(new FatalError(ERROR_SERVICE_EXISTS, metadata));
+/**
+ * If invalid role name was used
+ */
+public class InvalidRoleNameException extends Exception {
+    public InvalidRoleNameException(String s) {
+        super(s);
     }
 }
