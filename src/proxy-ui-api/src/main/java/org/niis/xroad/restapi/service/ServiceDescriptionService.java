@@ -68,11 +68,9 @@ public class ServiceDescriptionService {
     public static final int DEFAULT_SERVICE_TIMEOUT = 60;
     public static final String DEFAULT_DISABLED_NOTICE = "Out of order";
 
-    public static final String SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE = "client_not_found";
-
-    public static final String WARNING_ADDING_SERVICES = "clients.adding_services";
-    public static final String WARNING_DELETING_SERVICES = "clients.deleting_services";
-    public static final String WARNING_WSDL_VALIDATION_WARNINGS = "clients.wsdl_validation_warnings";
+    public static final String WARNING_ADDING_SERVICES = "adding_services";
+    public static final String WARNING_DELETING_SERVICES = "deleting_services";
+    public static final String WARNING_WSDL_VALIDATION_WARNINGS = "wsdl_validation_warnings";
 
     private final ServiceDescriptionRepository serviceDescriptionRepository;
     private final ClientService clientService;

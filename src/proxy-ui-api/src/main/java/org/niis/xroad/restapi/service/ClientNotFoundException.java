@@ -28,9 +28,9 @@ import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class ClientNotFoundException extends NotFoundException {
 
-    public static final String CLIENT_NOT_FOUND_ERROR_CODE = "client_not_found";
+    public static final String ERROR_CLIENT_NOT_FOUND = "client_not_found";
 
     public ClientNotFoundException(String s) {
-        super(s, new ErrorDeviation(CLIENT_NOT_FOUND_ERROR_CODE));
+        super(s, new ErrorDeviation(ERROR_CLIENT_NOT_FOUND));
     }
 }

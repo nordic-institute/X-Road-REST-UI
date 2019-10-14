@@ -55,7 +55,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.niis.xroad.restapi.service.ClientNotFoundException.CLIENT_NOT_FOUND_ERROR_CODE;
+import static org.niis.xroad.restapi.service.ClientNotFoundException.ERROR_CLIENT_NOT_FOUND;
 import static org.niis.xroad.restapi.service.ServiceService.AccessRightNotFoundException.ERROR_ACCESSRIGHT_NOT_FOUND;
 import static org.niis.xroad.restapi.service.ServiceService.ServiceNotFoundException.ERROR_SERVICE_NOT_FOUND;
 
@@ -198,7 +198,7 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getService(SS0_GET_RANDOM).getBody();
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(CLIENT_NOT_FOUND_ERROR_CODE, expected.getErrorDeviation().getCode());
+            assertEquals(ERROR_CLIENT_NOT_FOUND, expected.getErrorDeviation().getCode());
         }
     }
 
@@ -249,7 +249,7 @@ public class ServicesApiControllerIntegrationTest {
             servicesApiController.getServiceAccessRights(SS0_GET_RANDOM);
             fail("should throw ResourceNotFoundException");
         } catch (ResourceNotFoundException expected) {
-            assertEquals(CLIENT_NOT_FOUND_ERROR_CODE, expected.getErrorDeviation().getCode());
+            assertEquals(ERROR_CLIENT_NOT_FOUND, expected.getErrorDeviation().getCode());
         }
 
         try {

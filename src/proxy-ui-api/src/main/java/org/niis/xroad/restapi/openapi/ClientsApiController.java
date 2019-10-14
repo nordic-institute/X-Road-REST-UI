@@ -82,8 +82,8 @@ import static org.niis.xroad.restapi.openapi.ApiUtil.createCreatedResponse;
 @PreAuthorize("denyAll")
 public class ClientsApiController implements ClientsApi {
 
-    public static final String INVALID_CERT_UPLOAD_ERROR_CODE = "clients.invalid_cert_upload";
-    public static final String INVALID_CERT_ERROR_CODE = "clients.invalid_cert";
+    public static final String ERROR_INVALID_CERT_UPLOAD = "invalid_cert_upload";
+    public static final String ERROR_INVALID_CERT = "invalid_cert";
 
     private final ClientConverter clientConverter;
     private final ClientService clientService;
@@ -217,14 +217,14 @@ public class ClientsApiController implements ClientsApi {
             certificateBytes = IOUtils.toByteArray(body.getInputStream());
         } catch (IOException ex) {
             throw new BadRequestException("cannot read certificate data", ex,
-                    new ErrorDeviation(INVALID_CERT_UPLOAD_ERROR_CODE));
+                    new ErrorDeviation(ERROR_INVALID_CERT_UPLOAD));
         }
         ClientId clientId = clientConverter.convertId(encodedId);
         CertificateType certificateType = null;
         try {
             certificateType = clientService.addTlsCertificate(clientId, certificateBytes);
         } catch (CertificateException c) {
-            throw new BadRequestException(c, new ErrorDeviation(INVALID_CERT_ERROR_CODE));
+            throw new BadRequestException(c, new ErrorDeviation(ERROR_INVALID_CERT));
         } catch (ClientNotFoundException e) {
             throw new ResourceNotFoundException(e);
         } catch (ClientService.CertificateAlreadyExistsException e) {

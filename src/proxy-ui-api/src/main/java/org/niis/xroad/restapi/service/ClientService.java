@@ -197,9 +197,9 @@ public class ClientService {
      * If trying to add certificate which already exists
      */
     public static class CertificateAlreadyExistsException extends ServiceException {
-        public static final String ERROR_CODE = "clients.certificate_already_exists";
+        public static final String ERROR_CERTIFICATE_ALREADY_EXISTS = "certificate_already_exists";
         public CertificateAlreadyExistsException(String s) {
-            super(s, new ErrorDeviation(ERROR_CODE));
+            super(s, new ErrorDeviation(ERROR_CERTIFICATE_ALREADY_EXISTS));
         }
     }
 

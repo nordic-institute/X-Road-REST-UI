@@ -28,11 +28,9 @@ import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class ServiceDescriptionNotFoundException extends NotFoundException {
 
-    // To do: remove from service?
-    public static final String SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE =
-            ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE;
+    public static final String ERROR_SERVICE_DESCRIPTION_NOT_FOUND = "service_description_not_found";
 
     public ServiceDescriptionNotFoundException(String s) {
-        super(s, new ErrorDeviation(SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
+        super(s, new ErrorDeviation(ERROR_SERVICE_DESCRIPTION_NOT_FOUND));
     }
 }

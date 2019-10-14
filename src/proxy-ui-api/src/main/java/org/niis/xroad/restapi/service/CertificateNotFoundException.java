@@ -28,7 +28,7 @@ import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class CertificateNotFoundException extends NotFoundException {
 
-    public static final String CERTIFICATE_NOT_FOUND_ERROR_CODE = "certificate_not_found";
+    public static final String ERROR_CERTIFICATE_NOT_FOUND = "certificate_not_found";
 
     public CertificateNotFoundException(String s) {
         super(s, createError());
@@ -37,6 +37,6 @@ public class CertificateNotFoundException extends NotFoundException {
         super(createError());
     }
     private static ErrorDeviation createError() {
-        return new ErrorDeviation(CERTIFICATE_NOT_FOUND_ERROR_CODE);
+        return new ErrorDeviation(ERROR_CERTIFICATE_NOT_FOUND);
     }
 }

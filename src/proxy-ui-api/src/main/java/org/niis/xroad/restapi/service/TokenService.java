@@ -190,7 +190,7 @@ public class TokenService {
      */
     public static class TokenNotFoundException extends NotFoundException {
 
-        public static final String TOKEN_NOT_FOUND_ERROR_CODE = "token_not_found";
+        public static final String ERROR_TOKEN_NOT_FOUND = "token_not_found";
 
         public TokenNotFoundException(String s) {
             super(s, createError());
@@ -201,7 +201,7 @@ public class TokenService {
         }
 
         private static ErrorDeviation createError() {
-            return new ErrorDeviation(TOKEN_NOT_FOUND_ERROR_CODE);
+            return new ErrorDeviation(ERROR_TOKEN_NOT_FOUND);
         }
     }
 
