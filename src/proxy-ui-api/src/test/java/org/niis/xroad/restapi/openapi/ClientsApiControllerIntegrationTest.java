@@ -582,7 +582,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown ConflictException");
         } catch (ConflictException expected) {
-            assertEquals(ERROR_WSDL_EXISTS, expected.getFatalError().getCode());
+            assertEquals(ERROR_WSDL_EXISTS, expected.getErrorDeviation().getCode());
         }
         serviceDescription = new ServiceDescriptionAdd().url("file:src/test/resources/wsdl/testservice.wsdl");
         serviceDescription.setType(ServiceType.WSDL);
@@ -607,7 +607,7 @@ public class ClientsApiControllerIntegrationTest {
             clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
             fail("should have thrown BadRequestException");
         } catch (BadRequestException expected) {
-            assertEquals(ERROR_INVALID_WSDL, expected.getFatalError().getCode());
+            assertEquals(ERROR_INVALID_WSDL, expected.getErrorDeviation().getCode());
         }
     }
 
@@ -629,7 +629,7 @@ public class ClientsApiControllerIntegrationTest {
                     expected);
         }
 
-        // now lets ignore the warnings
+        // now lets ignore the warningDeviations
         serviceDescription.setIgnoreWarnings(true);
         clientsApiController.addClientServiceDescription(CLIENT_ID_SS1, serviceDescription);
         ResponseEntity<List<ServiceDescription>> descriptions =

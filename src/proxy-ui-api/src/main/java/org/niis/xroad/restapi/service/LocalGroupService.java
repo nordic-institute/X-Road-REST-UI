@@ -30,7 +30,7 @@ import ee.ria.xroad.common.conf.serverconf.model.LocalGroupType;
 import ee.ria.xroad.common.identifier.ClientId;
 
 import lombok.extern.slf4j.Slf4j;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.repository.LocalGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,7 +204,7 @@ public class LocalGroupService {
     public static class MemberAlreadyExistsException extends ServiceException {
         public static final String ERROR_CODE = "local_groups.member_already_exists";
         public MemberAlreadyExistsException(String s) {
-            super(s, new FatalError(ERROR_CODE));
+            super(s, new ErrorDeviation(ERROR_CODE));
         }
     }
 
@@ -214,7 +214,7 @@ public class LocalGroupService {
     public static class DuplicateLocalGroupCodeException extends ServiceException {
         public static final String ERROR_CODE = "local_groups.code_already_exists";
         public DuplicateLocalGroupCodeException(String s) {
-            super(s, new FatalError(ERROR_CODE));
+            super(s, new ErrorDeviation(ERROR_CODE));
         }
     }
 
@@ -224,7 +224,7 @@ public class LocalGroupService {
     public static class LocalGroupMemberNotFoundException extends NotFoundException {
         public static final String ERROR_CODE = "local_groups.member_not_found";
         public LocalGroupMemberNotFoundException(String s) {
-            super(s, new FatalError(ERROR_CODE));
+            super(s, new ErrorDeviation(ERROR_CODE));
         }
     }
 }

@@ -30,7 +30,7 @@ import ee.ria.xroad.signer.protocol.dto.CertificateInfo;
 import ee.ria.xroad.signer.protocol.dto.TokenInfo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.facade.SignerProxyFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -200,8 +200,8 @@ public class TokenService {
             super(t, createError());
         }
 
-        private static FatalError createError() {
-            return new FatalError(TOKEN_NOT_FOUND_ERROR_CODE);
+        private static ErrorDeviation createError() {
+            return new ErrorDeviation(TOKEN_NOT_FOUND_ERROR_CODE);
         }
     }
 
@@ -213,8 +213,8 @@ public class TokenService {
             super(t, createError());
         }
 
-        private static FatalError createError() {
-            return new FatalError(ERROR_PIN_INCORRECT);
+        private static ErrorDeviation createError() {
+            return new ErrorDeviation(ERROR_PIN_INCORRECT);
         }
 
     }

@@ -25,8 +25,8 @@
 package org.niis.xroad.restapi.openapi;
 
 import org.niis.xroad.restapi.exceptions.DeviationAware;
-import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.exceptions.Warning;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
+import org.niis.xroad.restapi.exceptions.WarningDeviation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -40,7 +40,7 @@ import java.util.Collection;
 public class InternalServerErrorException extends OpenApiException {
 
     public InternalServerErrorException(DeviationAware deviations) {
-        super(deviations.getFatalError(), deviations.getWarnings());
+        super(deviations.getErrorDeviation(), deviations.getWarningDeviations());
     }
 
     public InternalServerErrorException() {
@@ -54,28 +54,29 @@ public class InternalServerErrorException extends OpenApiException {
         super(msg, t);
     }
 
-    public InternalServerErrorException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
+    public InternalServerErrorException(String msg, ErrorDeviation errorDeviation) {
+        super(msg, errorDeviation);
     }
 
-    public InternalServerErrorException(String msg, Throwable t, FatalError fatalError) {
-        super(msg, t, fatalError);
+    public InternalServerErrorException(String msg, Throwable t, ErrorDeviation errorDeviation) {
+        super(msg, t, errorDeviation);
     }
 
-    public InternalServerErrorException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(t, fatalError, warnings);
+    public InternalServerErrorException(Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
+        super(t, errorDeviation, warningDeviations);
     }
 
-    public InternalServerErrorException(FatalError fatalError, Collection<Warning> warnings) {
-        super(fatalError, warnings);
+    public InternalServerErrorException(ErrorDeviation errorDeviation, Collection<WarningDeviation> warningDeviations) {
+        super(errorDeviation, warningDeviations);
     }
 
-    public InternalServerErrorException(FatalError fatalError) {
-        super(fatalError);
+    public InternalServerErrorException(ErrorDeviation errorDeviation) {
+        super(errorDeviation);
     }
 
-    public InternalServerErrorException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
+    public InternalServerErrorException(Throwable t, ErrorDeviation errorDeviation) {
+        super(t, errorDeviation);
     }
 
 }

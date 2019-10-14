@@ -33,8 +33,8 @@ import ee.ria.xroad.common.identifier.ClientId;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
-import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.exceptions.Warning;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
+import org.niis.xroad.restapi.exceptions.WarningDeviation;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.repository.ServiceDescriptionRepository;
 import org.niis.xroad.restapi.util.FormatUtils;
@@ -320,7 +320,7 @@ public class ServiceDescriptionService {
                 newServices);
 
         // collect all types of warnings, throw Exception if not ignored
-        List<Warning> allWarnings = new ArrayList<>();
+        List<WarningDeviation> allWarnings = new ArrayList<>();
         allWarnings.addAll(wsdlProcessingResult.getWarnings());
         if (!serviceChanges.isEmpty()) {
             allWarnings.addAll(createServiceChangeWarnings(serviceChanges));
@@ -343,17 +343,17 @@ public class ServiceDescriptionService {
     /**
      * @return warnings about adding or deleting services
      */
-    private List<Warning> createServiceChangeWarnings(ServiceChangeChecker.ServiceChanges changes) {
-        List<Warning> warnings = new ArrayList<>();
+    private List<WarningDeviation> createServiceChangeWarnings(ServiceChangeChecker.ServiceChanges changes) {
+        List<WarningDeviation> warnings = new ArrayList<>();
         if (!CollectionUtils.isEmpty(changes.getAddedServices())) {
-            Warning addedServicesWarning = new Warning(WARNING_ADDING_SERVICES,
+            WarningDeviation addedServicesWarningDeviation = new WarningDeviation(WARNING_ADDING_SERVICES,
                     changes.getAddedServices());
-            warnings.add(addedServicesWarning);
+            warnings.add(addedServicesWarningDeviation);
         }
         if (!CollectionUtils.isEmpty(changes.getRemovedServices())) {
-            Warning deletedServicesWarning = new Warning(WARNING_DELETING_SERVICES,
+            WarningDeviation deletedServicesWarningDeviation = new WarningDeviation(WARNING_DELETING_SERVICES,
                     changes.getRemovedServices());
-            warnings.add(deletedServicesWarning);
+            warnings.add(deletedServicesWarningDeviation);
         }
         return warnings;
     }
@@ -476,7 +476,7 @@ public class ServiceDescriptionService {
     @Data
     private class WsdlProcessingResult {
         private Collection<WsdlParser.ServiceInfo> parsedServices = new ArrayList<>();
-        private List<Warning> warnings = new ArrayList<>();
+        private List<WarningDeviation> warnings = new ArrayList<>();
     }
 
     /**
@@ -524,11 +524,11 @@ public class ServiceDescriptionService {
         } catch (WsdlValidator.WsdlValidatorNotExecutableException e) {
             throw new RuntimeException("could not run validator command", e);
         }
-        List<Warning> warnings = new ArrayList<>();
+        List<WarningDeviation> warnings = new ArrayList<>();
         if (!warningStrings.isEmpty()) {
-            Warning validationWarning = new Warning(WARNING_WSDL_VALIDATION_WARNINGS,
+            WarningDeviation validationWarningDeviation = new WarningDeviation(WARNING_WSDL_VALIDATION_WARNINGS,
                     warningStrings);
-            warnings.add(validationWarning);
+            warnings.add(validationWarningDeviation);
         }
         result.setParsedServices(parsedServices);
         result.setWarnings(warnings);
@@ -543,7 +543,7 @@ public class ServiceDescriptionService {
         public static final String ERROR_SERVICE_EXISTS = "service_already_exists";
 
         public ServiceAlreadyExistsException(List<String> metadata) {
-            super(new FatalError(ERROR_SERVICE_EXISTS, metadata));
+            super(new ErrorDeviation(ERROR_SERVICE_EXISTS, metadata));
         }
     }
 
@@ -553,7 +553,7 @@ public class ServiceDescriptionService {
 
 
         public WrongServiceDescriptionTypeException(String s) {
-            super(s, new FatalError(ERROR_WRONG_TYPE));
+            super(s, new ErrorDeviation(ERROR_WRONG_TYPE));
         }
     }
 
@@ -562,7 +562,7 @@ public class ServiceDescriptionService {
         public static final String ERROR_WSDL_EXISTS = "wsdl_exists";
 
         public WsdlUrlAlreadyExistsException(String s) {
-            super(s, new FatalError(ERROR_WSDL_EXISTS));
+            super(s, new ErrorDeviation(ERROR_WSDL_EXISTS));
         }
     }
 }

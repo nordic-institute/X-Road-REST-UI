@@ -31,7 +31,7 @@ import ee.ria.xroad.common.identifier.ClientId;
 import ee.ria.xroad.common.util.CryptoUtils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.facade.GlobalConfFacade;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,7 +199,7 @@ public class ClientService {
     public static class CertificateAlreadyExistsException extends ServiceException {
         public static final String ERROR_CODE = "clients.certificate_already_exists";
         public CertificateAlreadyExistsException(String s) {
-            super(s, new FatalError(ERROR_CODE));
+            super(s, new ErrorDeviation(ERROR_CODE));
         }
     }
 

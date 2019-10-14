@@ -24,21 +24,21 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 /**
  * Service layer exception, which is thrown if some item is not found
  */
 public class NotFoundException extends ServiceException {
-    public NotFoundException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
+    public NotFoundException(Throwable t, ErrorDeviation errorDeviation) {
+        super(t, errorDeviation);
     }
 
-    public NotFoundException(FatalError fatalError) {
-        super(fatalError);
+    public NotFoundException(ErrorDeviation errorDeviation) {
+        super(errorDeviation);
     }
 
-    public NotFoundException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
+    public NotFoundException(String msg, ErrorDeviation errorDeviation) {
+        super(msg, errorDeviation);
     }
 }

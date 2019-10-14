@@ -25,8 +25,8 @@
 package org.niis.xroad.restapi.openapi;
 
 import org.niis.xroad.restapi.exceptions.DeviationAwareRuntimeException;
-import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.exceptions.Warning;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
+import org.niis.xroad.restapi.exceptions.WarningDeviation;
 
 import java.util.Collection;
 
@@ -44,39 +44,41 @@ public class OpenApiException extends DeviationAwareRuntimeException {
         super(msg);
     }
 
-    public OpenApiException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
+    public OpenApiException(String msg, ErrorDeviation errorDeviation) {
+        super(msg, errorDeviation);
     }
 
     public OpenApiException(String msg, Throwable t) {
         super(msg, t);
     }
 
-    public OpenApiException(String msg, Throwable t, FatalError fatalError) {
-        super(msg, t, fatalError);
+    public OpenApiException(String msg, Throwable t, ErrorDeviation errorDeviation) {
+        super(msg, t, errorDeviation);
     }
 
-    public OpenApiException(String msg, Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(msg, t, fatalError, warnings);
+    public OpenApiException(String msg, Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
+        super(msg, t, errorDeviation, warningDeviations);
     }
 
-    public OpenApiException(FatalError fatalError) {
-        super(fatalError);
+    public OpenApiException(ErrorDeviation errorDeviation) {
+        super(errorDeviation);
     }
 
-    public OpenApiException(FatalError fatalError, Collection<Warning> warnings) {
-        super(fatalError, warnings);
+    public OpenApiException(ErrorDeviation errorDeviation, Collection<WarningDeviation> warningDeviations) {
+        super(errorDeviation, warningDeviations);
     }
 
     public OpenApiException(Throwable t) {
         super(t);
     }
 
-    public OpenApiException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
+    public OpenApiException(Throwable t, ErrorDeviation errorDeviation) {
+        super(t, errorDeviation);
     }
 
-    public OpenApiException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(t, fatalError, warnings);
+    public OpenApiException(Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
+        super(t, errorDeviation, warningDeviations);
     }
 }

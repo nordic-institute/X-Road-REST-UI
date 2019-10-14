@@ -24,7 +24,7 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class CertificateNotFoundException extends NotFoundException {
 
@@ -36,7 +36,7 @@ public class CertificateNotFoundException extends NotFoundException {
     public CertificateNotFoundException() {
         super(createError());
     }
-    private static FatalError createError() {
-        return new FatalError(CERTIFICATE_NOT_FOUND_ERROR_CODE);
+    private static ErrorDeviation createError() {
+        return new ErrorDeviation(CERTIFICATE_NOT_FOUND_ERROR_CODE);
     }
 }

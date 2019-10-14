@@ -24,7 +24,7 @@
  */
 package org.niis.xroad.restapi.wsdl;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.service.ServiceException;
 
 /**
@@ -32,11 +32,11 @@ import org.niis.xroad.restapi.service.ServiceException;
  * Root class for all WSDL validation exceptions.
  */
 public class WsdlValidationException extends ServiceException {
-    public WsdlValidationException(FatalError fatalError) {
-        super(fatalError);
+    public WsdlValidationException(ErrorDeviation errorDeviation) {
+        super(errorDeviation);
     }
 
-    public WsdlValidationException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
+    public WsdlValidationException(Throwable t, ErrorDeviation errorDeviation) {
+        super(t, errorDeviation);
     }
 }

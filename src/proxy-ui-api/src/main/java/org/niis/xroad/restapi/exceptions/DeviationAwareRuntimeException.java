@@ -27,22 +27,22 @@ package org.niis.xroad.restapi.exceptions;
 import java.util.Collection;
 
 /**
- * RuntimeException that (possibly) carries fatalError code.
+ * RuntimeException that (possibly) carries error code.
  * Root of all deviation aware runtimeexceptions
  */
 public class DeviationAwareRuntimeException extends RuntimeException implements DeviationAware {
 
-    private final FatalError fatalError;
-    private final Collection<Warning> warnings;
+    private final ErrorDeviation errorDeviation;
+    private final Collection<WarningDeviation> warningDeviations;
 
     @Override
-    public FatalError getFatalError() {
-        return fatalError;
+    public ErrorDeviation getErrorDeviation() {
+        return errorDeviation;
     }
 
     @Override
-    public Collection<Warning> getWarnings() {
-        return warnings;
+    public Collection<WarningDeviation> getWarningDeviations() {
+        return warningDeviations;
     }
 
     /**
@@ -50,8 +50,8 @@ public class DeviationAwareRuntimeException extends RuntimeException implements 
      */
     public DeviationAwareRuntimeException() {
         super();
-        this.fatalError = null;
-        this.warnings = null;
+        this.errorDeviation = null;
+        this.warningDeviations = null;
     }
 
     /**
@@ -59,18 +59,18 @@ public class DeviationAwareRuntimeException extends RuntimeException implements 
      */
     public DeviationAwareRuntimeException(String msg) {
         super(msg);
-        this.fatalError = null;
-        this.warnings = null;
+        this.errorDeviation = null;
+        this.warningDeviations = null;
     }
 
     /**
      * @param msg
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareRuntimeException(String msg, FatalError fatalError) {
+    public DeviationAwareRuntimeException(String msg, ErrorDeviation errorDeviation) {
         super(msg);
-        this.fatalError = fatalError;
-        this.warnings = null;
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = null;
     }
 
     /**
@@ -84,39 +84,40 @@ public class DeviationAwareRuntimeException extends RuntimeException implements 
     /**
      * @param msg
      * @param t
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareRuntimeException(String msg, Throwable t, FatalError fatalError) {
-        this(msg, t, fatalError, null);
+    public DeviationAwareRuntimeException(String msg, Throwable t, ErrorDeviation errorDeviation) {
+        this(msg, t, errorDeviation, null);
     }
 
     /**
      * @param msg
      * @param t
-     * @param fatalError
-     * @param warnings
+     * @param errorDeviation
+     * @param warningDeviations
      */
-    public DeviationAwareRuntimeException(String msg, Throwable t, FatalError fatalError,
-                                          Collection<Warning> warnings) {
+    public DeviationAwareRuntimeException(String msg, Throwable t, ErrorDeviation errorDeviation,
+                                          Collection<WarningDeviation> warningDeviations) {
         super(msg, t);
-        this.fatalError = fatalError;
-        this.warnings = warnings;
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = warningDeviations;
     }
 
     /**
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareRuntimeException(FatalError fatalError) {
-        this(fatalError, null);
+    public DeviationAwareRuntimeException(ErrorDeviation errorDeviation) {
+        this(errorDeviation, null);
     }
 
     /**
-     * @param fatalError
-     * @param warnings
+     * @param errorDeviation
+     * @param warningDeviations
      */
-    public DeviationAwareRuntimeException(FatalError fatalError, Collection<Warning> warnings) {
-        this.fatalError = fatalError;
-        this.warnings = warnings;
+    public DeviationAwareRuntimeException(ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = warningDeviations;
     }
 
     /**
@@ -128,20 +129,21 @@ public class DeviationAwareRuntimeException extends RuntimeException implements 
 
     /**
      * @param t
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareRuntimeException(Throwable t, FatalError fatalError) {
-        this(t, fatalError, null);
+    public DeviationAwareRuntimeException(Throwable t, ErrorDeviation errorDeviation) {
+        this(t, errorDeviation, null);
     }
 
     /**
      * @param t
-     * @param fatalError
-     * @param warnings
+     * @param errorDeviation
+     * @param warningDeviations
      */
-    public DeviationAwareRuntimeException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+    public DeviationAwareRuntimeException(Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
         super(t);
-        this.fatalError = fatalError;
-        this.warnings = warnings;
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = warningDeviations;
     }
 }

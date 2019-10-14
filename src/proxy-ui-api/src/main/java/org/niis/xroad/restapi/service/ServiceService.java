@@ -36,7 +36,7 @@ import ee.ria.xroad.common.identifier.XRoadObjectType;
 
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.dto.AccessRightHolderDto;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.repository.ClientRepository;
 import org.niis.xroad.restapi.repository.LocalGroupRepository;
 import org.niis.xroad.restapi.repository.ServiceDescriptionRepository;
@@ -302,7 +302,7 @@ public class ServiceService {
     public static class ServiceNotFoundException extends NotFoundException {
         public static final String ERROR_SERVICE_NOT_FOUND = "services.service_not_found";
         public ServiceNotFoundException(String s) {
-            super(s, new FatalError(ERROR_SERVICE_NOT_FOUND));
+            super(s, new ErrorDeviation(ERROR_SERVICE_NOT_FOUND));
         }
     }
 
@@ -312,7 +312,7 @@ public class ServiceService {
     public static class AccessRightNotFoundException extends NotFoundException {
         public static final String ERROR_ACCESSRIGHT_NOT_FOUND = "services.accessright_not_found";
         public AccessRightNotFoundException() {
-            super(new FatalError(ERROR_ACCESSRIGHT_NOT_FOUND));
+            super(new ErrorDeviation(ERROR_ACCESSRIGHT_NOT_FOUND));
         }
     }
 

@@ -24,7 +24,7 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class InvalidUrlException extends ServiceException {
 
@@ -39,8 +39,8 @@ public class InvalidUrlException extends ServiceException {
         super(s, createError());
     }
 
-    private static FatalError createError() {
-        return new FatalError(ERROR_MALFORMED_URL);
+    private static ErrorDeviation createError() {
+        return new ErrorDeviation(ERROR_MALFORMED_URL);
     }
 
 }

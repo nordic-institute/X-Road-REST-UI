@@ -27,22 +27,22 @@ package org.niis.xroad.restapi.exceptions;
 import java.util.Collection;
 
 /**
- * Checked exception that (possibly) carries fatalError code.
+ * Checked exception that (possibly) carries error code.
  * Root of all checked deviation aware exceptions
  */
 public class DeviationAwareException extends Exception implements DeviationAware {
 
-    private final FatalError fatalError;
-    private final Collection<Warning> warnings;
+    private final ErrorDeviation errorDeviation;
+    private final Collection<WarningDeviation> warningDeviations;
 
     @Override
-    public FatalError getFatalError() {
-        return fatalError;
+    public ErrorDeviation getErrorDeviation() {
+        return errorDeviation;
     }
 
     @Override
-    public Collection<Warning> getWarnings() {
-        return warnings;
+    public Collection<WarningDeviation> getWarningDeviations() {
+        return warningDeviations;
     }
 
     /**
@@ -50,8 +50,8 @@ public class DeviationAwareException extends Exception implements DeviationAware
      */
     public DeviationAwareException() {
         super();
-        this.fatalError = null;
-        this.warnings = null;
+        this.errorDeviation = null;
+        this.warningDeviations = null;
     }
 
     /**
@@ -59,18 +59,18 @@ public class DeviationAwareException extends Exception implements DeviationAware
      */
     public DeviationAwareException(String msg) {
         super(msg);
-        this.fatalError = null;
-        this.warnings = null;
+        this.errorDeviation = null;
+        this.warningDeviations = null;
     }
 
     /**
      * @param msg
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareException(String msg, FatalError fatalError) {
+    public DeviationAwareException(String msg, ErrorDeviation errorDeviation) {
         super(msg);
-        this.fatalError = fatalError;
-        this.warnings = null;
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = null;
     }
 
     /**
@@ -84,39 +84,39 @@ public class DeviationAwareException extends Exception implements DeviationAware
     /**
      * @param msg
      * @param t
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareException(String msg, Throwable t, FatalError fatalError) {
-        this(msg, t, fatalError, null);
+    public DeviationAwareException(String msg, Throwable t, ErrorDeviation errorDeviation) {
+        this(msg, t, errorDeviation, null);
     }
 
     /**
      * @param msg
      * @param t
-     * @param fatalError
-     * @param warnings
+     * @param errorDeviation
+     * @param warningDeviations
      */
-    public DeviationAwareException(String msg, Throwable t, FatalError fatalError,
-                                          Collection<Warning> warnings) {
+    public DeviationAwareException(String msg, Throwable t, ErrorDeviation errorDeviation,
+                                          Collection<WarningDeviation> warningDeviations) {
         super(msg, t);
-        this.fatalError = fatalError;
-        this.warnings = warnings;
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = warningDeviations;
     }
 
     /**
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareException(FatalError fatalError) {
-        this(fatalError, null);
+    public DeviationAwareException(ErrorDeviation errorDeviation) {
+        this(errorDeviation, null);
     }
 
     /**
-     * @param fatalError
-     * @param warnings
+     * @param errorDeviation
+     * @param warningDeviations
      */
-    public DeviationAwareException(FatalError fatalError, Collection<Warning> warnings) {
-        this.fatalError = fatalError;
-        this.warnings = warnings;
+    public DeviationAwareException(ErrorDeviation errorDeviation, Collection<WarningDeviation> warningDeviations) {
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = warningDeviations;
     }
 
     /**
@@ -128,20 +128,21 @@ public class DeviationAwareException extends Exception implements DeviationAware
 
     /**
      * @param t
-     * @param fatalError
+     * @param errorDeviation
      */
-    public DeviationAwareException(Throwable t, FatalError fatalError) {
-        this(t, fatalError, null);
+    public DeviationAwareException(Throwable t, ErrorDeviation errorDeviation) {
+        this(t, errorDeviation, null);
     }
 
     /**
      * @param t
-     * @param fatalError
-     * @param warnings
+     * @param errorDeviation
+     * @param warningDeviations
      */
-    public DeviationAwareException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+    public DeviationAwareException(Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
         super(t);
-        this.fatalError = fatalError;
-        this.warnings = warnings;
+        this.errorDeviation = errorDeviation;
+        this.warningDeviations = warningDeviations;
     }
 }

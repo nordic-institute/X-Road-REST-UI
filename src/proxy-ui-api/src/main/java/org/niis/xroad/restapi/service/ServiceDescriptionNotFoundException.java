@@ -24,7 +24,7 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class ServiceDescriptionNotFoundException extends NotFoundException {
 
@@ -33,6 +33,6 @@ public class ServiceDescriptionNotFoundException extends NotFoundException {
             ServiceDescriptionService.SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE;
 
     public ServiceDescriptionNotFoundException(String s) {
-        super(s, new FatalError(SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
+        super(s, new ErrorDeviation(SERVICE_DESCRIPTION_NOT_FOUND_ERROR_CODE));
     }
 }

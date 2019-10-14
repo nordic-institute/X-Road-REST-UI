@@ -25,8 +25,8 @@
 package org.niis.xroad.restapi.service;
 
 import org.niis.xroad.restapi.exceptions.DeviationAwareException;
-import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.exceptions.Warning;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
+import org.niis.xroad.restapi.exceptions.WarningDeviation;
 
 import java.util.Collection;
 
@@ -35,32 +35,34 @@ import java.util.Collection;
  */
 public abstract class ServiceException extends DeviationAwareException {
 
-    public ServiceException(String msg, Throwable t, FatalError fatalError) {
-        super(msg, t, fatalError);
+    public ServiceException(String msg, Throwable t, ErrorDeviation errorDeviation) {
+        super(msg, t, errorDeviation);
     }
 
-    public ServiceException(String msg, Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(msg, t, fatalError, warnings);
+    public ServiceException(String msg, Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
+        super(msg, t, errorDeviation, warningDeviations);
     }
 
-    public ServiceException(FatalError fatalError, Collection<Warning> warnings) {
-        super(fatalError, warnings);
+    public ServiceException(ErrorDeviation errorDeviation, Collection<WarningDeviation> warningDeviations) {
+        super(errorDeviation, warningDeviations);
     }
 
-    public ServiceException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
+    public ServiceException(Throwable t, ErrorDeviation errorDeviation) {
+        super(t, errorDeviation);
     }
 
-    public ServiceException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(t, fatalError, warnings);
+    public ServiceException(Throwable t, ErrorDeviation errorDeviation,
+            Collection<WarningDeviation> warningDeviations) {
+        super(t, errorDeviation, warningDeviations);
     }
 
-    public ServiceException(FatalError fatalError) {
-        super(fatalError);
+    public ServiceException(ErrorDeviation errorDeviation) {
+        super(errorDeviation);
     }
 
-    public ServiceException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
+    public ServiceException(String msg, ErrorDeviation errorDeviation) {
+        super(msg, errorDeviation);
     }
 
 

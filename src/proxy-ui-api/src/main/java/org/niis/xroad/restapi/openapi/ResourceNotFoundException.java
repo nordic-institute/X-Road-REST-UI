@@ -25,7 +25,7 @@
 package org.niis.xroad.restapi.openapi;
 
 import org.niis.xroad.restapi.exceptions.DeviationAware;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -40,27 +40,27 @@ public class ResourceNotFoundException extends OpenApiException {
     }
 
     public ResourceNotFoundException(DeviationAware deviations) {
-        super(deviations.getFatalError(), deviations.getWarnings());
+        super(deviations.getErrorDeviation(), deviations.getWarningDeviations());
     }
 
     public ResourceNotFoundException(String msg) {
         super(msg);
     }
 
-    public ResourceNotFoundException(FatalError fatalError) {
-        super(fatalError);
+    public ResourceNotFoundException(ErrorDeviation errorDeviation) {
+        super(errorDeviation);
     }
 
-    public ResourceNotFoundException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
+    public ResourceNotFoundException(String msg, ErrorDeviation errorDeviation) {
+        super(msg, errorDeviation);
     }
 
     public ResourceNotFoundException(String msg, Throwable t) {
         super(msg, t);
     }
 
-    public ResourceNotFoundException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
+    public ResourceNotFoundException(Throwable t, ErrorDeviation errorDeviation) {
+        super(t, errorDeviation);
     }
 
 }

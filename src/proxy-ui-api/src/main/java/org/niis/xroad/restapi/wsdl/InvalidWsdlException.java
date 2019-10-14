@@ -24,7 +24,7 @@
  */
 package org.niis.xroad.restapi.wsdl;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class InvalidWsdlException extends WsdlValidationException {
      * @param metadata describes why wsdl was invalid
      */
     public InvalidWsdlException(List<String> metadata) {
-        super(new FatalError(ERROR_INVALID_WSDL, metadata));
+        super(new ErrorDeviation(ERROR_INVALID_WSDL, metadata));
     }
 
 }

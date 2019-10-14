@@ -66,11 +66,11 @@ public class ExceptionTranslator {
         if (e instanceof DeviationAware) {
             // add information about errors and warnings
             DeviationAware errorCodedException = (DeviationAware) e;
-            if (errorCodedException.getFatalError() != null) {
-                errorDto.setError(convert(errorCodedException.getFatalError()));
+            if (errorCodedException.getErrorDeviation() != null) {
+                errorDto.setError(convert(errorCodedException.getErrorDeviation()));
             }
-            if (errorCodedException.getWarnings() != null) {
-                for (Deviation warning: errorCodedException.getWarnings()) {
+            if (errorCodedException.getWarningDeviations() != null) {
+                for (Deviation warning: errorCodedException.getWarningDeviations()) {
                     errorDto.addWarningsItem(convert(warning));
 
                 }

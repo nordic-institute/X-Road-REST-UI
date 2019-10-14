@@ -24,8 +24,8 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
-import org.niis.xroad.restapi.exceptions.Warning;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
+import org.niis.xroad.restapi.exceptions.WarningDeviation;
 
 import java.util.Collection;
 
@@ -36,7 +36,7 @@ public class UnhandledWarningsException extends ServiceException {
 
     public static final String ERROR_WARNINGS_DETECTED = "warnings_detected";
 
-    public UnhandledWarningsException(Collection<Warning> warnings) {
-        super(new FatalError(ERROR_WARNINGS_DETECTED), warnings);
+    public UnhandledWarningsException(Collection<WarningDeviation> warningDeviations) {
+        super(new ErrorDeviation(ERROR_WARNINGS_DETECTED), warningDeviations);
     }
 }

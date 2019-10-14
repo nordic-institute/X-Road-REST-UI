@@ -27,18 +27,18 @@ package org.niis.xroad.restapi.exceptions;
 import java.util.List;
 
 /**
- * A warning that can be ignored
+ * An error that can't be ignored
  */
-public class Warning extends Deviation {
-    public Warning(String code, List<String> metadata) {
+public class ErrorDeviation extends Deviation {
+    public ErrorDeviation(String code, List<String> metadata) {
         super(code, metadata);
     }
 
-    public Warning(String code, String metadataItem) {
+    public ErrorDeviation(String code, String metadataItem) {
         super(code, metadataItem);
     }
 
-    public Warning(String code) {
+    public ErrorDeviation(String code) {
         super(code);
     }
 }

@@ -73,7 +73,7 @@ public class WsdlValidatorTest {
             fail("should have thrown WsdlValidationException");
         } catch (WsdlValidator.WsdlValidationFailedException expected) {
             assertEquals(Collections.singletonList(MOCK_VALIDATOR_ERROR),
-                    expected.getFatalError().getMetadata());
+                    expected.getErrorDeviation().getMetadata());
         }
     }
 

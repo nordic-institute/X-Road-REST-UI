@@ -24,13 +24,13 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 public class ClientNotFoundException extends NotFoundException {
 
     public static final String CLIENT_NOT_FOUND_ERROR_CODE = "client_not_found";
 
     public ClientNotFoundException(String s) {
-        super(s, new FatalError(CLIENT_NOT_FOUND_ERROR_CODE));
+        super(s, new ErrorDeviation(CLIENT_NOT_FOUND_ERROR_CODE));
     }
 }

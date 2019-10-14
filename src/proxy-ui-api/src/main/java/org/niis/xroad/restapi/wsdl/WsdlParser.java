@@ -27,7 +27,7 @@ package org.niis.xroad.restapi.wsdl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.service.ServiceException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -379,7 +379,7 @@ public final class WsdlParser {
         public static final String ERROR_WSDL_DOWNLOAD_FAILED = "wsdl_download_failed";
 
         public WsdlNotFoundException(Throwable cause) {
-            super(cause, new FatalError(ERROR_WSDL_DOWNLOAD_FAILED));
+            super(cause, new ErrorDeviation(ERROR_WSDL_DOWNLOAD_FAILED));
         }
     }
 }

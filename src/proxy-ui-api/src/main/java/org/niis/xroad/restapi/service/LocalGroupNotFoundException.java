@@ -24,7 +24,7 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 
 /**
  * If local group was not found
@@ -32,6 +32,6 @@ import org.niis.xroad.restapi.exceptions.FatalError;
 public class LocalGroupNotFoundException extends NotFoundException {
     public static final String ERROR_CODE = "local_group_not_found";
     public LocalGroupNotFoundException(String s) {
-        super(s, new FatalError(ERROR_CODE));
+        super(s, new ErrorDeviation(ERROR_CODE));
     }
 }

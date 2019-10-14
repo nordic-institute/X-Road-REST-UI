@@ -29,7 +29,7 @@ import org.niis.xroad.restapi.dao.PersistentApiKeyDAOImpl;
 import org.niis.xroad.restapi.domain.InvalidRoleNameException;
 import org.niis.xroad.restapi.domain.PersistentApiKeyType;
 import org.niis.xroad.restapi.domain.Role;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.service.NotFoundException;
 import org.niis.xroad.restapi.util.PersistenceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,7 +169,7 @@ public class ApiKeyRepository {
     public static class ApiKeyNotFoundException extends NotFoundException {
         public static final String ERROR_API_KEY_NOT_FOUND = "api_key_not_found";
         ApiKeyNotFoundException(String s) {
-            super(s, new FatalError(ERROR_API_KEY_NOT_FOUND));
+            super(s, new ErrorDeviation(ERROR_API_KEY_NOT_FOUND));
         }
     }
 

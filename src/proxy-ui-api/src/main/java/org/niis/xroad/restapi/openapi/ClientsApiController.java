@@ -38,7 +38,7 @@ import org.niis.xroad.restapi.converter.ConnectionTypeMapping;
 import org.niis.xroad.restapi.converter.LocalGroupConverter;
 import org.niis.xroad.restapi.converter.ServiceDescriptionConverter;
 import org.niis.xroad.restapi.exceptions.DeviationAware;
-import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.ErrorDeviation;
 import org.niis.xroad.restapi.openapi.model.CertificateDetails;
 import org.niis.xroad.restapi.openapi.model.Client;
 import org.niis.xroad.restapi.openapi.model.ConnectionType;
@@ -217,14 +217,14 @@ public class ClientsApiController implements ClientsApi {
             certificateBytes = IOUtils.toByteArray(body.getInputStream());
         } catch (IOException ex) {
             throw new BadRequestException("cannot read certificate data", ex,
-                    new FatalError(INVALID_CERT_UPLOAD_ERROR_CODE));
+                    new ErrorDeviation(INVALID_CERT_UPLOAD_ERROR_CODE));
         }
         ClientId clientId = clientConverter.convertId(encodedId);
         CertificateType certificateType = null;
         try {
             certificateType = clientService.addTlsCertificate(clientId, certificateBytes);
         } catch (CertificateException c) {
-            throw new BadRequestException(c, new FatalError(INVALID_CERT_ERROR_CODE));
+            throw new BadRequestException(c, new ErrorDeviation(INVALID_CERT_ERROR_CODE));
         } catch (ClientNotFoundException e) {
             throw new ResourceNotFoundException(e);
         } catch (ClientService.CertificateAlreadyExistsException e) {
