@@ -22,61 +22,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.openapi;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.niis.xroad.restapi.exceptions.DeviationAwareRuntimeException;
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.Warning;
 
 import java.util.Collection;
 
 /**
- * Thrown if client sent bad request.
- * Results in http 400 BAD_REQUEST
+ * Root class of exceptions thrown from openapi controllers and converters,
+ * that map into specific response http statuses. Mapping is done
+ * with Spring's @ResponseStatus annotation
  */
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class BadRequestException extends DeviationAwareRuntimeException {
-
-    public BadRequestException(DeviationAware deviations) {
-        super(deviations.getFatalError(), deviations.getWarnings());
+public class OpenApiException extends DeviationAwareRuntimeException {
+    public OpenApiException() {
+        super();
     }
 
-    public BadRequestException() {
-    }
-
-    public BadRequestException(String msg) {
+    public OpenApiException(String msg) {
         super(msg);
     }
 
-    public BadRequestException(String msg, FatalError fatalError) {
+    public OpenApiException(String msg, FatalError fatalError) {
         super(msg, fatalError);
     }
 
-    public BadRequestException(String msg, Throwable t, FatalError fatalError) {
+    public OpenApiException(String msg, Throwable t) {
+        super(msg, t);
+    }
+
+    public OpenApiException(String msg, Throwable t, FatalError fatalError) {
         super(msg, t, fatalError);
     }
 
-    public BadRequestException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(t, fatalError, warnings);
+    public OpenApiException(String msg, Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(msg, t, fatalError, warnings);
     }
 
-    public BadRequestException(FatalError fatalError, Collection<Warning> warnings) {
-        super(fatalError, warnings);
-    }
-
-    public BadRequestException(FatalError fatalError) {
+    public OpenApiException(FatalError fatalError) {
         super(fatalError);
     }
 
-    public BadRequestException(Throwable t, FatalError fatalError) {
+    public OpenApiException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
+    }
+
+    public OpenApiException(Throwable t) {
+        super(t);
+    }
+
+    public OpenApiException(Throwable t, FatalError fatalError) {
         super(t, fatalError);
     }
 
-    /**
-     * Use deviation data from original exception
-     * @param e
-     */
-    public BadRequestException(DeviationAwareRuntimeException e) {
-        this(e, e.getFatalError(), e.getWarnings());
+    public OpenApiException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(t, fatalError, warnings);
     }
-
 }

@@ -22,31 +22,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.openapi;
 
+import org.niis.xroad.restapi.exceptions.DeviationAware;
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.Warning;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.Collection;
+
 /**
- * Thrown if parameters were invalid.
- * Results in http 400 BAD_REQUEST
- * to do: replace with BadRequestException and ServiceExceptions
+ * Thrown if internal server error occurs.
+ * Results in http 500 INTERNAL_SERVER_ERROR
  */
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class InvalidParametersException extends RuntimeException {
-    public InvalidParametersException() {
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+public class InternalServerErrorException extends OpenApiException {
+
+    public InternalServerErrorException(DeviationAware deviations) {
+        super(deviations.getFatalError(), deviations.getWarnings());
     }
 
-    public InvalidParametersException(String msg) {
+    public InternalServerErrorException() {
+    }
+
+    public InternalServerErrorException(String msg) {
         super(msg);
     }
 
-    public InvalidParametersException(String msg, Throwable t) {
+    public InternalServerErrorException(String msg, Throwable t) {
         super(msg, t);
     }
 
-    public InvalidParametersException(Throwable t) {
-        super(t);
+    public InternalServerErrorException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
+    }
+
+    public InternalServerErrorException(String msg, Throwable t, FatalError fatalError) {
+        super(msg, t, fatalError);
+    }
+
+    public InternalServerErrorException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(t, fatalError, warnings);
+    }
+
+    public InternalServerErrorException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
+    }
+
+    public InternalServerErrorException(FatalError fatalError) {
+        super(fatalError);
+    }
+
+    public InternalServerErrorException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
     }
 
 }

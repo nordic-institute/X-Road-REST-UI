@@ -22,47 +22,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.service;
+package org.niis.xroad.restapi.openapi;
 
-import org.niis.xroad.restapi.exceptions.DeviationAwareException;
+import org.niis.xroad.restapi.exceptions.DeviationAware;
 import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.Warning;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Collection;
 
 /**
- * Root class for all checked service layer exceptions
+ * Thrown if client sent bad request.
+ * Results in http 400 BAD_REQUEST
  */
-public abstract class ServiceException extends DeviationAwareException {
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+public class BadRequestException extends OpenApiException {
 
-    public ServiceException(String msg, Throwable t, FatalError fatalError) {
-        super(msg, t, fatalError);
+    public BadRequestException(DeviationAware deviations) {
+        super(deviations.getFatalError(), deviations.getWarnings());
     }
 
-    public ServiceException(String msg, Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(msg, t, fatalError, warnings);
+    public BadRequestException() {
     }
 
-    public ServiceException(FatalError fatalError, Collection<Warning> warnings) {
-        super(fatalError, warnings);
+    public BadRequestException(String msg) {
+        super(msg);
     }
 
-    public ServiceException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
-    }
-
-    public ServiceException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(t, fatalError, warnings);
-    }
-
-    public ServiceException(FatalError fatalError) {
-        super(fatalError);
-    }
-
-    public ServiceException(String msg, FatalError fatalError) {
+    public BadRequestException(String msg, FatalError fatalError) {
         super(msg, fatalError);
     }
 
+    public BadRequestException(String msg, Throwable t, FatalError fatalError) {
+        super(msg, t, fatalError);
+    }
 
+    public BadRequestException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
+        super(t, fatalError, warnings);
+    }
 
+    public BadRequestException(FatalError fatalError, Collection<Warning> warnings) {
+        super(fatalError, warnings);
+    }
+
+    public BadRequestException(FatalError fatalError) {
+        super(fatalError);
+    }
+
+    public BadRequestException(Throwable t, FatalError fatalError) {
+        super(t, fatalError);
+    }
 }

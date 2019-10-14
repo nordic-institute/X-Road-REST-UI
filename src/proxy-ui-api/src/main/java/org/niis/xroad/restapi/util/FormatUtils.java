@@ -32,7 +32,7 @@ import ee.ria.xroad.common.identifier.XRoadId;
 
 import org.apache.commons.lang.StringUtils;
 import org.niis.xroad.restapi.converter.Converters;
-import org.niis.xroad.restapi.exceptions.ResourceNotFoundException;
+import org.niis.xroad.restapi.openapi.ResourceNotFoundException;
 import org.niis.xroad.restapi.wsdl.WsdlParser;
 
 import java.net.MalformedURLException;

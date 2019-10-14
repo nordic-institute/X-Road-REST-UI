@@ -28,7 +28,7 @@ import java.util.Collection;
 
 /**
  * RuntimeException that (possibly) carries fatalError code.
- * Root of all deviation aware runtimeexceptions (do we need any?)
+ * Root of all deviation aware runtimeexceptions
  */
 public class DeviationAwareRuntimeException extends RuntimeException implements DeviationAware {
 

@@ -22,72 +22,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.openapi;
 
+import org.niis.xroad.restapi.exceptions.DeviationAware;
+import org.niis.xroad.restapi.exceptions.FatalError;
+import org.niis.xroad.restapi.exceptions.Warning;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Collection;
 
 /**
- * Thrown if internal server error occurs.
- * Results in http 500 INTERNAL_SERVER_ERROR
+ * Thrown if there was a conflict, for example tried to add an item which already exists.
+ * Results in http 409 CONFLICT
  */
-@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-public class InternalServerErrorException extends DeviationAwareRuntimeException {
+@ResponseStatus(value = HttpStatus.CONFLICT)
+public class ConflictException extends OpenApiException {
+    public ConflictException() {
+    }
 
-    public InternalServerErrorException(DeviationAware deviations) {
+    public ConflictException(DeviationAware deviations) {
         super(deviations.getFatalError(), deviations.getWarnings());
     }
 
-    public InternalServerErrorException() {
-    }
-
-    public InternalServerErrorException(String msg) {
+    public ConflictException(String msg) {
         super(msg);
     }
 
-    public InternalServerErrorException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
-    public InternalServerErrorException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
-    }
-
-    public InternalServerErrorException(String msg, Throwable t, FatalError fatalError) {
-        super(msg, t, fatalError);
-    }
-
-    public InternalServerErrorException(Throwable t, FatalError fatalError, Collection<Warning> warnings) {
-        super(t, fatalError, warnings);
-    }
-
-    public InternalServerErrorException(FatalError fatalError, Collection<Warning> warnings) {
+    public ConflictException(FatalError fatalError, Collection<Warning> warnings) {
         super(fatalError, warnings);
     }
 
-    public InternalServerErrorException(FatalError fatalError) {
+    public ConflictException(String msg, FatalError fatalError) {
+        super(msg, fatalError);
+    }
+
+    public ConflictException(FatalError fatalError) {
         super(fatalError);
-    }
-
-    public InternalServerErrorException(Throwable t, FatalError fatalError) {
-        super(t, fatalError);
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Use deviation data from original exception
-     * @param e
-     */
-    public InternalServerErrorException(DeviationAwareRuntimeException e) {
-        this(e, e.getFatalError(), e.getWarnings());
     }
 
 }

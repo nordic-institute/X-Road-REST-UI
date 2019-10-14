@@ -27,8 +27,8 @@ package org.niis.xroad.restapi.exceptions;
 import java.util.Collection;
 
 /**
- * Exception that (possibly) carries fatalError code.
- * Root of all non-runtime deviation aware exceptions
+ * Checked exception that (possibly) carries fatalError code.
+ * Root of all checked deviation aware exceptions
  */
 public class DeviationAwareException extends Exception implements DeviationAware {
 

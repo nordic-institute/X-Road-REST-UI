@@ -22,40 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.restapi.exceptions;
+package org.niis.xroad.restapi.openapi;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.Collection;
-
 /**
- * Thrown if there was a conflict, for example tried to add an item which already exists.
- * Results in http 409 CONFLICT
+ * Thrown if parameters were invalid.
+ * Results in http 400 BAD_REQUEST
+ * to do: replace with BadRequestException and ServiceExceptions
  */
-@ResponseStatus(value = HttpStatus.CONFLICT)
-public class ConflictException extends DeviationAwareRuntimeException {
-    public ConflictException() {
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+public class InvalidParametersException extends OpenApiException {
+    public InvalidParametersException() {
     }
 
-    public ConflictException(DeviationAware deviations) {
-        super(deviations.getFatalError(), deviations.getWarnings());
-    }
-
-    public ConflictException(String msg) {
+    public InvalidParametersException(String msg) {
         super(msg);
     }
 
-    public ConflictException(FatalError fatalError, Collection<Warning> warnings) {
-        super(fatalError, warnings);
+    public InvalidParametersException(String msg, Throwable t) {
+        super(msg, t);
     }
 
-    public ConflictException(String msg, FatalError fatalError) {
-        super(msg, fatalError);
-    }
-
-    public ConflictException(FatalError fatalError) {
-        super(fatalError);
+    public InvalidParametersException(Throwable t) {
+        super(t);
     }
 
 }

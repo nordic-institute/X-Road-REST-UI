@@ -26,6 +26,9 @@ package org.niis.xroad.restapi.service;
 
 import org.niis.xroad.restapi.exceptions.FatalError;
 
+/**
+ * Service layer exception, which is thrown if some item is not found
+ */
 public class NotFoundException extends ServiceException {
     public NotFoundException(Throwable t, FatalError fatalError) {
         super(t, fatalError);

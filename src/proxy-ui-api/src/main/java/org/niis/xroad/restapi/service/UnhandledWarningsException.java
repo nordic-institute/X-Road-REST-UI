@@ -24,7 +24,6 @@
  */
 package org.niis.xroad.restapi.service;
 
-import org.niis.xroad.restapi.exceptions.DeviationAwareException;
 import org.niis.xroad.restapi.exceptions.FatalError;
 import org.niis.xroad.restapi.exceptions.Warning;
 
@@ -33,7 +32,7 @@ import java.util.Collection;
 /**
  * If warnings were detected and they were not ignored
  */
-public class UnhandledWarningsException extends DeviationAwareException {
+public class UnhandledWarningsException extends ServiceException {
 
     public static final String ERROR_WARNINGS_DETECTED = "warnings_detected";
 
