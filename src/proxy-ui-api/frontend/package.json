@@ -9,6 +9,7 @@
     "build:report": "vue-cli-service build --report",
     "test:coverage": "vue-cli-service test:unit --coverage",
     "test:e2e": "vue-cli-service test:e2e",
+    "test:e3e": "vue-cli-service test:e2e --env firefox --headless --url https://xroad-lxd-ss1.lxd:4000",
     "test:unit": "vue-cli-service test:unit",
     "check-audit": "check-audit",
     "resolve-audit": "resolve-audit"
