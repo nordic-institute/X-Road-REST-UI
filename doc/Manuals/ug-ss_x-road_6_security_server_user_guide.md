@@ -536,7 +536,7 @@ To add a new member and change it to Owner member, the following actions must be
     
     3.2 In the detail view, click **Make owner**
     
-    1.3 In the opening dialog, click **Make owner**. A owner change request is sent to the X-Road Governing Authority
+    1.3 In the opening dialog, click **Make owner**. The owner change request is sent to the X-Road Governing Authority
     
 Once the owner change request, the new member will be automatically shown as the security server Owner member.
 
