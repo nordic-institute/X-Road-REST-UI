@@ -56,7 +56,7 @@ import java.util.EnumSet;
 public class LimitRequestSizesFilter {
 
     @ResponseStatus(value = HttpStatus.PAYLOAD_TOO_LARGE)
-    public static class SizeLimitExceededException extends RuntimeException {
+    public static class SizeLimitExceededException extends IOException {
         public SizeLimitExceededException(String s) {
             super(s);
         }
@@ -76,7 +76,7 @@ public class LimitRequestSizesFilter {
     public FilterRegistrationBean<JannenFilter> fileUploadFilter() {
         FilterRegistrationBean<JannenFilter> bean = new FilterRegistrationBean<>();
         bean.setName("BinaryUploadLimitSizeFilter");
-        bean.setFilter(new JannenFilter(10000, false, "tls-certificates"));
+        bean.setFilter(new JannenFilter(888, false, "tls-certificates"));
         bean.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
@@ -125,13 +125,13 @@ public class LimitRequestSizesFilter {
             this.maxBytes = maxBytes;
         }
 
-        private void addReadBytesCount(int number) {
+        private void addReadBytesCount(int number) throws SizeLimitExceededException {
             readSoFar = readSoFar + number;
             if (readSoFar > maxBytes) {
                 throw new SizeLimitExceededException("request limit " + maxBytes + " exceeded");
             }
         }
-        private void addReadBytesCount() {
+        private void addReadBytesCount() throws SizeLimitExceededException {
             addReadBytesCount(1);
         }
 
