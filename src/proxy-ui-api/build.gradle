@@ -113,7 +113,7 @@ task checkFrontAudit(type: NpmTask, dependsOn: 'npmInstall') {
 task e2eTest(type: NpmTask, dependsOn: 'npmInstall') {
     inputs.dir("frontend")
     outputs.dir("frontend")
-    args = ['run', 'test:e2e', '-- --url=https://restuitest-ss1.i.x-road.rocks:4000']
+    args = ['run', 'test:e2e', '--', '--url=https://restuitest-ss1.i.x-road.rocks:4000']
     execOverrides {
         it.workingDir = 'frontend'
     }
