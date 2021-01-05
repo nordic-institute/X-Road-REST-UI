@@ -14,7 +14,7 @@
     "resolve-audit": "resolve-audit"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "core-js": "^3.1.2",
     "lodash": "^4.17.15",
     "roboto-fontface": "*",
